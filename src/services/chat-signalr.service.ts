@@ -2,9 +2,9 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import * as signalR from "@microsoft/signalr"
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
-import { from } from "rxjs";
 import { tap } from "rxjs/operators";
 import { chatMessage } from "src/app/models/chatMessage";
+import { Const } from "src/utils/const";
 
 @Injectable({ providedIn: 'root' })
 export class ChatSignalRService {
@@ -12,8 +12,8 @@ export class ChatSignalRService {
     public messages: chatMessage[] = []
 
     private hubConnection: signalR.HubConnection
-    private connectionUrl = "https://localhost:7291/signalr"
-    private apiUrl = "https://localhost:7291/api/chat/send"
+    private connectionUrl = Const.getBaseUrl() + "signalr"
+    private apiUrl = Const.getBaseUrl() + "api/chat/send"
 
     constructor(private http: HttpClient) { }
 
@@ -27,12 +27,12 @@ export class ChatSignalRService {
             .pipe(tap(_ => console.log("message sucessfully sent to api")))
     }
 
-    public sendMessageToHub(message: string) {
-        var promise = this.hubConnection.invoke("BroadcastAsync", this.buildChatMessage(message))
+    public async sendMessageToHub(message: string) {
+        var promise = await this.hubConnection.invoke("BroadcastAsync", this.buildChatMessage(message))
             .then(() => console.log("message sent to hub"))
             .catch((err) => console.error("error while sending message to hub"))
 
-        return from(promise)
+        return promise
     }
 
     private getConnection(): signalR.HubConnection {

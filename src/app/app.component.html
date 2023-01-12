@@ -10,7 +10,7 @@
     </div>
   </div>
   <div id="chat-form">
-    <input type="text" [(ngModel)]="text" placeholder="Enter a message" maxlength="500" autocomplete="off" />
-    <button class="btn btn-primary" [disabled]="text.length==0" (click)="sendMessage()">Send</button>
+    <input type="text" [(ngModel)]="message" placeholder="Enter a message" />
+    <button class="btn btn-primary" [disabled]="message.length==0" (click)="sendMessage()">Send</button>
   </div>
 </div>

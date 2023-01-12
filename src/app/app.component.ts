@@ -8,7 +8,7 @@ import { ChatSignalRService } from 'src/services/chat-signalr.service';
 })
 export class AppComponent implements OnInit {
   title = 'Chatterz'
-  text: string = ""
+  message: string = ""
   username: string = ""
 
   constructor(public chatSignalRService: ChatSignalRService) { }
@@ -18,11 +18,10 @@ export class AppComponent implements OnInit {
     this.chatSignalRService.connect()
   }
 
-  sendMessage(): void {
-    this.chatSignalRService.sendMessageToHub(this.text).subscribe({
-      next: _ => this.text = "",
-      error: (err) => console.error(err)
-    })
+  async sendMessage() {
+    await this.chatSignalRService.sendMessageToHub(this.message)
+      .then(_ => this.message = "")
+      .catch((err) => console.log(err))
   }
 
   userName(): void {
