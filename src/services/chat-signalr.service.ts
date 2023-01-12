@@ -46,7 +46,8 @@ export class ChatSignalRService {
         return {
             ConnectionId: this.hubConnection.connectionId,
             Text: message,
-            DateTime: new Date()
+            DateTime: new Date(),
+            UserName: localStorage.getItem("username").toString()
         }
     }
 
@@ -65,7 +66,6 @@ export class ChatSignalRService {
         })
         this.hubConnection.on("messageReceivedFromHub", (data: chatMessage) => {
             console.log("message received from hub")
-            console.log(data)
             this.messages.push(data)
         })
         this.hubConnection.on("newUserConnected", _ => {
