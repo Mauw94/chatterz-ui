@@ -1,0 +1,17 @@
+<div id="chat">
+  <div id="chat-messages">
+    <div *ngIf="chatSignalRService.messages.length==0">
+      <p>You haven't sent or received messages</p>
+    </div>
+    <div *ngFor="let m of chatSignalRService.messages">
+      <div>{{m.Text}}</div>
+    </div>
+  </div>
+
+  <div id="chat-form">
+    <input type="text" [(ngModel)]="text" name="message" placeholder="Enter a message" maxlength="500"
+      autocomplete="off" />
+    <button class="btn btn-primary" [disabled]="text.length==0" (click)="sendMessage()">Send</button>
+  </div>
+
+</div>

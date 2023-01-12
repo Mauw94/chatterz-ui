@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+    background-color: #222831;
+    font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    font-weight: 300;
+    font-size: 18pt;
+    color: #dfdbdb;
+    line-height: 1.60em;
+    overflow-x: hidden;
+}
