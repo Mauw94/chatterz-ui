@@ -2,26 +2,27 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import * as signalR from "@microsoft/signalr"
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
+import { Observable, Subject } from "rxjs";
 import { tap } from "rxjs/operators";
-import { chatMessage } from "src/app/models/chatMessage";
+import { ChatMessage } from "src/app/models/ChatMessage";
 import { Const } from "src/utils/const";
 
 @Injectable({ providedIn: 'root' })
 export class ChatSignalRService {
 
-    public messages: chatMessage[] = []
     public connectionId: string = ""
     public connectionEstablished: boolean = false
 
     private hubConnection: signalR.HubConnection
     private connectionUrl = Const.getBaseUrl() + "signalr"
     private apiUrl = Const.getBaseUrl() + "api/chat/send"
+    private messageSubject = new Subject<ChatMessage>()
 
     constructor(private http: HttpClient) { }
 
-    public connect = () => {
-        this.startConnection()
-        this.addListeners()
+    public async connect() {
+        await this.startConnection()
+        await this.addListeners()
     }
 
     public sendMessageToApi(message: string) {
@@ -37,6 +38,10 @@ export class ChatSignalRService {
         return promise
     }
 
+    public retrieveMessage(): Observable<ChatMessage> {
+        return this.messageSubject.asObservable();
+    }
+
     private getConnection(): signalR.HubConnection {
         return new signalR.HubConnectionBuilder()
             .withUrl(this.connectionUrl)
@@ -44,7 +49,7 @@ export class ChatSignalRService {
             .build()
     }
 
-    private buildChatMessage(message: string): chatMessage {
+    private buildChatMessage(message: string): ChatMessage {
         return {
             ConnectionId: this.hubConnection.connectionId,
             Text: message,
@@ -53,10 +58,10 @@ export class ChatSignalRService {
         }
     }
 
-    private startConnection() {
+    private async startConnection() {
         this.hubConnection = this.getConnection()
 
-        this.hubConnection.start()
+        await this.hubConnection.start()
             .then(() =>  { 
                 console.log("connection started")
                 this.connectionId = this.hubConnection.connectionId
@@ -65,18 +70,15 @@ export class ChatSignalRService {
             .catch((err) => console.error("error while establishing signalr connection"))
     }
 
-    private addListeners() {
-        this.hubConnection.on("messageReceivedFromApi", (data: chatMessage) => {
-            console.log("messaged received from API controller")
-            this.messages.push(data)
+    private async addListeners() {
+        this.hubConnection.on("messageReceivedFromApi", (data: ChatMessage) => {
+            this.messageSubject.next(data)
         })
-        this.hubConnection.on("messageReceivedFromHub", (data: chatMessage) => {
-            console.log("message received from hub")
-            this.messages.push(data)
+        this.hubConnection.on("messageReceivedFromHub", (data: ChatMessage) => {
+            this.messageSubject.next(data)
         })
         this.hubConnection.on("newUserConnected", _ => {
             console.log("new user connected")
         })
-    }
-
+    } 
 }

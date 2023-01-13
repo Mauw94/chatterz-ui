@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
+import { ChatMessage } from './models/ChatMessage';
 
 @Component({
   selector: 'app-root',
@@ -10,18 +11,37 @@ export class AppComponent implements OnInit {
   title = 'Chatterz'
   message: string = ""
   username: string = ""
+  msgInbox: ChatMessage[] = []
 
-  constructor(public chatSignalRService: ChatSignalRService) { }
+  constructor(private chatSignalRService: ChatSignalRService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.userName()
-    this.chatSignalRService.connect()
+    await this.chatSignalRService.connect()
+    this.chatSignalRService.retrieveMessage().subscribe((message: ChatMessage) => {
+      console.log("retrieved a new message")
+      this.addToInbox(message)
+    })
   }
 
   async sendMessage() {
     await this.chatSignalRService.sendMessageToHub(this.message)
       .then(_ => this.message = "")
       .catch((err) => console.log(err))
+  }
+
+  addToInbox(message: ChatMessage) {
+    let newMsg = this.newChatMessage(message)
+    this.msgInbox.push(newMsg)
+  }
+
+  newChatMessage(message: ChatMessage): ChatMessage {
+    return {
+      ConnectionId: message.ConnectionId,
+      UserName: message.UserName,
+      Text: message.Text,
+      DateTime: message.DateTime
+    }
   }
 
   userName(): void {

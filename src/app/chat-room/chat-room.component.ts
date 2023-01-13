@@ -9,7 +9,7 @@ import { ChatterzService } from 'src/services/chatterz.service';
 export class ChatRoomComponent implements OnInit {
 
   public chatroomId: string = ""
-
+  
   constructor(private chatterzService: ChatterzService) { }
 
   ngOnInit(): void {

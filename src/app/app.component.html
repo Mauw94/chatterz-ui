@@ -4,10 +4,10 @@
 <button class="btn btn-primary btn-sm" (click)="changeUsername()">Change username</button>
 <div id="chat">
   <div id="chat-messages">
-    <div *ngIf="chatSignalRService.messages.length==0">
+    <div *ngIf="msgInbox.length===0">
       <p>You haven't sent or received messages</p>
     </div>
-    <div *ngFor="let m of chatSignalRService.messages">
+    <div *ngFor="let m of msgInbox">
       <div>{{m.UserName}}: {{m.Text}}</div>
     </div>
   </div>
