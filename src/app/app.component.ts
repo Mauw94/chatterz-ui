@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { ChatMessage } from './models/ChatMessage';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,13 @@ export class AppComponent implements OnInit {
   message: string = ""
   username: string = ""
   msgInbox: ChatMessage[] = []
+  prodEnv: boolean = false;
 
   constructor(private chatSignalRService: ChatSignalRService) { }
 
   async ngOnInit() {
+    if (environment.production) this.prodEnv = true
+
     this.userName()
     await this.chatSignalRService.connect()
     this.chatSignalRService.retrieveMessage().subscribe((message: ChatMessage) => {
@@ -25,6 +29,8 @@ export class AppComponent implements OnInit {
   }
 
   async sendMessage() {
+    if (this.message.length === 0) return
+
     await this.chatSignalRService.sendMessageToHub(this.message)
       .then(_ => this.message = "")
       .catch((err) => console.log(err))
