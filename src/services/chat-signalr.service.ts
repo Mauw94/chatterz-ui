@@ -10,6 +10,8 @@ import { Const } from "src/utils/const";
 export class ChatSignalRService {
 
     public messages: chatMessage[] = []
+    public connectionId: string = ""
+    public connectionEstablished: boolean = false
 
     private hubConnection: signalR.HubConnection
     private connectionUrl = Const.getBaseUrl() + "signalr"
@@ -55,7 +57,11 @@ export class ChatSignalRService {
         this.hubConnection = this.getConnection()
 
         this.hubConnection.start()
-            .then(() => console.log("connection started"))
+            .then(() =>  { 
+                console.log("connection started")
+                this.connectionId = this.hubConnection.connectionId
+                this.connectionEstablished = true
+            })
             .catch((err) => console.error("error while establishing signalr connection"))
     }
 
