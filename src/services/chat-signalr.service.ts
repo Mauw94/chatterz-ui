@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone } from "@angular/core";
 import * as signalR from "@microsoft/signalr"
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 import { Observable, Subject } from "rxjs";
@@ -18,7 +18,7 @@ export class ChatSignalRService {
     private apiUrl = Const.getBaseUrl() + "api/chat/send"
     private messageSubject = new Subject<ChatMessage>()
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private ngZone: NgZone) { }
 
     public async connect() {
         await this.startConnection()
@@ -72,10 +72,10 @@ export class ChatSignalRService {
 
     private async addListeners() {
         this.hubConnection.on("messageReceivedFromApi", (data: ChatMessage) => {
-            this.messageSubject.next(data)
+            this.ngZone.run(() => this.messageSubject.next(data))
         })
         this.hubConnection.on("messageReceivedFromHub", (data: ChatMessage) => {
-            this.messageSubject.next(data)
+            this.ngZone.run(() => this.messageSubject.next(data))
         })
         this.hubConnection.on("newUserConnected", _ => {
             console.log("new user connected")
