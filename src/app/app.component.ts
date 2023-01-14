@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
   }
 
   async sendMessage() {
+    // TODO: save in chatroom history
     if (this.message.length === 0) return
 
     await this.chatSignalRService.sendMessageToHub(this.message)
@@ -70,6 +71,7 @@ export class AppComponent implements OnInit {
   }
 
   changeUsername(): void {
+    // TODO: update username in db
     var username = window.prompt("Enter your username")
     if (username === null) {
       this.changeUsername()
