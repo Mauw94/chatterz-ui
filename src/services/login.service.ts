@@ -1,26 +1,49 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { CookieService } from "ngx-cookie-service";
 import { Observable } from "rxjs";
 import { UserLoginInfo } from "src/app/models/userLoginInfo";
 import { Const } from "src/utils/const";
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class LoginService {
 
-    public loggedIn: boolean = false
-    
+    public isLoggedIn: boolean = false
+    public user: UserLoginInfo = new UserLoginInfo()
+
     private apiUrl = Const.getBaseUrl() + "api/login/"
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        private router: Router,
+        private cookieService: CookieService) { }
 
-    login(username: string, password: string) {
-        return this.http.post(this.apiUrl + "login", 
+    public login(username: string, password: string) {
+        return this.http.post(this.apiUrl + "login",
             this.createUserLoginInfo(username, password))
     }
 
-    createTempUser(username: string, password: string): Observable<any> {
-        return this.http.post(this.apiUrl + "create", 
+    public createTempUser(username: string, password: string): Observable<any> {
+        return this.http.post(this.apiUrl + "create",
             this.createUserLoginInfo(username, password))
+    }
+
+    public checkCookie() {
+        var loginInfo = this.cookieService.get('loginInfo')
+        if (loginInfo !== '') {
+            var user = JSON.parse(loginInfo)
+            this.isLoggedIn = true
+            this.user = user
+            this.router.navigate(['chat'])
+        }
+    }
+
+    public setCookie() {
+        var now = new Date()
+        now.setHours(now.getHours() + 1) // cookie expires in 1hour
+        this.cookieService.set('loginInfo', JSON.stringify(this.user), now)
+        this.router.navigate(['chat'])
     }
 
     private createUserLoginInfo(username: string, password: string): UserLoginInfo {

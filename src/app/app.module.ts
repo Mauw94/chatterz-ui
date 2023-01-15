@@ -7,11 +7,15 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ChatRoomComponent } from './chat-room/chat-room.component';
 import { LoginComponent } from './login/login.component';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { ChatComponent } from './chat/chat.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatRoomComponent,
+    ChatComponent,
     LoginComponent
   ],
   imports: [
@@ -20,7 +24,7 @@ import { LoginComponent } from './login/login.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [AuthGuard, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
