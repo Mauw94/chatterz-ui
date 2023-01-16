@@ -30,7 +30,9 @@ export class ChatSignalRService {
         await this.startConnection()
         await this.addListeners()
 
-        this.user = this.loginService.user
+        this.loginService.userSubject.subscribe((user) => {
+            this.user = user
+        })
     }
 
     public sendMessageToApi(message: string) {
@@ -85,7 +87,7 @@ export class ChatSignalRService {
         this.hubConnection.on("messageReceivedFromHub", (data: ChatMessage) => {
             this.ngZone.run(() => this.messageSubject.next(data))
         })
-        this.hubConnection.on("newUserConnected", _ => {
+        this.hubConnection.on("userConnected", _ => {
             console.log("new user connected")
         })
     }

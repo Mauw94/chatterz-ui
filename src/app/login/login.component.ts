@@ -17,14 +17,14 @@ export class LoginComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.loginService.fetchTestUser().subscribe({
-      next: (res) => {
-        this.loginService.user = res
-        this.loginService.isLoggedIn = true
-        this.loginService.setCookie()
-      },
-      error: (err) => console.error(err)
-    })
+    // this.loginService.fetchTestUser().subscribe({
+    //   next: (res) => {
+    //     this.loginService.user = res
+    //     this.loginService.isLoggedIn = true
+    //     this.loginService.setCookie()
+    //   },
+    //   error: (err) => console.error(err)
+    // })
     // this.loginService.checkCookie()
   }
 
@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.username, this.password).subscribe({
       next: (res: any) => {
         this.loginService.user = res
+        this.loginService.userSubject.next(res)
         this.loginService.isLoggedIn = true
         this.loginService.setCookie()
       },

@@ -22,10 +22,16 @@ export class ChatRoomComponent implements OnInit {
       next: () => this.getAllChatrooms(),
       error: (err) => console.error(err)
     })
+    this.getAllChatrooms()
   }
 
   joinRoom(id: string): void {
-    console.log("joining gameroom.." + id)
+    this.chatterzService.joinChatroom(id, this.signalRService.user.id, this.signalRService.connectionId)
+      .subscribe({
+        next: () => this.chatroomId = id,
+        error: (err) => console.error(err)
+      })
+    this.chatterzService.inChatRoom.next(this.isInChatroom(this.chatrooms))
   }
 
   create(): void {
@@ -36,6 +42,7 @@ export class ChatRoomComponent implements OnInit {
       },
       error: error => console.error(error)
     })
+    this.chatterzService.inChatRoom.next(this.isInChatroom(this.chatrooms))
   }
 
   private getAllChatrooms(): void {

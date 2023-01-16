@@ -5,6 +5,7 @@ import { ChatSignalRService } from "./chat-signalr.service";
 import { ConnectionInfo } from "src/app/models/connectionInfo";
 import { Observable, Subject } from "rxjs";
 import { changeUsernameDto } from "src/app/models/changeUsernameDto";
+import { ChatroomJoinDto } from "src/app/models/chatroomJoinDto";
 
 @Injectable({ providedIn: 'root' })
 export class ChatterzService {
@@ -23,6 +24,11 @@ export class ChatterzService {
             this.buildConnectionInfo(), { responseType: 'text' })
     }
 
+    public joinChatroom(chatroomId: string, userId: string, connectionId: string): Observable<any> {
+        return this.http.post(this.apiChatroomUrl + "join",
+            this.chatroomJoinDto(chatroomId, userId, connectionId))
+    }
+
     public getAllChatrooms(): Observable<any> {
         return this.http.get(this.apiChatroomUrl + "all")
     }
@@ -32,7 +38,15 @@ export class ChatterzService {
             this.changeUsernameDto(newUsername, userId))
     }
 
+    private chatroomJoinDto(chatroomId: string, userId: string, connectionId: string): ChatroomJoinDto {
+        return {
+            chatroomId: chatroomId,
+            userId: userId,
+            connectionId: connectionId
+        }
+    }
     private buildConnectionInfo(): ConnectionInfo {
+        console.log(this.signalRService.user)
         return {
             connectionId: this.signalRService.connectionId,
             userId: this.signalRService.user.id

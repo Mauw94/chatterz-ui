@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { CookieService } from "ngx-cookie-service";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { UserLoginInfo } from "src/app/models/userLoginInfo";
 import { Const } from "src/utils/const";
 
@@ -11,6 +11,7 @@ export class LoginService {
 
     public isLoggedIn: boolean = false
     public user: UserLoginInfo = new UserLoginInfo()
+    public userSubject: Subject<UserLoginInfo> = new Subject<UserLoginInfo>()
 
     private apiUrl = Const.getBaseUrl() + "api/login/"
 
