@@ -20,6 +20,8 @@
     "@angular/platform-browser-dynamic": "^13.2.6",
     "@angular/router": "^13.2.6",
     "@microsoft/signalr-protocol-msgpack": "^7.0.2",
+    "bootstrap": "^5.2.3",
+    "bootstrap-icons": "^1.10.3",
     "ngx-cookie-service": "^14.0.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
