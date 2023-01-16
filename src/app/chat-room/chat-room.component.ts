@@ -28,7 +28,9 @@ export class ChatRoomComponent implements OnInit {
   joinRoom(id: string): void {
     this.chatterzService.joinChatroom(id, this.signalRService.user.id, this.signalRService.connectionId)
       .subscribe({
-        next: () => this.chatroomId = id,
+        next: () => {
+          this.chatroomId = id
+        },
         error: (err) => console.error(err)
       })
     this.chatterzService.inChatRoom.next(this.isInChatroom(this.chatrooms))
@@ -62,6 +64,7 @@ export class ChatRoomComponent implements OnInit {
       if (chatrooms[i].users.map(u => u.id).includes(this.signalRService.user.id)) {
         console.log("current chatroom: " + chatrooms[i].id)
         this.chatroomId = chatrooms[i].id
+        this.chatterzService.chatroomId = this.chatroomId
         return true
       }
     }

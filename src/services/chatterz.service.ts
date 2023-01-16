@@ -11,7 +11,8 @@ import { ChatroomJoinDto } from "src/app/models/chatroomJoinDto";
 export class ChatterzService {
 
     public inChatRoom: Subject<boolean> = new Subject<boolean>()
-
+    public chatroomId: string = ""
+    
     private apiChatroomUrl = Const.getBaseUrl() + "api/chatroom/"
     private apiUsersUrl = Const.getBaseUrl() + "api/users/"
 

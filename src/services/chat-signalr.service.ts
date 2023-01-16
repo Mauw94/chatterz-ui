@@ -36,12 +36,12 @@ export class ChatSignalRService {
     }
 
     public sendMessageToApi(message: string) {
-        return this.http.post(this.apiUrl, this.buildChatMessage(message))
+        return this.http.post(this.apiUrl, this.buildChatMessage(message, undefined))
             .pipe(tap(_ => console.log("message sucessfully sent to api")))
     }
 
-    public async sendMessageToHub(message: string) {
-        var promise = await this.hubConnection.invoke("BroadcastAsync", this.buildChatMessage(message))
+    public async sendMessageToHub(message: string, chatroomId: string) {
+        var promise = await this.hubConnection.invoke("BroadcastAsync", this.buildChatMessage(message, chatroomId))
             .then(() => console.log("message sent to hub"))
             .catch((err) => console.error("error while sending message to hub"))
 
@@ -59,12 +59,13 @@ export class ChatSignalRService {
             .build()
     }
 
-    private buildChatMessage(message: string): ChatMessage {
+    private buildChatMessage(message: string, chatroomId: string): ChatMessage {
         return {
             ConnectionId: this.hubConnection.connectionId,
             Text: message,
             DateTime: new Date(),
-            UserName: this.loginService.user.userName
+            UserName: this.loginService.user.userName,
+            ChatroomId: chatroomId
         }
     }
 
