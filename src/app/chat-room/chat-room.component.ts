@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatterzService } from 'src/services/chatterz.service';
+import { ChatroomDto } from '../models/chatroomDto';
 
 @Component({
   selector: 'app-chat-room',
@@ -9,7 +10,8 @@ import { ChatterzService } from 'src/services/chatterz.service';
 export class ChatRoomComponent implements OnInit {
 
   public chatroomId: string = ""
-  
+  public chatrooms: ChatroomDto[] = []
+
   constructor(private chatterzService: ChatterzService) { }
 
   ngOnInit(): void {
@@ -17,11 +19,21 @@ export class ChatRoomComponent implements OnInit {
 
   create(): void {
     this.chatterzService.createChatroom().subscribe({
-      next: data => { 
+      next: data => {
         this.chatroomId = data
-        console.log(data) 
+        console.log(data)
       },
       error: error => console.error(error)
+    })
+  }
+
+  getAllChatrooms(): void {
+    this.chatterzService.getAllChatrooms().subscribe({
+      next: (res) => {
+        console.log(res)
+        this.chatrooms = res
+      },
+      error: (err) => console.error(err)
     })
   }
 }

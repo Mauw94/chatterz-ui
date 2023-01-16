@@ -19,6 +19,10 @@ export class LoginService {
         private router: Router,
         private cookieService: CookieService) { }
 
+    public fetchTestUser(): Observable<any> {
+        return this.http.get(this.apiUrl + "new")
+    }
+    
     public login(username: string, password: string): Observable<any> {
         return this.http.post(this.apiUrl + "login",
             this.createUserLoginInfo(username, password))
@@ -55,6 +59,7 @@ export class LoginService {
 
     private createUserLoginInfo(username: string, password: string): UserLoginInfo {
         return {
+            id: undefined,
             userName: username,
             password: password
         }

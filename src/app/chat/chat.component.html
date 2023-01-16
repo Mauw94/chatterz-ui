@@ -1,13 +1,11 @@
 <div class="row">
-  
+
   <div class="col-md-6">
-    <div *ngIf="!prodEnv">
-      <app-chat-room></app-chat-room>
-    </div>
+    <app-chat-room></app-chat-room>
   </div>
 
   <div class="col-md-6">
-    <h2 *ngIf="username.length > 0">Welcome {{username}}</h2>
+    <h2>Welcome {{loginService.user.userName}}</h2>
     <button class="btn btn-primary btn-sm" (click)="changeUsername()">Change username</button>
     <div id="chat">
       <div id="chat-messages">

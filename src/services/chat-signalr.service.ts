@@ -6,23 +6,31 @@ import { Observable, Subject } from "rxjs";
 import { tap } from "rxjs/operators";
 import { ChatMessage } from "src/app/models/ChatMessage";
 import { Const } from "src/utils/const";
+import { LoginService } from "./login.service";
+import { UserLoginInfo } from "src/app/models/userLoginInfo";
 
 @Injectable({ providedIn: 'root' })
 export class ChatSignalRService {
 
     public connectionId: string = ""
     public connectionEstablished: boolean = false
+    public user: UserLoginInfo
 
     private hubConnection: signalR.HubConnection
     private connectionUrl = Const.getBaseUrl() + "signalr"
     private apiUrl = Const.getBaseUrl() + "api/chat/send"
     private messageSubject = new Subject<ChatMessage>()
 
-    constructor(private http: HttpClient, private ngZone: NgZone) { }
+    constructor(
+        private http: HttpClient,
+        private ngZone: NgZone,
+        private loginService: LoginService) { }
 
     public async connect() {
         await this.startConnection()
         await this.addListeners()
+
+        this.user = this.loginService.user
     }
 
     public sendMessageToApi(message: string) {
@@ -54,7 +62,7 @@ export class ChatSignalRService {
             ConnectionId: this.hubConnection.connectionId,
             Text: message,
             DateTime: new Date(),
-            UserName: localStorage.getItem("username").toString()
+            UserName: this.loginService.user.userName
         }
     }
 
@@ -62,7 +70,7 @@ export class ChatSignalRService {
         this.hubConnection = this.getConnection()
 
         await this.hubConnection.start()
-            .then(() =>  { 
+            .then(() => {
                 console.log("connection started")
                 this.connectionId = this.hubConnection.connectionId
                 this.connectionEstablished = true
@@ -80,5 +88,5 @@ export class ChatSignalRService {
         this.hubConnection.on("newUserConnected", _ => {
             console.log("new user connected")
         })
-    } 
+    }
 }

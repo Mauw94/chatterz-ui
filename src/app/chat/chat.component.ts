@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ChatMessage } from '../models/ChatMessage';
 import { environment } from 'src/environments/environment';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
+import { LoginService } from 'src/services/login.service';
+import { ChatterzService } from 'src/services/chatterz.service';
 
 @Component({
   selector: 'app-chat',
@@ -16,12 +18,14 @@ export class ChatComponent implements OnInit {
   msgInbox: ChatMessage[] = []
   prodEnv: boolean = false;
 
-  constructor(private chatSignalRService: ChatSignalRService) { }
+  constructor(
+    public loginService: LoginService,
+    private chatterzService: ChatterzService,
+    private chatSignalRService: ChatSignalRService) { }
 
   async ngOnInit() {
     if (environment.production) this.prodEnv = true
 
-    this.userName()
     await this.chatSignalRService.connect()
     this.chatSignalRService.retrieveMessage().subscribe((message: ChatMessage) => {
       console.log("retrieved a new message")
@@ -52,27 +56,7 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  userName(): void {
-    if (localStorage.getItem("username") !== null) {
-      console.log("already have a username stored")
-      this.username = localStorage.getItem("username").toString()
-      return
-    }
-    var username = window.prompt("Enter your username")
-    if (username === null) {
-      this.userName()
-      return
-    }
-    if (username.length > 2) {
-      this.username = username
-      localStorage.setItem("username", username)
-    } else {
-      this.userName()
-    }
-  }
-
   changeUsername(): void {
-    // TODO: update username in db
     var username = window.prompt("Enter your username")
     if (username === null) {
       this.changeUsername()
@@ -80,7 +64,12 @@ export class ChatComponent implements OnInit {
     }
     if (username.length > 2) {
       this.username = username
-      localStorage.setItem("username", username)
+      this.chatterzService.changeUsername(username, this.loginService.user.id).subscribe({
+        next: () => {
+          this.loginService.user.userName = username
+        },
+        error: (err) => console.error(err)
+      })
     } else {
       this.changeUsername()
     }

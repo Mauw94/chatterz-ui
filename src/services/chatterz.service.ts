@@ -2,26 +2,49 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Const } from "src/utils/const";
 import { ChatSignalRService } from "./chat-signalr.service";
-import { tap } from "rxjs/operators";
-import { connectionInfo } from "src/app/models/connectionInfo";
+import { ConnectionInfo } from "src/app/models/connectionInfo";
 import { Observable } from "rxjs";
+import { changeUsernameDto } from "src/app/models/changeUsernameDto";
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ChatterzService {
-    
-    private apiUrl = Const.getBaseUrl() + "api/chatroom/create"
 
-    constructor(private http: HttpClient, private signalRService: ChatSignalRService) {}
+    private apiChatroomUrl = Const.getBaseUrl() + "api/chatroom/"
+    private apiUsersUrl = Const.getBaseUrl() + "api/users/"
+
+    constructor(
+        private http: HttpClient,
+        private signalRService: ChatSignalRService) { }
 
     public createChatroom(): Observable<any> {
         if (this.signalRService.connectionEstablished) {
-            return this.http.post(this.apiUrl, this.buildConnectionInfo(), {responseType: 'text'})
+            return this.http.post(this.apiChatroomUrl + "create",
+                this.buildConnectionInfo(), { responseType: 'text' })
         }
     }
 
-    private buildConnectionInfo(): connectionInfo {
+    public getAllChatrooms(): Observable<any> {
+        if (this.signalRService.connectionEstablished) {
+            return this.http.get(this.apiChatroomUrl + "all")
+        }
+    }
+
+    public changeUsername(newUsername: string, userId: string): Observable<any> {
+        return this.http.post(this.apiUsersUrl + "change_username",
+            this.changeUsernameDto(newUsername, userId))
+    }
+
+    private buildConnectionInfo(): ConnectionInfo {
         return {
-            ConnectionId: this.signalRService.connectionId
+            connectionId: this.signalRService.connectionId,
+            userId: this.signalRService.user.id
+        }
+    }
+
+    private changeUsernameDto(newUsername: string, userId: string): changeUsernameDto {
+        return {
+            newUsername: newUsername,
+            userId: userId
         }
     }
 }

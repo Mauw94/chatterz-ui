@@ -17,7 +17,15 @@ export class LoginComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.loginService.checkCookie()
+    this.loginService.fetchTestUser().subscribe({
+      next: (res) => {
+        this.loginService.user = res
+        this.loginService.isLoggedIn = true
+        this.loginService.setCookie()
+      },
+      error: (err) => console.error(err)
+    })
+    // this.loginService.checkCookie()
   }
 
   login(): void {

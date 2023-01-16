@@ -1,3 +1,4 @@
-export interface connectionInfo {
-    ConnectionId: string
+export class ConnectionInfo {
+    connectionId: string
+    userId: string
 }
