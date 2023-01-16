@@ -3,11 +3,13 @@ import { Injectable } from "@angular/core";
 import { Const } from "src/utils/const";
 import { ChatSignalRService } from "./chat-signalr.service";
 import { ConnectionInfo } from "src/app/models/connectionInfo";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { changeUsernameDto } from "src/app/models/changeUsernameDto";
 
 @Injectable({ providedIn: 'root' })
 export class ChatterzService {
+
+    public inChatRoom: Subject<boolean> = new Subject<boolean>()
 
     private apiChatroomUrl = Const.getBaseUrl() + "api/chatroom/"
     private apiUsersUrl = Const.getBaseUrl() + "api/users/"
@@ -17,16 +19,12 @@ export class ChatterzService {
         private signalRService: ChatSignalRService) { }
 
     public createChatroom(): Observable<any> {
-        if (this.signalRService.connectionEstablished) {
-            return this.http.post(this.apiChatroomUrl + "create",
-                this.buildConnectionInfo(), { responseType: 'text' })
-        }
+        return this.http.post(this.apiChatroomUrl + "create",
+            this.buildConnectionInfo(), { responseType: 'text' })
     }
 
     public getAllChatrooms(): Observable<any> {
-        if (this.signalRService.connectionEstablished) {
-            return this.http.get(this.apiChatroomUrl + "all")
-        }
+        return this.http.get(this.apiChatroomUrl + "all")
     }
 
     public changeUsername(newUsername: string, userId: string): Observable<any> {

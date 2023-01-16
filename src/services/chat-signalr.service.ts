@@ -13,7 +13,7 @@ import { UserLoginInfo } from "src/app/models/userLoginInfo";
 export class ChatSignalRService {
 
     public connectionId: string = ""
-    public connectionEstablished: boolean = false
+    public connectionEstablished: Subject<boolean> = new Subject<boolean>()
     public user: UserLoginInfo
 
     private hubConnection: signalR.HubConnection
@@ -73,7 +73,7 @@ export class ChatSignalRService {
             .then(() => {
                 console.log("connection started")
                 this.connectionId = this.hubConnection.connectionId
-                this.connectionEstablished = true
+                this.connectionEstablished.next(true)
             })
             .catch((err) => console.error("error while establishing signalr connection"))
     }

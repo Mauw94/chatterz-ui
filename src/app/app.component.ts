@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { LoginService } from 'src/services/login.service';
 
 @Component({
@@ -6,8 +7,14 @@ import { LoginService } from 'src/services/login.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  constructor(public loginService: LoginService) { }
+  constructor(
+    public loginService: LoginService,
+    private chatSignalRService: ChatSignalRService) { }
+
+  async ngOnInit() {
+    await this.chatSignalRService.connect()
+  }
 
 }

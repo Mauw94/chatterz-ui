@@ -1,5 +1,10 @@
 <h2>Chatrooms</h2>
 
 <p>Create new chatroom</p>
-<button class="btn btn-primary" (click)="create()">Create</button>
-<p>{{chatroomId}}</p>
+<button class="btn btn-primary btn-sm" (click)="create()">Create</button>
+<p>current chatroom: {{chatroomId}}</p>
+
+<h3>Open chatrooms</h3>
+<div *ngFor="let c of chatrooms">
+    {{c.id}} <button class="btn btn-outline-success btn-sm" (click)="joinRoom(c.id)">join</button>
+</div>

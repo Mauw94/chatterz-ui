@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatMessage } from '../models/ChatMessage';
-import { environment } from 'src/environments/environment';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { LoginService } from 'src/services/login.service';
 import { ChatterzService } from 'src/services/chatterz.service';
@@ -12,11 +11,11 @@ import { ChatterzService } from 'src/services/chatterz.service';
 })
 
 export class ChatComponent implements OnInit {
-  title = 'Chatterz'
-  message: string = ""
-  username: string = ""
-  msgInbox: ChatMessage[] = []
-  prodEnv: boolean = false;
+  public title = 'Chatterz'
+  public message: string = ""
+  public username: string = ""
+  public msgInbox: ChatMessage[] = []
+  public isInChatroom: boolean = false;
 
   constructor(
     public loginService: LoginService,
@@ -24,9 +23,13 @@ export class ChatComponent implements OnInit {
     private chatSignalRService: ChatSignalRService) { }
 
   async ngOnInit() {
-    if (environment.production) this.prodEnv = true
+    this.chatterzService.inChatRoom.subscribe({
+      next: (res) => {
+        this.isInChatroom = res
+      },
+      error: (err) => console.error(err)
+    })
 
-    await this.chatSignalRService.connect()
     this.chatSignalRService.retrieveMessage().subscribe((message: ChatMessage) => {
       console.log("retrieved a new message")
       this.addToInbox(message)
