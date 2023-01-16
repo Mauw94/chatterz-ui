@@ -1,5 +1,24 @@
-<h2>Login</h2>
-
-<input type="text" [(ngModel)]="username" placeholder="Username">
-<input type="password" [(ngModel)]="password" placeholder="Password">
-<button (click)="login()">Login</button>
+<div class="sidenav">
+    <div class="login-main-text">
+        <h2>Application<br> Login Page</h2>
+        <p>Login or register from here to access.</p>
+    </div>
+</div>
+<div class="main">
+    <div class="col-md-6 col-sm-12">
+        <div class="login-form">
+            <form>
+                <div class="form-group">
+                    <label>User Name</label>
+                    <input type="text" [(ngModel)]="username" class="form-control" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" [(ngModel)]="password" class="form-control" placeholder="Password">
+                </div>
+                <button (click)="login()" class="btn btn-black">Login</button>
+                <button class="btn btn-secondary">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
