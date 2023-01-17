@@ -47,7 +47,7 @@ export class LoginService {
             var user = JSON.parse(loginInfo)
             this.isLoggedIn = true
             this.user = user
-            this.router.navigate(['chat'])
+            this.router.navigate(['main'])
         }
     }
 
@@ -55,7 +55,7 @@ export class LoginService {
         var now = new Date()
         now.setHours(now.getHours() + 1) // cookie expires in 1hour
         this.cookieService.set('loginInfo', JSON.stringify(this.user), now)
-        this.router.navigate(['chat'])
+        this.router.navigate(['main'])
     }
 
     private createUserLoginInfo(username: string, password: string): UserLoginInfo {

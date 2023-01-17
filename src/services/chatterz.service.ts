@@ -12,17 +12,16 @@ export class ChatterzService {
 
     public inChatRoom: Subject<boolean> = new Subject<boolean>()
     public chatroomId: string = ""
-    
+
     private apiChatroomUrl = Const.getBaseUrl() + "api/chatroom/"
     private apiUsersUrl = Const.getBaseUrl() + "api/users/"
 
     constructor(
-        private http: HttpClient,
-        private signalRService: ChatSignalRService) { }
+        private http: HttpClient) { }
 
-    public createChatroom(): Observable<any> {
+    public createChatroom(userId: string, connectionId: string): Observable<any> {
         return this.http.post(this.apiChatroomUrl + "create",
-            this.buildConnectionInfo(), { responseType: 'text' })
+            this.buildConnectionInfo(userId, connectionId), { responseType: 'text' })
     }
 
     public joinChatroom(chatroomId: string, userId: string, connectionId: string): Observable<any> {
@@ -46,11 +45,10 @@ export class ChatterzService {
             connectionId: connectionId
         }
     }
-    private buildConnectionInfo(): ConnectionInfo {
-        console.log(this.signalRService.user)
+    private buildConnectionInfo(userId: string, connectionId: string): ConnectionInfo {
         return {
-            connectionId: this.signalRService.connectionId,
-            userId: this.signalRService.user.id
+            connectionId: connectionId,
+            userId: userId
         }
     }
 

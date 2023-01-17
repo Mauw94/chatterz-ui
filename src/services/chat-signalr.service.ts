@@ -14,11 +14,12 @@ export class ChatSignalRService {
 
     public connectionId: string = ""
     public connectionEstablished: Subject<boolean> = new Subject<boolean>()
-    public user: UserLoginInfo
 
     private hubConnection: signalR.HubConnection
     private connectionUrl = Const.getBaseUrl() + "signalr"
     private apiUrl = Const.getBaseUrl() + "api/chat/send"
+    private apiSignalRUrl = Const.getBaseUrl() + "api/signalr/"
+
     private messageSubject = new Subject<ChatMessage>()
 
     constructor(
@@ -29,10 +30,17 @@ export class ChatSignalRService {
     public async connect() {
         await this.startConnection()
         await this.addListeners()
+    }
 
-        this.loginService.userSubject.subscribe((user) => {
-            this.user = user
-        })
+    public async disconnect() {
+        await this.hubConnection.stop()
+            .then(() => {
+                this.disconnectSignalRApi()
+                console.log("connection stopped")
+                this.connectionEstablished.next(false)
+                // todo api call here to end connection, remove from group etc
+            })
+            .catch((err) => console.error(err))
     }
 
     public sendMessageToApi(message: string) {
@@ -50,6 +58,13 @@ export class ChatSignalRService {
 
     public retrieveMessage(): Observable<ChatMessage> {
         return this.messageSubject.asObservable();
+    }
+
+    public disconnectSignalRApi() {
+        this.http.post(this.apiSignalRUrl + "disconnect", {}).subscribe({
+            next: (res) => console.log(res),
+            error: (err) => console.error(err)
+        })
     }
 
     private getConnection(): signalR.HubConnection {
@@ -90,6 +105,12 @@ export class ChatSignalRService {
         })
         this.hubConnection.on("userConnected", _ => {
             console.log("new user connected")
+        })
+        this.hubConnection.onreconnected(() => {
+            console.log("reconnected")
+        })
+        this.hubConnection.on("disconnected", () => {
+            console.log("disconnected")
         })
     }
 }
