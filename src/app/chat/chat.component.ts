@@ -40,26 +40,9 @@ export class ChatComponent implements OnInit {
     // TODO: save in chatroom history
     if (this.message.length === 0) return
 
-    console.log(this.chatterzService.chatroomId)
-
     await this.chatSignalRService.sendMessageToHub(this.message, this.chatterzService.chatroomId)
       .then(_ => this.message = "")
       .catch((err) => console.log(err))
-  }
-
-  addToInbox(message: ChatMessage) {
-    let newMsg = this.newChatMessage(message)
-    this.msgInbox.push(newMsg)
-  }
-
-  newChatMessage(message: ChatMessage): ChatMessage {
-    return {
-      ConnectionId: message.ConnectionId,
-      UserName: message.UserName,
-      Text: message.Text,
-      DateTime: message.DateTime,
-      ChatroomId: message.ChatroomId
-    }
   }
 
   changeUsername(): void {
@@ -80,5 +63,21 @@ export class ChatComponent implements OnInit {
       this.changeUsername()
     }
   }
+
+  private addToInbox(message: ChatMessage) {
+    let newMsg = this.newChatMessage(message)
+    this.msgInbox.push(newMsg)
+  }
+
+  private newChatMessage(message: ChatMessage): ChatMessage {
+    return {
+      ConnectionId: message.ConnectionId,
+      UserName: message.UserName,
+      Text: message.Text,
+      DateTime: message.DateTime,
+      ChatroomId: message.ChatroomId
+    }
+  }
+
 
 }

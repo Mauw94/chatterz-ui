@@ -7,7 +7,7 @@ import { MainComponent } from './main/main.component';
 
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
+  { path: '', component: LoginComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'chat', component: ChatComponent, canActivate: [AuthGuard] },
   { path: 'main', component: MainComponent, canActivate: [AuthGuard] }

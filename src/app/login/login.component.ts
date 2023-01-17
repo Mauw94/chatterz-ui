@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { LoginService } from 'src/services/login.service';
 
 @Component({
@@ -13,31 +12,22 @@ export class LoginComponent implements OnInit {
   password: string = ""
 
   constructor(
-    private loginService: LoginService,
-    private router: Router) { }
+    private loginService: LoginService) { }
 
-  ngOnInit(): void {
-    // this.loginService.fetchTestUser().subscribe({
-    //   next: (res) => {
-    //     this.loginService.user = res
-    //     this.loginService.isLoggedIn = true
-    //     this.loginService.setCookie()
-    //   },
-    //   error: (err) => console.error(err)
-    // })
-    // this.loginService.checkCookie()
-  }
+  ngOnInit(): void { }
 
   login(): void {
-    this.loginService.login(this.username, this.password).subscribe({
-      next: (res: any) => {
-        this.loginService.user = res
-        this.loginService.userSubject.next(res)
-        this.loginService.isLoggedIn = true
-        this.loginService.setCookie()
-      },
-      error: (err) => console.error(err)
-    })
+    if (this.username && this.password) {
+      this.loginService.login(this.username, this.password).subscribe({
+        next: (res: any) => {
+          this.loginService.user = res
+          this.loginService.userSubject.next(res)
+          this.loginService.isLoggedIn = true
+          this.loginService.setCookie()
+        },
+        error: (err) => console.error(err)
+      })
+    }
   }
 
 }

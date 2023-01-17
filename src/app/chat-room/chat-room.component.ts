@@ -39,7 +39,6 @@ export class ChatRoomComponent implements OnInit {
     this.chatterzService.createChatroom(this.loginService.user.id, this.signalRService.connectionId)
       .subscribe({
         next: data => {
-          this.chatroomId = data
           this.getAllChatrooms()
         },
         error: error => console.error(error)

@@ -39,7 +39,6 @@ export class ChatSignalRService {
                 this.disconnectSignalRApi()
                 console.log("connection stopped")
                 this.connectionEstablished.next(false)
-                // todo api call here to end connection, remove from group etc
             })
             .catch((err) => console.error(err))
     }
@@ -119,12 +118,6 @@ export class ChatSignalRService {
         })
         this.hubConnection.on("userConnected", _ => {
             console.log("new user connected")
-        })
-        this.hubConnection.onreconnected(() => {
-            console.log("reconnected")
-        })
-        this.hubConnection.on("disconnected", () => {
-            console.log("disconnected")
         })
     }
 }

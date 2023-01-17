@@ -17,7 +17,6 @@ export class MainComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.chatSignalRService.connectionEstablished.subscribe((connectionEstablished) => {
-      console.log(connectionEstablished)
       this.signalRConnectionStarted = connectionEstablished
     })
 
