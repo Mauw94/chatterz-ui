@@ -7,20 +7,21 @@ import { tap } from "rxjs/operators";
 import { ChatMessage } from "src/app/models/ChatMessage";
 import { Const } from "src/utils/const";
 import { LoginService } from "./login.service";
-import { UserLoginInfo } from "src/app/models/userLoginInfo";
 import { ChatroomJoinDto } from "src/app/models/chatroomJoinDto";
+import { ChatroomDto } from "src/app/models/chatroomDto";
 
 @Injectable({ providedIn: 'root' })
 export class ChatSignalRService {
 
     public connectionId: string = ""
     public connectionEstablished: Subject<boolean> = new Subject<boolean>()
-
+    
     private hubConnection: signalR.HubConnection
     private connectionUrl = Const.getBaseUrl() + "signalr"
     private apiUrl = Const.getBaseUrl() + "api/chat/send"
     private apiSignalRUrl = Const.getBaseUrl() + "api/signalr/"
-
+    
+    private chatroomsSubject: Subject<ChatroomDto[]> = new Subject<ChatroomDto[]>()
     private messageSubject = new Subject<ChatMessage>()
 
     constructor(
@@ -60,6 +61,10 @@ export class ChatSignalRService {
         return this.messageSubject.asObservable();
     }
 
+    public retrieveChatrooms(): Observable<ChatroomDto[]> {
+        return this.chatroomsSubject.asObservable()
+    }
+
     public reconnectToChatrooms(currentChatroomId: string, userId: string, connectionId: string): Observable<any> {
         return this.http.post(this.apiSignalRUrl + "connect",
             this.buildChatroomDto(currentChatroomId, userId, connectionId))
@@ -81,9 +86,9 @@ export class ChatSignalRService {
 
     private buildChatroomDto(chatroomId: string, userId: string, connectionId: string): ChatroomJoinDto {
         return {
-            chatroomId: chatroomId,
-            userId: userId,
-            connectionId: connectionId
+            ChatroomId: chatroomId,
+            UserId: userId,
+            ConnectionId: connectionId
         }
     }
 
@@ -92,7 +97,7 @@ export class ChatSignalRService {
             ConnectionId: this.hubConnection.connectionId,
             Text: message,
             DateTime: new Date(),
-            UserName: this.loginService.user.userName,
+            UserName: this.loginService.user.UserName,
             ChatroomId: chatroomId
         }
     }
@@ -118,6 +123,11 @@ export class ChatSignalRService {
         })
         this.hubConnection.on("userConnected", _ => {
             console.log("new user connected")
+        })
+        this.hubConnection.on("roomsUpdated", (chatrooms: ChatroomDto[]) => {
+            console.log("Rooms are updated => refresh please")
+            console.log(chatrooms)
+            this.chatroomsSubject.next(chatrooms)
         })
     }
 }

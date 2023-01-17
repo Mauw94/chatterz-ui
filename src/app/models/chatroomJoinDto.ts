@@ -1,5 +1,5 @@
 export class ChatroomJoinDto {
-    chatroomId: string
-    userId: string
-    connectionId: string
+    ChatroomId: string
+    UserId: string
+    ConnectionId: string
 }

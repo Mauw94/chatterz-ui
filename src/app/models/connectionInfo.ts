@@ -1,4 +1,4 @@
 export class ConnectionInfo {
-    connectionId: string
-    userId: string
+    ConnectionId: string
+    UserId: string
 }

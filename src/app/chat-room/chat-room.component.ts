@@ -3,6 +3,7 @@ import { ChatterzService } from 'src/services/chatterz.service';
 import { ChatroomDto } from '../models/chatroomDto';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { LoginService } from 'src/services/login.service';
+import { UserLoginInfo } from '../models/userLoginInfo';
 
 @Component({
   selector: 'app-chat-room',
@@ -20,11 +21,12 @@ export class ChatRoomComponent implements OnInit {
     private loginService: LoginService) { }
 
   ngOnInit(): void {
+    this.retrieveChatroomsOnUpdate()
     this.getAllChatrooms()
   }
 
   joinRoom(id: string): void {
-    this.chatterzService.joinChatroom(id, this.loginService.user.id, this.signalRService.connectionId)
+    this.chatterzService.joinChatroom(id, this.loginService.user.Id, this.signalRService.connectionId)
       .subscribe({
         next: () => {
           this.chatroomId = id
@@ -36,21 +38,35 @@ export class ChatRoomComponent implements OnInit {
   }
 
   create(): void {
-    this.chatterzService.createChatroom(this.loginService.user.id, this.signalRService.connectionId)
+    this.chatterzService.createChatroom(this.loginService.user.Id, this.signalRService.connectionId)
       .subscribe({
-        next: data => {
-          this.getAllChatrooms()
-        },
-        error: error => console.error(error)
+        next: (chatroomId: string) => { this.joinRoom(chatroomId) },
+        error: (err) => console.error(err)
       })
+  }
+
+  private retrieveChatroomsOnUpdate(): void {
+    this.signalRService.retrieveChatrooms().subscribe({
+      next: (chatrooms) => {
+        this.chatrooms = []
+        chatrooms.forEach(cr => {
+          this.chatrooms.push(this.newChatroom(cr.Id, cr.Users))
+        });
+      },
+      error: (err) => console.error(err)
+    })
   }
 
   private getAllChatrooms(): void {
     this.chatterzService.getAllChatrooms().subscribe({
-      next: (res) => {
-        this.chatrooms = res
-        if (res !== null) {
+      next: (chatrooms) => {
+        if (chatrooms !== null) {
+          this.chatrooms = []
+          chatrooms.forEach(cr => {
+            this.chatrooms.push(this.newChatroom(cr.id, cr.users))
+          })
           let isInChatroom = this.isInChatroom(this.chatrooms)
+          console.log(isInChatroom)
           this.chatterzService.inChatRoom.next(isInChatroom)
           if (isInChatroom) {
             console.log("is in a chatroom with id" + this.chatroomId)
@@ -63,13 +79,32 @@ export class ChatRoomComponent implements OnInit {
   }
 
   private isInChatroom(chatrooms: ChatroomDto[]): boolean {
+    console.log(chatrooms)
+    console.log(this.loginService.user.Id)
+
     for (let i = 0; i < chatrooms.length; i++) {
-      if (chatrooms[i].users.map(u => u.id).includes(this.loginService.user.id)) {
-        console.log("current chatroom: " + chatrooms[i].id)
-        this.chatroomId = chatrooms[i].id
+      if (chatrooms[i].Users.map(u => u.Id).includes(this.loginService.user.Id)) {
+        console.log("current chatroom: " + chatrooms[i].Id)
+        this.chatroomId = chatrooms[i].Id
         return true
       }
     }
     return false
+  }
+
+  private newChatroom(id: string, users: UserLoginInfo[]): ChatroomDto {
+    return {
+      Id: id,
+      Users: this.newUserLoginInfo(users)
+    }
+  }
+
+  private newUserLoginInfo(users): UserLoginInfo[] {
+    var newUsers: UserLoginInfo[] = []
+    users.forEach(u => {
+      newUsers.push({ Id: u.id, UserName: u.userName, Password: u.password })
+    })
+
+    return newUsers
   }
 }

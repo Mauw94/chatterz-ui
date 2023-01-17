@@ -40,22 +40,22 @@ export class ChatterzService {
 
     private chatroomJoinDto(chatroomId: string, userId: string, connectionId: string): ChatroomJoinDto {
         return {
-            chatroomId: chatroomId,
-            userId: userId,
-            connectionId: connectionId
+            ChatroomId: chatroomId,
+            UserId: userId,
+            ConnectionId: connectionId
         }
     }
     private buildConnectionInfo(userId: string, connectionId: string): ConnectionInfo {
         return {
-            connectionId: connectionId,
-            userId: userId
+            ConnectionId: connectionId,
+            UserId: userId
         }
     }
 
     private changeUsernameDto(newUsername: string, userId: string): changeUsernameDto {
         return {
-            newUsername: newUsername,
-            userId: userId
+            NewUsername: newUsername,
+            UserId: userId
         }
     }
 }

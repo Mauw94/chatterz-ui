@@ -60,9 +60,9 @@ export class LoginService {
 
     private createUserLoginInfo(username: string, password: string): UserLoginInfo {
         return {
-            id: undefined,
-            userName: username,
-            password: password
+            Id: undefined,
+            UserName: username,
+            Password: password
         }
     }
 }

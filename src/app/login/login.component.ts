@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'src/services/login.service';
+import { UserLoginInfo } from '../models/userLoginInfo';
 
 @Component({
   selector: 'app-login',
@@ -19,14 +20,22 @@ export class LoginComponent implements OnInit {
   login(): void {
     if (this.username && this.password) {
       this.loginService.login(this.username, this.password).subscribe({
-        next: (res: any) => {
-          this.loginService.user = res
+        next: (res) => {
+          this.loginService.user = this.newUserLoginInfo(res.id, res.userName, res.password)
           this.loginService.userSubject.next(res)
           this.loginService.isLoggedIn = true
           this.loginService.setCookie()
         },
         error: (err) => console.error(err)
       })
+    }
+  }
+
+  private newUserLoginInfo(id: string, username: string, password: string): UserLoginInfo {
+    return {
+      Id: id,
+      UserName: username,
+      Password: password
     }
   }
 

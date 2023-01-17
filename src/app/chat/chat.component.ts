@@ -53,9 +53,9 @@ export class ChatComponent implements OnInit {
     }
     if (username.length > 2) {
       this.username = username
-      this.chatterzService.changeUsername(username, this.loginService.user.id).subscribe({
+      this.chatterzService.changeUsername(username, this.loginService.user.Id).subscribe({
         next: () => {
-          this.loginService.user.userName = username
+          this.loginService.user.UserName = username
         },
         error: (err) => console.error(err)
       })

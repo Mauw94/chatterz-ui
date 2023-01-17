@@ -1,4 +1,4 @@
 export class changeUsernameDto {
-    newUsername: string
-    userId: string
+    NewUsername: string
+    UserId: string
 }
