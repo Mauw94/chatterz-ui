@@ -41,7 +41,18 @@ export class ChatComponent implements OnInit {
     if (this.message.length === 0) return
 
     await this.chatSignalRService.sendMessageToHub(this.message, this.chatterzService.chatroomId)
-      .then(_ => this.message = "")
+      .then(_ => {
+        this.chatterzService.saveChat(
+          this.chatterzService.chatroomId,
+          this.loginService.user.UserName,
+          this.message,
+          this.chatSignalRService.connectionId)
+          .subscribe({
+            next: (res) => console.log(res),
+            error: (err) => console.error(err)
+          })
+        this.message = ""
+      })
       .catch((err) => console.log(err))
   }
 
@@ -78,6 +89,4 @@ export class ChatComponent implements OnInit {
       ChatroomId: message.ChatroomId
     }
   }
-
-
 }

@@ -1,11 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Const } from "src/utils/const";
-import { ChatSignalRService } from "./chat-signalr.service";
 import { ConnectionInfo } from "src/app/models/connectionInfo";
 import { Observable, Subject } from "rxjs";
 import { changeUsernameDto } from "src/app/models/changeUsernameDto";
 import { ChatroomJoinDto } from "src/app/models/chatroomJoinDto";
+import { ChatMessage } from "src/app/models/ChatMessage";
 
 @Injectable({ providedIn: 'root' })
 export class ChatterzService {
@@ -38,6 +38,11 @@ export class ChatterzService {
             this.changeUsernameDto(newUsername, userId))
     }
 
+    public saveChat(chatroomId: string, userName: string, message: string, connectionId: string) {
+        return this.http.post(this.apiChatroomUrl + "send",
+            this.buildChatMessageInfo(chatroomId, userName, message, connectionId))
+    }
+
     private chatroomJoinDto(chatroomId: string, userId: string, connectionId: string): ChatroomJoinDto {
         return {
             ChatroomId: chatroomId,
@@ -49,6 +54,16 @@ export class ChatterzService {
         return {
             ConnectionId: connectionId,
             UserId: userId
+        }
+    }
+
+    private buildChatMessageInfo(chatroomId: string, userName: string, message: string, connectionId: string): ChatMessage {
+        return {
+            ChatroomId: chatroomId,
+            UserName: userName,
+            Text: message,
+            ConnectionId: connectionId,
+            DateTime: new Date()
         }
     }
 
