@@ -20,10 +20,6 @@ export class ChatRoomComponent implements OnInit {
     private loginService: LoginService) { }
 
   ngOnInit(): void {
-    // this.signalRService.connectionEstablished.subscribe({
-    //   next: () => this.getAllChatrooms(),
-    //   error: (err) => console.error(err)
-    // })
     this.getAllChatrooms()
   }
 
@@ -32,10 +28,11 @@ export class ChatRoomComponent implements OnInit {
       .subscribe({
         next: () => {
           this.chatroomId = id
+          this.chatterzService.chatroomId = id
+          this.chatterzService.inChatRoom.next(true)
         },
         error: (err) => console.error(err)
       })
-    this.chatterzService.inChatRoom.next(this.isInChatroom(this.chatrooms))
   }
 
   create(): void {
@@ -54,7 +51,12 @@ export class ChatRoomComponent implements OnInit {
       next: (res) => {
         this.chatrooms = res
         if (res !== null) {
-          this.chatterzService.inChatRoom.next(this.isInChatroom(this.chatrooms))
+          let isInChatroom = this.isInChatroom(this.chatrooms)
+          this.chatterzService.inChatRoom.next(isInChatroom)
+          if (isInChatroom) {
+            console.log("is in a chatroom with id" + this.chatroomId)
+            this.joinRoom(this.chatroomId)
+          }
         }
       },
       error: (err) => console.error(err)
@@ -66,7 +68,6 @@ export class ChatRoomComponent implements OnInit {
       if (chatrooms[i].users.map(u => u.id).includes(this.loginService.user.id)) {
         console.log("current chatroom: " + chatrooms[i].id)
         this.chatroomId = chatrooms[i].id
-        this.chatterzService.chatroomId = this.chatroomId
         return true
       }
     }

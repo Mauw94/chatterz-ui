@@ -8,6 +8,7 @@ import { ChatMessage } from "src/app/models/ChatMessage";
 import { Const } from "src/utils/const";
 import { LoginService } from "./login.service";
 import { UserLoginInfo } from "src/app/models/userLoginInfo";
+import { ChatroomJoinDto } from "src/app/models/chatroomJoinDto";
 
 @Injectable({ providedIn: 'root' })
 export class ChatSignalRService {
@@ -60,7 +61,12 @@ export class ChatSignalRService {
         return this.messageSubject.asObservable();
     }
 
-    public disconnectSignalRApi() {
+    public reconnectToChatrooms(currentChatroomId: string, userId: string, connectionId: string): Observable<any> {
+        return this.http.post(this.apiSignalRUrl + "connect",
+            this.buildChatroomDto(currentChatroomId, userId, connectionId))
+    }
+
+    private disconnectSignalRApi() {
         this.http.post(this.apiSignalRUrl + "disconnect", {}).subscribe({
             next: (res) => console.log(res),
             error: (err) => console.error(err)
@@ -72,6 +78,14 @@ export class ChatSignalRService {
             .withUrl(this.connectionUrl)
             .withHubProtocol(new MessagePackHubProtocol())
             .build()
+    }
+
+    private buildChatroomDto(chatroomId: string, userId: string, connectionId: string): ChatroomJoinDto {
+        return {
+            chatroomId: chatroomId,
+            userId: userId,
+            connectionId: connectionId
+        }
     }
 
     private buildChatMessage(message: string, chatroomId: string): ChatMessage {

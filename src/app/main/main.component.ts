@@ -9,14 +9,19 @@ import { LoginService } from 'src/services/login.service';
 })
 export class MainComponent implements OnInit, OnDestroy {
 
+  public signalRConnectionStarted: boolean = false
+
   constructor(
     public loginService: LoginService,
     private chatSignalRService: ChatSignalRService) { }
 
   async ngOnInit() {
-    await this.chatSignalRService.connect()
+    this.chatSignalRService.connectionEstablished.subscribe((connectionEstablished) => {
+      console.log(connectionEstablished)
+      this.signalRConnectionStarted = connectionEstablished
+    })
 
-    // todo: make signal r call to recreate groups etc here..?
+    await this.chatSignalRService.connect()
   }
 
   async ngOnDestroy() {
