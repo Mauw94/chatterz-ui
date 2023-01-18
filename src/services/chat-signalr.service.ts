@@ -9,6 +9,7 @@ import { Const } from "src/utils/const";
 import { LoginService } from "./login.service";
 import { ChatroomJoinDto } from "src/app/models/chatroomJoinDto";
 import { ChatroomDto } from "src/app/models/chatroomDto";
+import { DtoBuilder } from "src/utils/dto-builder";
 
 @Injectable({ providedIn: 'root' })
 export class ChatSignalRService {
@@ -45,14 +46,16 @@ export class ChatSignalRService {
     }
 
     public sendMessageToApi(message: string) {
-        return this.http.post(this.apiUrl, this.buildChatMessage(message, undefined))
-            .pipe(tap(_ => console.log("message sucessfully sent to api")))
+        return this.http.post(this.apiUrl, 
+            DtoBuilder.buildChatMessageInfo(undefined, this.loginService.user.UserName, message, this.hubConnection.connectionId))
+                .pipe(tap(_ => console.log("message sucessfully sent to api")))
     }
 
     public async sendMessageToHub(message: string, chatroomId: string) {
-        var promise = await this.hubConnection.invoke("BroadcastAsync", this.buildChatMessage(message, chatroomId))
-            .then(() => console.log("message sent to hub"))
-            .catch((err) => console.error("error while sending message to hub"))
+        var promise = await this.hubConnection.invoke("BroadcastAsync", 
+            DtoBuilder.buildChatMessageInfo(chatroomId, this.loginService.user.UserName, message, this.hubConnection.connectionId))
+                .then(() => console.log("message sent to hub"))
+                .catch((err) => console.error("error while sending message to hub"))
 
         return promise
     }
@@ -67,7 +70,7 @@ export class ChatSignalRService {
 
     public reconnectToChatrooms(currentChatroomId: string, userId: string, connectionId: string): Observable<any> {
         return this.http.post(this.apiSignalRUrl + "connect",
-            this.buildChatroomDto(currentChatroomId, userId, connectionId))
+            DtoBuilder.buildChatroomJoinDto(currentChatroomId, userId, connectionId))
     }
 
     private disconnectSignalRApi() {
@@ -82,24 +85,6 @@ export class ChatSignalRService {
             .withUrl(this.connectionUrl)
             .withHubProtocol(new MessagePackHubProtocol())
             .build()
-    }
-
-    private buildChatroomDto(chatroomId: string, userId: string, connectionId: string): ChatroomJoinDto {
-        return {
-            ChatroomId: chatroomId,
-            UserId: userId,
-            ConnectionId: connectionId
-        }
-    }
-
-    private buildChatMessage(message: string, chatroomId: string): ChatMessage {
-        return {
-            ConnectionId: this.hubConnection.connectionId,
-            Text: message,
-            DateTime: new Date(),
-            UserName: this.loginService.user.UserName,
-            ChatroomId: chatroomId
-        }
     }
 
     private async startConnection() {

@@ -6,6 +6,7 @@ import { Observable, Subject } from "rxjs";
 import { changeUsernameDto } from "src/app/models/changeUsernameDto";
 import { ChatroomJoinDto } from "src/app/models/chatroomJoinDto";
 import { ChatMessage } from "src/app/models/ChatMessage";
+import { DtoBuilder } from "src/utils/dto-builder";
 
 @Injectable({ providedIn: 'root' })
 export class ChatterzService {
@@ -21,12 +22,12 @@ export class ChatterzService {
 
     public createChatroom(userId: string, connectionId: string): Observable<any> {
         return this.http.post(this.apiChatroomUrl + "create",
-            this.buildConnectionInfo(userId, connectionId), { responseType: 'text' })
+            DtoBuilder.buildConnectionInfo(userId, connectionId), { responseType: 'text' })
     }
 
     public joinChatroom(chatroomId: string, userId: string, connectionId: string): Observable<any> {
         return this.http.post(this.apiChatroomUrl + "join",
-            this.chatroomJoinDto(chatroomId, userId, connectionId))
+            DtoBuilder.buildChatroomJoinDto(chatroomId, userId, connectionId))
     }
 
     public getAllChatrooms(): Observable<any> {
@@ -35,42 +36,11 @@ export class ChatterzService {
 
     public changeUsername(newUsername: string, userId: string): Observable<any> {
         return this.http.post(this.apiUsersUrl + "change_username",
-            this.changeUsernameDto(newUsername, userId))
+        DtoBuilder.buildChangeUsernameDto(newUsername, userId))
     }
 
     public saveChat(chatroomId: string, userName: string, message: string, connectionId: string) {
         return this.http.post(this.apiChatroomUrl + "send",
-            this.buildChatMessageInfo(chatroomId, userName, message, connectionId))
-    }
-
-    private chatroomJoinDto(chatroomId: string, userId: string, connectionId: string): ChatroomJoinDto {
-        return {
-            ChatroomId: chatroomId,
-            UserId: userId,
-            ConnectionId: connectionId
-        }
-    }
-    private buildConnectionInfo(userId: string, connectionId: string): ConnectionInfo {
-        return {
-            ConnectionId: connectionId,
-            UserId: userId
-        }
-    }
-
-    private buildChatMessageInfo(chatroomId: string, userName: string, message: string, connectionId: string): ChatMessage {
-        return {
-            ChatroomId: chatroomId,
-            UserName: userName,
-            Text: message,
-            ConnectionId: connectionId,
-            DateTime: new Date()
-        }
-    }
-
-    private changeUsernameDto(newUsername: string, userId: string): changeUsernameDto {
-        return {
-            NewUsername: newUsername,
-            UserId: userId
-        }
+            DtoBuilder.buildChatMessageInfo(chatroomId, userName, message, connectionId))
     }
 }

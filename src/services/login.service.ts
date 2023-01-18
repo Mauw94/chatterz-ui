@@ -5,6 +5,7 @@ import { CookieService } from "ngx-cookie-service";
 import { Observable, Subject } from "rxjs";
 import { UserLoginInfo } from "src/app/models/userLoginInfo";
 import { Const } from "src/utils/const";
+import { DtoBuilder } from "src/utils/dto-builder";
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
@@ -26,7 +27,7 @@ export class LoginService {
     
     public login(username: string, password: string): Observable<any> {
         return this.http.post(this.apiUrl + "login",
-            this.createUserLoginInfo(username, password))
+        DtoBuilder.buildUserLoginInfo(username, password))
     }
 
     public logout(): void {
@@ -38,7 +39,7 @@ export class LoginService {
 
     public createTempUser(username: string, password: string): Observable<any> {
         return this.http.post(this.apiUrl + "create",
-            this.createUserLoginInfo(username, password))
+            DtoBuilder.buildUserLoginInfo(username, password))
     }
 
     public checkCookie(): void {
@@ -56,13 +57,5 @@ export class LoginService {
         now.setHours(now.getHours() + 1) // cookie expires in 1hour
         this.cookieService.set('loginInfo', JSON.stringify(this.user), now)
         this.router.navigate(['main'])
-    }
-
-    private createUserLoginInfo(username: string, password: string): UserLoginInfo {
-        return {
-            Id: undefined,
-            UserName: username,
-            Password: password
-        }
     }
 }
