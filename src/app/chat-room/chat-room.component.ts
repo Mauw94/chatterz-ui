@@ -36,6 +36,17 @@ export class ChatRoomComponent implements OnInit {
         error: (err) => console.error(err)
       })
   }
+  
+  leaveRoom(id: string): void {
+    this.chatterzService.leaveChatroom(id, this.loginService.user.Id, this.signalRService.connectionId).subscribe({
+      next: () => {
+        this.chatroomId = undefined
+        this.chatterzService.chatroomId = undefined
+        this.chatterzService.inChatRoom.next(false)
+      },
+      error: (err) => console.error(err)
+    })
+  } 
 
   create(): void {
     this.chatterzService.createChatroom(this.loginService.user.Id, this.signalRService.connectionId)
