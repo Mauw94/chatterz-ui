@@ -12,6 +12,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MainComponent } from './main/main.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { MainComponent } from './main/main.component';
     HttpClientModule,
     NgbModule
   ],
-  providers: [AuthGuard, CookieService],
+  providers: [AuthGuard, CookieService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

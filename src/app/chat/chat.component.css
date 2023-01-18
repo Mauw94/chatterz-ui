@@ -29,10 +29,10 @@ div.message.green {
     color: #95d592;
 }
 
-div.message.red {
-    color: #d59292;
+.msg-red {
+    color: #eb6767;
 }
 
-div.message.blue {
-    color: #9592d5;
+.msg-blue {
+    color: #8e89e8;
 }

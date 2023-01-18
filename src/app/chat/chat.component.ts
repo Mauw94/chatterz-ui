@@ -1,26 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ChatMessage } from '../models/ChatMessage';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { LoginService } from 'src/services/login.service';
 import { ChatterzService } from 'src/services/chatterz.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  styleUrls: ['./chat.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class ChatComponent implements OnInit {
   public title = 'Chatterz'
   public message: string = ""
   public username: string = ""
-  public msgInbox: ChatMessage[] = []
+  public msgInbox: string[] = []
   public isInChatroom: boolean = false;
 
   constructor(
     public loginService: LoginService,
     private chatterzService: ChatterzService,
-    private chatSignalRService: ChatSignalRService) { }
+    private chatSignalRService: ChatSignalRService,
+    public datePipe: DatePipe) { }
 
   async ngOnInit() {
     this.chatterzService.inChatRoom.subscribe({
@@ -28,6 +31,10 @@ export class ChatComponent implements OnInit {
         this.isInChatroom = res
       },
       error: (err) => console.error(err)
+    })
+
+    this.chatSignalRService.retrieveUserConnected().subscribe((userName: string) => {
+      this.msgInbox.push(userName + " joined")
     })
 
     this.chatSignalRService.retrieveMessage().subscribe((message: ChatMessage) => {
@@ -76,17 +83,9 @@ export class ChatComponent implements OnInit {
   }
 
   private addToInbox(message: ChatMessage) {
-    let newMsg = this.newChatMessage(message)
-    this.msgInbox.push(newMsg)
+    let time = this.datePipe.transform(message.DateTime, 'HH:MM')
+    this.msgInbox.push(time + " " + '<span class="msg-blue">' + message.UserName + '</span>' + ": " + message.Text)
   }
 
-  private newChatMessage(message: ChatMessage): ChatMessage {
-    return {
-      ConnectionId: message.ConnectionId,
-      UserName: message.UserName,
-      Text: message.Text,
-      DateTime: message.DateTime,
-      ChatroomId: message.ChatroomId
-    }
-  }
+
 }

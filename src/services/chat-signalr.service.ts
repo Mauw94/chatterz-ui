@@ -23,6 +23,7 @@ export class ChatSignalRService {
     
     private chatroomsSubject: Subject<ChatroomDto[]> = new Subject<ChatroomDto[]>()
     private messageSubject = new Subject<ChatMessage>()
+    private userConnectedSubject = new Subject<string>()
 
     constructor(
         private http: HttpClient,
@@ -67,6 +68,10 @@ export class ChatSignalRService {
         return this.chatroomsSubject.asObservable()
     }
 
+    public retrieveUserConnected(): Observable<string> {
+        return this.userConnectedSubject.asObservable()
+    }
+
     public reconnectToChatrooms(currentChatroomId: string, userId: string, connectionId: string): Observable<any> {
         return this.http.post(this.apiSignalRUrl + "connect",
             DtoBuilder.buildChatroomJoinDto(currentChatroomId, userId, connectionId))
@@ -105,8 +110,8 @@ export class ChatSignalRService {
         this.hubConnection.on("messageReceivedFromHub", (data: ChatMessage) => {
             this.ngZone.run(() => this.messageSubject.next(data))
         })
-        this.hubConnection.on("userConnected", _ => {
-            console.log("new user connected")
+        this.hubConnection.on("userConnected", (userName: string) => {
+            this.userConnectedSubject.next(userName)
         })
         this.hubConnection.on("roomsUpdated", (chatrooms: ChatroomDto[]) => {
             console.log("Rooms are updated => refresh please")
