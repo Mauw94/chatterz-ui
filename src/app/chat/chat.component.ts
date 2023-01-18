@@ -36,7 +36,9 @@ export class ChatComponent implements OnInit {
     this.chatSignalRService.retrieveUserConnected().subscribe((userName: string) => {
       this.msgInbox.push(userName + " joined")
     })
-
+    this.chatSignalRService.retrieveUserDisconnected().subscribe((userName: string) => {
+      this.msgInbox.push(userName + " disconnected")
+    })
     this.chatSignalRService.retrieveMessage().subscribe((message: ChatMessage) => {
       console.log("retrieved a new message")
       this.addToInbox(message)
@@ -86,6 +88,4 @@ export class ChatComponent implements OnInit {
     let time = this.datePipe.transform(message.DateTime, 'HH:MM')
     this.msgInbox.push(time + " " + '<span class="msg-blue">' + message.UserName + '</span>' + ": " + message.Text)
   }
-
-
 }
