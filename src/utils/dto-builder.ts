@@ -13,6 +13,7 @@ export class DtoBuilder {
             ConnectionId: connectionId
         }
     }
+    
     public static buildConnectionInfo(userId: string, connectionId: string): ConnectionInfo {
         return {
             ConnectionId: connectionId,

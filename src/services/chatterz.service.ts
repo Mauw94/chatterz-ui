@@ -1,11 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Const } from "src/utils/const";
-import { ConnectionInfo } from "src/app/models/connectionInfo";
 import { Observable, Subject } from "rxjs";
-import { changeUsernameDto } from "src/app/models/changeUsernameDto";
-import { ChatroomJoinDto } from "src/app/models/chatroomJoinDto";
-import { ChatMessage } from "src/app/models/ChatMessage";
 import { DtoBuilder } from "src/utils/dto-builder";
 
 @Injectable({ providedIn: 'root' })

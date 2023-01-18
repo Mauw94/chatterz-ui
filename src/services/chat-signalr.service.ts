@@ -7,7 +7,6 @@ import { tap } from "rxjs/operators";
 import { ChatMessage } from "src/app/models/ChatMessage";
 import { Const } from "src/utils/const";
 import { LoginService } from "./login.service";
-import { ChatroomJoinDto } from "src/app/models/chatroomJoinDto";
 import { ChatroomDto } from "src/app/models/chatroomDto";
 import { DtoBuilder } from "src/utils/dto-builder";
 
