@@ -15,12 +15,12 @@ export class ChatSignalRService {
 
     public connectionId: string = ""
     public connectionEstablished: Subject<boolean> = new Subject<boolean>()
-    
+
     private hubConnection: signalR.HubConnection
     private connectionUrl = Const.getBaseUrl() + "signalr"
     private apiUrl = Const.getBaseUrl() + "api/chat/send"
     private apiSignalRUrl = Const.getBaseUrl() + "api/signalr/"
-    
+
     private chatroomsSubject: Subject<ChatroomDto[]> = new Subject<ChatroomDto[]>()
     private messageSubject = new Subject<ChatMessage>()
     private userConnectedSubject = new Subject<string>()
@@ -46,17 +46,17 @@ export class ChatSignalRService {
             .catch((err) => console.error(err))
     }
 
-    public sendMessageToApi(message: string) {
-        return this.http.post(this.apiUrl, 
+    public sendMessageToApi(message: string): Observable<any> {
+        return this.http.post(this.apiUrl,
             DtoBuilder.buildChatMessageInfo(undefined, this.loginService.user.UserName, message, this.hubConnection.connectionId))
-                .pipe(tap(_ => console.log("message sucessfully sent to api")))
+            .pipe(tap(_ => console.log("message sucessfully sent to api")))
     }
 
-    public async sendMessageToHub(message: string, chatroomId: string) {
-        var promise = await this.hubConnection.invoke("BroadcastAsync", 
+    public async sendMessageToHub(message: string, chatroomId: string): Promise<any> {
+        var promise = await this.hubConnection.invoke("BroadcastAsync",
             DtoBuilder.buildChatMessageInfo(chatroomId, this.loginService.user.UserName, message, this.hubConnection.connectionId))
-                .then(() => console.log("message sent to hub"))
-                .catch((err) => console.error("error while sending message to hub"))
+            .then(() => console.log("message sent to hub"))
+            .catch((err) => console.error("error while sending message to hub"))
 
         return promise
     }
@@ -76,13 +76,13 @@ export class ChatSignalRService {
     public retrieveUserDisconnected(): Observable<string> {
         return this.userDisconnectedSubject.asObservable()
     }
-    
+
     public reconnectToChatrooms(currentChatroomId: string, userId: string, connectionId: string): Observable<any> {
         return this.http.post(this.apiSignalRUrl + "connect",
             DtoBuilder.buildChatroomJoinDto(currentChatroomId, userId, connectionId))
     }
 
-    private disconnectSignalRApi() {
+    private disconnectSignalRApi(): void {
         this.http.post(this.apiSignalRUrl + "disconnect", {}).subscribe({
             next: (res) => console.log(res),
             error: (err) => console.error(err)
@@ -96,7 +96,7 @@ export class ChatSignalRService {
             .build()
     }
 
-    private async startConnection() {
+    private async startConnection(): Promise<void> {
         this.hubConnection = this.getConnection()
 
         await this.hubConnection.start()
@@ -108,7 +108,7 @@ export class ChatSignalRService {
             .catch((err) => console.error("error while establishing signalr connection"))
     }
 
-    private async addListeners() {
+    private async addListeners(): Promise<void> {
         this.hubConnection.on("messageReceivedFromApi", (data: ChatMessage) => {
             this.ngZone.run(() => this.messageSubject.next(data))
         })

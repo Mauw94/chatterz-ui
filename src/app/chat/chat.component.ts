@@ -25,10 +25,19 @@ export class ChatComponent implements OnInit {
     private chatSignalRService: ChatSignalRService,
     public datePipe: DatePipe) { }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.chatterzService.inChatRoom.subscribe({
       next: (res) => {
         this.isInChatroom = res
+        this.msgInbox = []
+        if (this.chatterzService.chatroomId) {
+          this.chatterzService.getChatHistory(this.chatterzService.chatroomId).subscribe({
+            next: (res) => {
+              this.addChatHistoryToInbox(res)
+            },
+            error: (err) => console.error(err)
+          })
+        }
       },
       error: (err) => console.error(err)
     })
@@ -45,8 +54,7 @@ export class ChatComponent implements OnInit {
     })
   }
 
-  async sendMessage() {
-    // TODO: save in chatroom history
+  async sendMessage(): Promise<void> {
     if (this.message.length === 0) return
 
     await this.chatSignalRService.sendMessageToHub(this.message, this.chatterzService.chatroomId)
@@ -57,7 +65,7 @@ export class ChatComponent implements OnInit {
           this.message,
           this.chatSignalRService.connectionId)
           .subscribe({
-            next: (res) => console.log(res),
+            next: () => { },
             error: (err) => console.error(err)
           })
         this.message = ""
@@ -84,8 +92,19 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  private addToInbox(message: ChatMessage) {
+  private addToInbox(message: ChatMessage): void {
     let time = this.datePipe.transform(message.DateTime, 'HH:MM')
     this.msgInbox.push(time + " " + '<span class="msg-blue">' + message.UserName + '</span>' + ": " + message.Text)
+  }
+
+  private addChatHistoryToInbox(messages: any[]): void {
+    let msgs: ChatMessage[] = []
+    messages.forEach(msg => {
+      msgs.push({ DateTime: msg.dateTime, UserName: msg.userName, Text: msg.text, ConnectionId: msg.connectionId, ChatroomId: msg.chatroomId })
+    });
+
+    for (let i = 0; i < msgs.length; i++) {
+      this.addToInbox(msgs[i])
+    }
   }
 }

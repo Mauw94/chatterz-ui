@@ -15,7 +15,7 @@ export class MainComponent implements OnInit, OnDestroy {
     public loginService: LoginService,
     private chatSignalRService: ChatSignalRService) { }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.chatSignalRService.connectionEstablished.subscribe((connectionEstablished) => {
       this.signalRConnectionStarted = connectionEstablished
     })
@@ -23,7 +23,7 @@ export class MainComponent implements OnInit, OnDestroy {
     await this.chatSignalRService.connect()
   }
 
-  async ngOnDestroy() {
+  async ngOnDestroy(): Promise<void> {
     await this.chatSignalRService.disconnect()
   }
 
