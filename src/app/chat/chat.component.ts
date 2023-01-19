@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ChatMessage } from '../models/ChatMessage';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { LoginService } from 'src/services/login.service';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { DatePipe } from '@angular/common';
+import { ScrollToBottomDirective } from '../directives/scroll-to-bottom.directive';
 
 @Component({
   selector: 'app-chat',
@@ -13,6 +14,9 @@ import { DatePipe } from '@angular/common';
 })
 
 export class ChatComponent implements OnInit {
+  @ViewChild(ScrollToBottomDirective)
+  scroll: ScrollToBottomDirective
+  
   public title = 'Chatterz'
   public message: string = ""
   public username: string = ""

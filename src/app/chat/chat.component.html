@@ -2,15 +2,11 @@
   <h2>Welcome {{loginService.user.UserName}}</h2>
   <button class="btn btn-primary btn-sm" (click)="changeUsername()">Change username</button>
   <div id="chat">
-    <div id="chat-messages">
+    <div id="chat-messages" #scrollMe [scrollTop]="scrollMe.scrollHeight">
       <div *ngIf="msgInbox.length===0">
         <p>You haven't sent or received messages</p>
       </div>
       <div *ngFor="let m of msgInbox">
-        <!-- <div>{{m.DateTime | date:'HH:mm'}}
-          <span style="color:rgb(167, 17, 17)">{{m.UserName}}</span>: {{m.Text}}
-          <span>{{m}}</span>
-        </div> -->
         <div [innerHtml]="m"></div>
       </div>
     </div>

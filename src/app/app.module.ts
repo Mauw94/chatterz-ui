@@ -13,6 +13,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MainComponent } from './main/main.component';
 import { DatePipe } from '@angular/common';
+import { ScrollToBottomDirective } from './directives/scroll-to-bottom.directive';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { DatePipe } from '@angular/common';
     ChatComponent,
     LoginComponent,
     NavbarComponent,
-    MainComponent
+    MainComponent,
+    ScrollToBottomDirective
   ],
   imports: [
     BrowserModule,
