@@ -16,7 +16,7 @@ import { ScrollToBottomDirective } from '../directives/scroll-to-bottom.directiv
 export class ChatComponent implements OnInit {
   @ViewChild(ScrollToBottomDirective)
   scroll: ScrollToBottomDirective
-  
+
   public title = 'Chatterz'
   public message: string = ""
   public username: string = ""
@@ -37,7 +37,9 @@ export class ChatComponent implements OnInit {
         if (this.chatterzService.chatroomId) {
           this.chatterzService.getChatHistory(this.chatterzService.chatroomId).subscribe({
             next: (res) => {
-              this.addChatHistoryToInbox(res)
+              if (res != null) {
+                this.addChatHistoryToInbox(res)
+              }
             },
             error: (err) => console.error(err)
           })
