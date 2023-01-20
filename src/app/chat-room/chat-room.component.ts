@@ -80,7 +80,6 @@ export class ChatRoomComponent implements OnInit {
           console.log(isInChatroom)
           this.chatterzService.inChatRoom.next(isInChatroom)
           if (isInChatroom) {
-            console.log("is in a chatroom with id" + this.chatroomId)
             this.joinRoom(this.chatroomId)
           }
         }
@@ -90,9 +89,6 @@ export class ChatRoomComponent implements OnInit {
   }
 
   private isInChatroom(chatrooms: ChatroomDto[]): boolean {
-    console.log(chatrooms)
-    console.log(this.loginService.user.Id)
-
     for (let i = 0; i < chatrooms.length; i++) {
       if (chatrooms[i].Users.map(u => u.Id).includes(this.loginService.user.Id)) {
         console.log("current chatroom: " + chatrooms[i].Id)

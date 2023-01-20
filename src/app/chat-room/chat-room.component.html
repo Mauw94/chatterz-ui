@@ -14,7 +14,7 @@
             <button class="btn btn-outline-success btn-sm" (click)="joinRoom(c.Id)">join</button>
         </div>
         <div class="col-sm-1">
-            <button class="btn btn-outline-danger btn-sm" (click)="leaveRoom(c.Id)">leave</button>
+            <button *ngIf="c.Id === chatroomId" class="btn btn-outline-danger btn-sm" (click)="leaveRoom(c.Id)">leave</button>
         </div>
     </div>
 </div> 
