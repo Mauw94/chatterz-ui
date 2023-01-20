@@ -8,13 +8,14 @@
 <div *ngFor="let c of chatrooms">
     <div class="row">
         <div class="col-sm-9">
-            {{c.Id}}
+            {{c.Id}} ({{c.Users.length}}/{{MAX_USERS}})
         </div>
         <div class="col-sm-1">
-            <button class="btn btn-outline-success btn-sm" (click)="joinRoom(c.Id)">join</button>
+            <button *ngIf="c.Users.length < MAX_USERS" class="btn btn-outline-success btn-sm" (click)="joinRoom(c.Id)">join</button>
         </div>
         <div class="col-sm-1">
-            <button *ngIf="c.Id === chatroomId" class="btn btn-outline-danger btn-sm" (click)="leaveRoom(c.Id)">leave</button>
+            <button *ngIf="c.Id === chatroomId" class="btn btn-outline-danger btn-sm"
+                (click)="leaveRoom(c.Id)">leave</button>
         </div>
     </div>
-</div> 
+</div>

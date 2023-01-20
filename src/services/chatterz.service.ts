@@ -27,7 +27,8 @@ export class ChatterzService {
     }
 
     public leaveChatroom(chatroomId: string, userId: string, connectionId: string): Observable<any> {
-        return this.http.post(this.apiChatroomUrl + "leave", DtoBuilder.buildChatroomJoinDto(chatroomId, userId, connectionId))
+        return this.http.post(this.apiChatroomUrl + "leave", 
+            DtoBuilder.buildChatroomJoinDto(chatroomId, userId, connectionId))
     }
 
     public getAllChatrooms(): Observable<any> {

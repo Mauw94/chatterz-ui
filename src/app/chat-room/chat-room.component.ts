@@ -14,6 +14,7 @@ export class ChatRoomComponent implements OnInit {
 
   public chatroomId: string = ""
   public chatrooms: ChatroomDto[] = []
+  public MAX_USERS: number = 5
 
   constructor(
     private chatterzService: ChatterzService,
@@ -36,7 +37,7 @@ export class ChatRoomComponent implements OnInit {
         error: (err) => console.error(err)
       })
   }
-  
+
   leaveRoom(id: string): void {
     this.chatterzService.leaveChatroom(id, this.loginService.user.Id, this.signalRService.connectionId).subscribe({
       next: () => {
@@ -46,7 +47,7 @@ export class ChatRoomComponent implements OnInit {
       },
       error: (err) => console.error(err)
     })
-  } 
+  }
 
   create(): void {
     this.chatterzService.createChatroom(this.loginService.user.Id, this.signalRService.connectionId)
@@ -77,7 +78,6 @@ export class ChatRoomComponent implements OnInit {
             this.chatrooms.push(this.newChatroom(cr.id, cr.users))
           })
           let isInChatroom = this.isInChatroom(this.chatrooms)
-          console.log(isInChatroom)
           this.chatterzService.inChatRoom.next(isInChatroom)
           if (isInChatroom) {
             this.joinRoom(this.chatroomId)
@@ -91,7 +91,6 @@ export class ChatRoomComponent implements OnInit {
   private isInChatroom(chatrooms: ChatroomDto[]): boolean {
     for (let i = 0; i < chatrooms.length; i++) {
       if (chatrooms[i].Users.map(u => u.Id).includes(this.loginService.user.Id)) {
-        console.log("current chatroom: " + chatrooms[i].Id)
         this.chatroomId = chatrooms[i].Id
         return true
       }
