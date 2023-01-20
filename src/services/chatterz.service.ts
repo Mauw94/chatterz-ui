@@ -35,9 +35,9 @@ export class ChatterzService {
         return this.http.get(this.apiChatroomUrl + "all")
     }
 
-    public changeUsername(newUsername: string, userId: string): Observable<any> {
+    public changeUsername(oldUsername: string, newUsername: string, userId: string, chatroomId: string): Observable<any> {
         return this.http.post(this.apiUsersUrl + "change_username",
-            DtoBuilder.buildChangeUsernameDto(newUsername, userId))
+            DtoBuilder.buildChangeUsernameDto(oldUsername, newUsername, userId, chatroomId))
     }
 
     public saveChat(chatroomId: string, userName: string, message: string, connectionId: string): Observable<any> {

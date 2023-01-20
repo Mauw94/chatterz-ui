@@ -31,10 +31,12 @@ export class DtoBuilder {
         }
     }
 
-    public static buildChangeUsernameDto(newUsername: string, userId: string): changeUsernameDto {
+    public static buildChangeUsernameDto(oldUsername: string, newUsername: string, userId: string, chatroomId: string): changeUsernameDto {
         return {
+            OldUsername: oldUsername,
             NewUsername: newUsername,
-            UserId: userId
+            UserId: userId,
+            ChatroomId: chatroomId
         }
     }
     

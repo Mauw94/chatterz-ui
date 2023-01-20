@@ -5,6 +5,7 @@ import { LoginService } from 'src/services/login.service';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { DatePipe } from '@angular/common';
 import { ScrollToBottomDirective } from '../directives/scroll-to-bottom.directive';
+import { changeUsernameDto } from '../models/changeUsernameDto';
 
 @Component({
   selector: 'app-chat',
@@ -55,8 +56,10 @@ export class ChatComponent implements OnInit {
       this.msgInbox.push(userName + " disconnected")
     })
     this.chatSignalRService.retrieveMessage().subscribe((message: ChatMessage) => {
-      console.log("retrieved a new message")
       this.addToInbox(message)
+    })
+    this.chatSignalRService.retrieveUsernameChanged().subscribe((data: changeUsernameDto) => {
+      this.msgInbox.push(data.OldUsername + " changed username to " + data.NewUsername)
     })
   }
 
@@ -81,14 +84,10 @@ export class ChatComponent implements OnInit {
 
   changeUsername(): void {
     var username = window.prompt("Enter your username")
-    if (username === null) {
-      this.changeUsername()
-      return
-    }
     if (username.length > 2) {
-      this.username = username
-      this.chatterzService.changeUsername(username, this.loginService.user.Id).subscribe({
+      this.chatterzService.changeUsername(this.loginService.user.UserName, username, this.loginService.user.Id, this.chatterzService.chatroomId).subscribe({
         next: () => {
+          this.username = username
           this.loginService.user.UserName = username
         },
         error: (err) => console.error(err)

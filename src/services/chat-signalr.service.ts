@@ -9,6 +9,7 @@ import { Const } from "src/utils/const";
 import { LoginService } from "./login.service";
 import { ChatroomDto } from "src/app/models/chatroomDto";
 import { DtoBuilder } from "src/utils/dto-builder";
+import { changeUsernameDto } from "src/app/models/changeUsernameDto";
 
 @Injectable({ providedIn: 'root' })
 export class ChatSignalRService {
@@ -25,6 +26,7 @@ export class ChatSignalRService {
     private messageSubject = new Subject<ChatMessage>()
     private userConnectedSubject = new Subject<string>()
     private userDisconnectedSubject = new Subject<string>()
+    private usernameChangedSubject = new Subject<changeUsernameDto>()
 
     constructor(
         private http: HttpClient,
@@ -77,6 +79,10 @@ export class ChatSignalRService {
         return this.userDisconnectedSubject.asObservable()
     }
 
+    public retrieveUsernameChanged(): Observable<changeUsernameDto> {
+        return this.usernameChangedSubject.asObservable()
+    }
+
     public reconnectToChatrooms(currentChatroomId: string, userId: string, connectionId: string): Observable<any> {
         return this.http.post(this.apiSignalRUrl + "connect",
             DtoBuilder.buildChatroomJoinDto(currentChatroomId, userId, connectionId))
@@ -114,6 +120,9 @@ export class ChatSignalRService {
         })
         this.hubConnection.on("messageReceivedFromHub", (data: ChatMessage) => {
             this.ngZone.run(() => this.messageSubject.next(data))
+        })
+        this.hubConnection.on("usernameUpdated", (data: changeUsernameDto) => {
+            this.usernameChangedSubject.next(data)
         })
         this.hubConnection.on("userConnected", (userName: string) => {
             this.userConnectedSubject.next(userName)
