@@ -15,7 +15,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private loginService: LoginService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.loginService.checkCookie()
+  }
 
   login(): void {
     if (this.username && this.password) {

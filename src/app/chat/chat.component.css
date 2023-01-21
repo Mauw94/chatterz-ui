@@ -6,21 +6,6 @@ div#chat-messages {
     overflow-y: auto;
 }
 
-div#chat-form input,
-div#chat-form button {
-    border: 1px solid #dfdbdb;
-    background: none;
-    font-family: "Segoe UI", "Helvetica Neue", sans-serif;
-    font-weight: 300;
-    font-size: 18pt;
-    color: white;
-    padding: 8px 15px;
-}
-
-div#chat-form input {
-    width: 30vw;
-}
-
 div#chat-form button {
     cursor: pointer;
 }
