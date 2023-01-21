@@ -50,7 +50,7 @@ export class ChatRoomComponent implements OnInit {
   }
 
   create(): void {
-    this.chatterzService.createChatroom(this.loginService.user.Id, this.signalRService.connectionId)
+    this.chatterzService.createChatroom()
       .subscribe({
         next: (chatroomId: string) => { this.joinRoom(chatroomId) },
         error: (err) => console.error(err)

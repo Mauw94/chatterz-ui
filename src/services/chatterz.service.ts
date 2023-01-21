@@ -16,9 +16,8 @@ export class ChatterzService {
     constructor(
         private http: HttpClient) { }
 
-    public createChatroom(userId: string, connectionId: string): Observable<any> {
-        return this.http.post(this.apiChatroomUrl + "create",
-            DtoBuilder.buildConnectionInfo(userId, connectionId), { responseType: 'text' })
+    public createChatroom(): Observable<any> {
+        return this.http.post(this.apiChatroomUrl + "create", {}, { responseType: 'text' })
     }
 
     public joinChatroom(chatroomId: string, userId: string, connectionId: string): Observable<any> {
@@ -27,7 +26,7 @@ export class ChatterzService {
     }
 
     public leaveChatroom(chatroomId: string, userId: string, connectionId: string): Observable<any> {
-        return this.http.post(this.apiChatroomUrl + "leave", 
+        return this.http.post(this.apiChatroomUrl + "leave",
             DtoBuilder.buildChatroomJoinDto(chatroomId, userId, connectionId))
     }
 
