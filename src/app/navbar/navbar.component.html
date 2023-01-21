@@ -9,19 +9,22 @@
                 <a class="nav-link" href="#">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Tab1</a>
+                <a class="nav-link pointer" (click)="createChatroom()">Create chatroom</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Tab2</a>
+                <a class="nav-link pointer" (click)="changeUsername()">Change username</a>
             </li>
 
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#" (click)="logout()">Logout</a>
+                <a class="nav-link" (click)="logout()">Logout</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link">Welcome {{loginService.user.UserName}}</a>
             </li>
         </ul>
     </div>
 </nav>
 
-<hr>
+<hr id="margin-b">

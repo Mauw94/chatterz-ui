@@ -1,6 +1,6 @@
 <div *ngIf="isInChatroom">
-  <h4>Welcome {{loginService.user.UserName}}</h4>
-  <button class="btn btn-primary btn-sm" (click)="changeUsername()">Change username</button>
+  <h4>Chatroom</h4>
+  <hr>
   <div id="chat">
     <div id="chat-messages" #scrollMe [scrollTop]="scrollMe.scrollHeight">
       <div *ngIf="msgInbox.length===0">
@@ -12,7 +12,7 @@
     </div>
     <div id="chat-form">
       <div class="input-group mb-3">
-        <input type="text" class="form-control" [(ngModel)]="message" placeholder="Enter a message"
+        <input type="text" class="form-control" [(ngModel)]="message" placeholder="Message"
           (keyup.enter)="sendMessage()">
         <div class="input-group-append">
           <button class="btn btn-primary" type="button" [disabled]="message.length==0"

@@ -20,7 +20,6 @@ export class ChatComponent implements OnInit {
 
   public title = 'Chatterz'
   public message: string = ""
-  public username: string = ""
   public msgInbox: string[] = []
   public isInChatroom: boolean = false;
 
@@ -80,21 +79,6 @@ export class ChatComponent implements OnInit {
         this.message = ""
       })
       .catch((err) => console.log(err))
-  }
-
-  changeUsername(): void {
-    var username = window.prompt("Enter your username")
-    if (username.length > 2) {
-      this.chatterzService.changeUsername(this.loginService.user.UserName, username, this.loginService.user.Id, this.chatterzService.chatroomId).subscribe({
-        next: () => {
-          this.username = username
-          this.loginService.user.UserName = username
-        },
-        error: (err) => console.error(err)
-      })
-    } else {
-      this.changeUsername()
-    }
   }
 
   private addToInbox(message: ChatMessage): void {

@@ -1,11 +1,6 @@
-<h3>Chatrooms</h3>
-
-<p>Create new chatroom</p>
-<button class="btn btn-primary btn-sm" (click)="create()">Create</button>
-<p>current chatroom: {{chatroomId}}</p>
-
 <h4>Open chatrooms</h4>
 <div *ngFor="let c of chatrooms">
+    <hr>
     <div class="row">
         <div class="col-sm-8">
             {{c.Id}} ({{c.Users.length}}/{{MAX_USERS}})

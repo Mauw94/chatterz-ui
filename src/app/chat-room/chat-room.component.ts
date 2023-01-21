@@ -22,6 +22,12 @@ export class ChatRoomComponent implements OnInit {
     private loginService: LoginService) { }
 
   ngOnInit(): void {
+    this.chatterzService.createChatroomSubject.subscribe((create) => {
+      if (create) {
+        console.log("create new chatroom")
+        this.create()
+      }
+    })
     this.retrieveChatroomsOnUpdate()
     this.getAllChatrooms()
   }

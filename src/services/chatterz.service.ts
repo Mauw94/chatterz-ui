@@ -9,6 +9,8 @@ export class ChatterzService {
 
     public inChatRoom: Subject<boolean> = new Subject<boolean>()
     public chatroomId: string = ""
+    
+    public createChatroomSubject: Subject<boolean> = new Subject<boolean>()
 
     private apiChatroomUrl = Const.getBaseUrl() + "api/chatroom/"
     private apiUsersUrl = Const.getBaseUrl() + "api/users/"
@@ -46,5 +48,9 @@ export class ChatterzService {
 
     public getChatHistory(chatroomId: string): Observable<any> {
         return this.http.get(this.apiChatroomUrl + "history?chatroomId=" + chatroomId)
+    }
+
+    public retrieveChatroomCreate(): Observable<boolean> {
+        return this.createChatroomSubject.asObservable()
     }
 }
