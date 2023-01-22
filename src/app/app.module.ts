@@ -14,6 +14,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MainComponent } from './main/main.component';
 import { DatePipe } from '@angular/common';
 import { ScrollToBottomDirective } from './directives/scroll-to-bottom.directive';
+import { WordGuesserComponent } from './word-guesser/word-guesser.component';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { ScrollToBottomDirective } from './directives/scroll-to-bottom.directive
     LoginComponent,
     NavbarComponent,
     MainComponent,
-    ScrollToBottomDirective
+    ScrollToBottomDirective,
+    WordGuesserComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,

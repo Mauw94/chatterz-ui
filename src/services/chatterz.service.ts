@@ -3,14 +3,16 @@ import { Injectable } from "@angular/core";
 import { Const } from "src/utils/const";
 import { Observable, Subject } from "rxjs";
 import { DtoBuilder } from "src/utils/dto-builder";
+import { ChatroomDto } from "src/app/models/chatroomDto";
 
 @Injectable({ providedIn: 'root' })
 export class ChatterzService {
 
     public inChatRoom: Subject<boolean> = new Subject<boolean>()
     public chatroomId: string = ""
-    
+
     public createChatroomSubject: Subject<boolean> = new Subject<boolean>()
+    public updatedChatroom: Subject<boolean> = new Subject<boolean>()
 
     private apiChatroomUrl = Const.getBaseUrl() + "api/chatroom/"
     private apiUsersUrl = Const.getBaseUrl() + "api/users/"
@@ -50,7 +52,15 @@ export class ChatterzService {
         return this.http.get(this.apiChatroomUrl + "history?chatroomId=" + chatroomId)
     }
 
+    public getConnectedUsers(): Observable<any> {
+        return this.http.get(this.apiChatroomUrl + "users?chatroomId=" + this.chatroomId)
+    }
+
     public retrieveChatroomCreate(): Observable<boolean> {
         return this.createChatroomSubject.asObservable()
+    }
+
+    public retrieveChatroomUpdated(): Observable<boolean> {
+        return this.updatedChatroom.asObservable()
     }
 }

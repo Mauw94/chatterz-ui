@@ -2,14 +2,14 @@
 <div *ngFor="let c of chatrooms; index as i">
     <hr>
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             Chatroom: {{i + 1}} ({{c.Users.length}}/{{MAX_USERS}})
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-auto">
             <button *ngIf="c.Users.length < MAX_USERS" class="btn btn-outline-success btn-sm"
                 (click)="joinRoom(c.Id)">join</button>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-auto">
             <button *ngIf="c.Id === chatroomId" class="btn btn-outline-danger btn-sm"
                 (click)="leaveRoom(c.Id)">leave</button>
         </div>

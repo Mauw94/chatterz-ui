@@ -27,7 +27,7 @@ export class LoginService {
     
     public login(username: string, password: string): Observable<any> {
         return this.http.post(this.apiUrl + "login",
-        DtoBuilder.buildUserLoginInfo(username, password))
+            DtoBuilder.buildUserLoginInfo(username, password))
     }
 
     public logout(): void {

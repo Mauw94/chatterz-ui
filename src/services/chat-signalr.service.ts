@@ -131,8 +131,6 @@ export class ChatSignalRService {
             this.userDisconnectedSubject.next(userName)
         })
         this.hubConnection.on("roomsUpdated", (chatrooms: ChatroomDto[]) => {
-            console.log("Rooms are updated => refresh please")
-            console.log(chatrooms)
             this.chatroomsSubject.next(chatrooms)
         })
     }

@@ -24,7 +24,6 @@ export class ChatRoomComponent implements OnInit {
   ngOnInit(): void {
     this.chatterzService.createChatroomSubject.subscribe((create) => {
       if (create) {
-        console.log("create new chatroom")
         this.create()
       }
     })
@@ -38,6 +37,7 @@ export class ChatRoomComponent implements OnInit {
         next: () => {
           this.chatroomId = id
           this.chatterzService.chatroomId = id
+          this.chatterzService.updatedChatroom.next(true)
           this.chatterzService.inChatRoom.next(true)
         },
         error: (err) => console.error(err)

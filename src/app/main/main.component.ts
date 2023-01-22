@@ -26,5 +26,4 @@ export class MainComponent implements OnInit, OnDestroy {
   async ngOnDestroy(): Promise<void> {
     await this.chatSignalRService.disconnect()
   }
-
 }
