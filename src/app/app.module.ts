@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
 import { ScrollToBottomDirective } from './directives/scroll-to-bottom.directive';
 import { WordGuesserComponent } from './word-guesser/word-guesser.component';
 import { UsersComponent } from './users/users.component';
+import { ContextMenuComponentComponent } from './context-menu-component/context-menu-component.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { UsersComponent } from './users/users.component';
     MainComponent,
     ScrollToBottomDirective,
     WordGuesserComponent,
-    UsersComponent
+    UsersComponent,
+    ContextMenuComponentComponent
   ],
   imports: [
     BrowserModule,

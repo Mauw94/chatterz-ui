@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { UserLoginInfo } from '../models/userLoginInfo';
 
@@ -10,12 +10,52 @@ import { UserLoginInfo } from '../models/userLoginInfo';
 export class UsersComponent implements OnInit {
 
   public users: UserLoginInfo[] = []
+  public isDisplayContextMenu: boolean = false
+  public rightClickMenuItems: string[] = []
+  public rightClickMenuPositionX: number
+  public rightClickMenuPositionY: number
 
   constructor(private chatterzService: ChatterzService) { }
 
   ngOnInit(): void {
     this.retrieveUpdateChatroom()
     this.retrieveIsInChatroom()
+  }
+
+  public displayContextMenu(event: MouseEvent): void {
+    this.isDisplayContextMenu = true
+    this.rightClickMenuItems =
+      [
+        "ChallengeWordGuesser",
+        "ChallengeBomberman"
+      ]
+
+    this.rightClickMenuPositionX = event.clientX
+    this.rightClickMenuPositionY = event.clientY
+  }
+
+  public handleMenuItemClick(event) {
+    switch (event) {
+      case "ChallengeWordGuesser":
+        console.log("launch word guesser game")
+        break
+      case "ChallengeBomberman":
+        console.log("launch bomberman")
+        break
+    }
+  }
+
+  public getRightClickMenuStyle() {
+    return {
+      position: 'fixed',
+      left: `${this.rightClickMenuPositionX}`,
+      top: `${this.rightClickMenuPositionY}`
+    }
+  }
+
+  @HostListener('document:click')
+  documentClick(): void {
+    this.isDisplayContextMenu = false
   }
 
   private retrieveUpdateChatroom(): void {

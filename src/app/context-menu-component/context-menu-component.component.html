@@ -1,0 +1,7 @@
+<ng-container>
+    <div class="menu-link" *ngFor="let menuItem of contextMenuItems; index as i"
+        (click)="onContextMenuClick(menuItem)">
+        {{ menuItem }}
+        <hr *ngIf="i < contextMenuItems.length - 1" />
+    </div>
+</ng-container>

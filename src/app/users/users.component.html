@@ -1,5 +1,13 @@
 <h4>Users</h4>
 <hr>
 <div *ngFor="let u of users">
-    {{u.UserName}}
+
+    <div (contextmenu)="displayContextMenu($event); false">
+        {{u.UserName}}
+        <app-context-menu-component *ngIf="rightClickMenuItems.length > 0 && isDisplayContextMenu"
+            [ngStyle]="getRightClickMenuStyle()" [contextMenuItems]="rightClickMenuItems"
+            (onContextMenuItemClick)="handleMenuItemClick($event)">
+        </app-context-menu-component>
+    </div>
+
 </div>
