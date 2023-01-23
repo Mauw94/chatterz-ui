@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { UserLoginInfo } from '../models/userLoginInfo';
+import { LoginService } from 'src/services/login.service';
 
 @Component({
   selector: 'app-users',
@@ -15,7 +16,9 @@ export class UsersComponent implements OnInit {
   public rightClickMenuPositionX: number
   public rightClickMenuPositionY: number
 
-  constructor(private chatterzService: ChatterzService) { }
+  constructor(
+    private chatterzService: ChatterzService,
+    private loginService: LoginService) { }
 
   ngOnInit(): void {
     this.retrieveUpdateChatroom()
@@ -39,18 +42,17 @@ export class UsersComponent implements OnInit {
 
     switch (event) {
       case "ChallengeWordGuesser":
-        message = "Do you want to play a game of word guesser?"
+        message = "challenges you to play a game of word guesser! Do you accept?"
         break
       case "ChallengeBomberman":
-        message = "Do you want to play a game of bomberman?"
+        message = "challenges you to play a game of bomberman! Do you accept?"
         break
     }
 
-    this.chatterzService.challengePlayer(userId, message).subscribe({
+    this.chatterzService.challengePlayer(this.loginService.user.Id, userId, message).subscribe({
       next: () => { },
       error: (err) => console.error(err)
     })
-
   }
 
   public getRightClickMenuStyle() {
