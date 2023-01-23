@@ -1,7 +1,9 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { UserLoginInfo } from '../models/userLoginInfo';
 import { LoginService } from 'src/services/login.service';
+import { ChatroomDto } from '../models/chatroomDto';
+import { ChatSignalRService } from 'src/services/chat-signalr.service';
 
 @Component({
   selector: 'app-users',
@@ -20,11 +22,12 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private chatterzService: ChatterzService,
+    private signalRService: ChatSignalRService,
     private loginService: LoginService) { }
 
   ngOnInit(): void {
-    this.retrieveUpdateChatroom()
     this.retrieveIsInChatroom()
+    this.retrieveUsersList()
   }
 
   public displayContextMenu(event: MouseEvent, userId: string): void {
@@ -57,9 +60,9 @@ export class UsersComponent implements OnInit {
     }
 
     this.chatterzService.challengePlayer(
-      this.loginService.user.Id, 
-      this.userIdFromContextMenu, 
-      message, 
+      this.loginService.user.Id,
+      this.userIdFromContextMenu,
+      message,
       gameId)
       .subscribe({
         next: () => { },
@@ -80,19 +83,6 @@ export class UsersComponent implements OnInit {
     this.isDisplayContextMenu = false
   }
 
-  private retrieveUpdateChatroom(): void {
-    this.chatterzService.retrieveChatroomUpdated().subscribe((update) => {
-      if (update) {
-        this.chatterzService.getConnectedUsers().subscribe({
-          next: (users) => {
-            this.users = this.newUserLoginInfo(users)
-          },
-          error: (err) => console.error(err)
-        })
-      }
-    })
-  }
-
   private retrieveIsInChatroom(): void {
     this.chatterzService.inChatRoom.subscribe((inChatroom) => {
       if (!inChatroom) {
@@ -101,13 +91,10 @@ export class UsersComponent implements OnInit {
     })
   }
 
-  private newUserLoginInfo(users: any): UserLoginInfo[] {
-    var newusers: UserLoginInfo[] = []
-    users.forEach(user => {
-      newusers.push({ Id: user.id, UserName: user.userName, Password: user.password })
-    });
-
-    return newusers
+  private retrieveUsersList(): void {
+    this.signalRService.retrieveUsersList().subscribe((users) => {
+      this.users = users
+    })
   }
 
 }

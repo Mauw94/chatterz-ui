@@ -3,6 +3,7 @@ import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { LoginService } from 'src/services/login.service';
 import { GameInviteDto } from '../models/gameInviteDto';
 import { ChatterzService } from 'src/services/chatterz.service';
+import { ChatroomDto } from '../models/chatroomDto';
 
 @Component({
   selector: 'app-main',
@@ -12,6 +13,7 @@ import { ChatterzService } from 'src/services/chatterz.service';
 export class MainComponent implements OnInit, OnDestroy {
 
   public signalRConnectionStarted: boolean = false
+  public chatroom: ChatroomDto
 
   constructor(
     public loginService: LoginService,
@@ -30,6 +32,12 @@ export class MainComponent implements OnInit, OnDestroy {
 
   async ngOnDestroy(): Promise<void> {
     await this.chatSignalRService.disconnect()
+  }
+
+  public updateChatroom(chatroom: ChatroomDto): void {
+    console.log("updating chatroom")
+    console.log(chatroom)
+    this.chatroom = chatroom
   }
 
   private retrieveGameInvite(): void {

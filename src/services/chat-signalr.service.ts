@@ -11,6 +11,7 @@ import { ChatroomDto } from "src/app/models/chatroomDto";
 import { DtoBuilder } from "src/utils/dto-builder";
 import { changeUsernameDto } from "src/app/models/changeUsernameDto";
 import { GameInviteDto } from "src/app/models/gameInviteDto";
+import { UserLoginInfo } from "src/app/models/userLoginInfo";
 
 @Injectable({ providedIn: 'root' })
 export class ChatSignalRService {
@@ -30,6 +31,7 @@ export class ChatSignalRService {
     private usernameChangedSubject = new Subject<changeUsernameDto>()
     private gameInviteSubject = new Subject<GameInviteDto>()
     private gameAcceptSubject = new Subject<number>()
+    private usersListSubject = new Subject<UserLoginInfo[]>()
 
     constructor(
         private http: HttpClient,
@@ -94,6 +96,10 @@ export class ChatSignalRService {
         return this.gameAcceptSubject.asObservable()
     }
 
+    public retrieveUsersList(): Observable<UserLoginInfo[]> {
+        return this.usersListSubject.asObservable()
+    }
+    
     public reconnectToChatrooms(currentChatroomId: string, userId: string, connectionId: string): Observable<any> {
         return this.http.post(this.apiSignalRUrl + "connect",
             DtoBuilder.buildChatroomJoinDto(currentChatroomId, userId, connectionId))
@@ -146,6 +152,9 @@ export class ChatSignalRService {
         })
         this.hubConnection.on("userDisconnected", (userName: string) => {
             this.userDisconnectedSubject.next(userName)
+        })
+        this.hubConnection.on("updateUsersList", (users: UserLoginInfo[]) => {
+            this.usersListSubject.next(users)
         })
         this.hubConnection.on("roomsUpdated", (chatrooms: ChatroomDto[]) => {
             this.chatroomsSubject.next(chatrooms)

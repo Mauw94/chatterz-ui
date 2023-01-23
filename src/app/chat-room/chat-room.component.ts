@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { ChatroomDto } from '../models/chatroomDto';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
@@ -37,7 +37,6 @@ export class ChatRoomComponent implements OnInit {
         next: () => {
           this.chatroomId = id
           this.chatterzService.chatroomId = id
-          this.chatterzService.updatedChatroom.next(true)
           this.chatterzService.inChatRoom.next(true)
         },
         error: (err) => console.error(err)

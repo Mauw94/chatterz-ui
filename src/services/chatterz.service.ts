@@ -12,7 +12,6 @@ export class ChatterzService {
     public chatroomId: string = ""
 
     public createChatroomSubject: Subject<boolean> = new Subject<boolean>()
-    public updatedChatroom: Subject<boolean> = new Subject<boolean>()
 
     private apiChatroomUrl = Const.getBaseUrl() + "api/chatroom/"
     private apiUsersUrl = Const.getBaseUrl() + "api/users/"
@@ -70,9 +69,5 @@ export class ChatterzService {
 
     public acceptGameInvite(gameInvite: GameInviteDto): Observable<any> {
         return this.http.post(this.apiUsersUrl + "accept_gameinvite", gameInvite)
-    }
-
-    public retrieveChatroomUpdated(): Observable<boolean> {
-        return this.updatedChatroom.asObservable()
     }
 }
