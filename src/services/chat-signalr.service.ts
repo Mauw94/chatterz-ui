@@ -29,6 +29,7 @@ export class ChatSignalRService {
     private userDisconnectedSubject = new Subject<string>()
     private usernameChangedSubject = new Subject<changeUsernameDto>()
     private gameInviteSubject = new Subject<GameInviteDto>()
+    private gameAcceptSubject = new Subject<number>()
 
     constructor(
         private http: HttpClient,
@@ -65,10 +66,6 @@ export class ChatSignalRService {
         return promise
     }
 
-    public updateConnectionId(userId: string, connectionId: string): Observable<any> {
-        return this.http.get(this.apiSignalRUrl + "update?userId=" + userId + "&connectionId=" + connectionId);
-    }
-
     public retrieveMessage(): Observable<ChatMessage> {
         return this.messageSubject.asObservable();
     }
@@ -91,6 +88,10 @@ export class ChatSignalRService {
 
     public retrieveGameInvite(): Observable<GameInviteDto> {
         return this.gameInviteSubject.asObservable()
+    }
+
+    public retrieveGameAccept(): Observable<number> {
+        return this.gameAcceptSubject.asObservable()
     }
 
     public reconnectToChatrooms(currentChatroomId: string, userId: string, connectionId: string): Observable<any> {
@@ -126,6 +127,10 @@ export class ChatSignalRService {
             .catch((err) => console.error("error while establishing signalr connection"))
     }
 
+    private updateConnectionId(userId: string, connectionId: string): Observable<any> {
+        return this.http.get(this.apiSignalRUrl + "update?userId=" + userId + "&connectionId=" + connectionId);
+    }
+
     private async addListeners(): Promise<void> {
         this.hubConnection.on("messageReceivedFromApi", (data: ChatMessage) => {
             this.ngZone.run(() => this.messageSubject.next(data))
@@ -148,8 +153,8 @@ export class ChatSignalRService {
         this.hubConnection.on("gameInvite", (gameInvite: GameInviteDto) => {
             this.gameInviteSubject.next(gameInvite)
         })
-        this.hubConnection.on("acceptGameInvite", (gameId: string) => {
-            console.log("Game can start!" + gameId)
+        this.hubConnection.on("acceptGameInvite", (gameId: number) => {
+            this.gameAcceptSubject.next(gameId)
         })
     }
 }

@@ -34,13 +34,16 @@ export class MainComponent implements OnInit, OnDestroy {
 
   private retrieveGameInvite(): void {
     this.chatSignalRService.retrieveGameInvite().subscribe((gameInvite: GameInviteDto) => {
-      console.log(gameInvite)
       let res = window.confirm(gameInvite.InviteMessage)
       if (res) {
-        this.chatterzService.acceptGameInvite(gameInvite.Challenger.Id, this.loginService.user.Id).subscribe(() => {
-          
-        })
+        gameInvite.UserId = this.loginService.user.Id
+        this.chatterzService.acceptGameInvite(gameInvite).subscribe()
       }
+    })
+
+    this.chatSignalRService.retrieveGameAccept().subscribe((gameId: number) => {
+      console.log("game can start!!")
+      console.log(gameId)
     })
   }
 }

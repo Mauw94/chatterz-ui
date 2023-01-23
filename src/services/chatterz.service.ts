@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Const } from "src/utils/const";
 import { Observable, Subject } from "rxjs";
 import { DtoBuilder } from "src/utils/dto-builder";
+import { GameInviteDto } from "src/app/models/gameInviteDto";
 
 @Injectable({ providedIn: 'root' })
 export class ChatterzService {
@@ -59,14 +60,16 @@ export class ChatterzService {
         return this.createChatroomSubject.asObservable()
     }
 
-    public challengePlayer(challengerUserId: string, userId: string, inviteMessage: string): Observable<any> {
-        return this.http.get(this.apiUsersUrl + "challenge?userId=" +
-            userId + "&inviteMessage=" + inviteMessage +
-            "&challengerUserId=" + challengerUserId)
+    public challengePlayer(challengerUserId: string, userId: string, inviteMessage: string, gameId: number): Observable<any> {
+        return this.http.get(this.apiUsersUrl +
+            "challenge?userId=" + userId +
+            "&inviteMessage=" + inviteMessage +
+            "&challengerUserId=" + challengerUserId +
+            "&gameId=" + gameId)
     }
 
-    public acceptGameInvite(challengerUserId: string, userId: string): Observable<any> {
-        return this.http.get(this.apiUsersUrl + "accept_gameinvite?challengerUserId=" + challengerUserId + "&userId=" + userId)
+    public acceptGameInvite(gameInvite: GameInviteDto): Observable<any> {
+        return this.http.post(this.apiUsersUrl + "accept_gameinvite", gameInvite)
     }
 
     public retrieveChatroomUpdated(): Observable<boolean> {
