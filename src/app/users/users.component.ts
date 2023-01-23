@@ -16,6 +16,8 @@ export class UsersComponent implements OnInit {
   public rightClickMenuPositionX: number
   public rightClickMenuPositionY: number
 
+  private userIdFromContextMenu: string = ""
+
   constructor(
     private chatterzService: ChatterzService,
     private loginService: LoginService) { }
@@ -25,7 +27,7 @@ export class UsersComponent implements OnInit {
     this.retrieveIsInChatroom()
   }
 
-  public displayContextMenu(event: MouseEvent): void {
+  public displayContextMenu(event: MouseEvent, userId: string): void {
     this.isDisplayContextMenu = true
     this.rightClickMenuItems =
       [
@@ -35,9 +37,11 @@ export class UsersComponent implements OnInit {
 
     this.rightClickMenuPositionX = event.clientX
     this.rightClickMenuPositionY = event.clientY
+
+    this.userIdFromContextMenu = userId
   }
 
-  public handleMenuItemClick(event: string, userId: string) {
+  public handleMenuItemClick(event: string,) {
     let message: string = ""
 
     switch (event) {
@@ -49,7 +53,7 @@ export class UsersComponent implements OnInit {
         break
     }
 
-    this.chatterzService.challengePlayer(this.loginService.user.Id, userId, message).subscribe({
+    this.chatterzService.challengePlayer(this.loginService.user.Id, this.userIdFromContextMenu, message).subscribe({
       next: () => { },
       error: (err) => console.error(err)
     })
