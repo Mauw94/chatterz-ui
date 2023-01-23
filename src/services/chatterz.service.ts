@@ -60,6 +60,10 @@ export class ChatterzService {
         return this.createChatroomSubject.asObservable()
     }
 
+    public challengePlayer(userId: string, inviteMessage: string): Observable<any> {
+        return this.http.get(this.apiUsersUrl + "challenge?userId=" + userId + "&inviteMessage=" + inviteMessage)
+    }
+
     public retrieveChatroomUpdated(): Observable<boolean> {
         return this.updatedChatroom.asObservable()
     }

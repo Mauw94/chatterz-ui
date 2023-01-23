@@ -34,15 +34,23 @@ export class UsersComponent implements OnInit {
     this.rightClickMenuPositionY = event.clientY
   }
 
-  public handleMenuItemClick(event) {
+  public handleMenuItemClick(event: string, userId: string) {
+    let message: string = ""
+
     switch (event) {
       case "ChallengeWordGuesser":
-        console.log("launch word guesser game")
+        message = "Do you want to play a game of word guesser?"
         break
       case "ChallengeBomberman":
-        console.log("launch bomberman")
+        message = "Do you want to play a game of bomberman?"
         break
     }
+
+    this.chatterzService.challengePlayer(userId, message).subscribe({
+      next: () => { },
+      error: (err) => console.error(err)
+    })
+
   }
 
   public getRightClickMenuStyle() {

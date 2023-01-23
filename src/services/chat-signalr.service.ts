@@ -63,6 +63,10 @@ export class ChatSignalRService {
         return promise
     }
 
+    public updateConnectionId(userId: string, connectionId: string): Observable<any> {
+        return this.http.get(this.apiSignalRUrl + "update?userId=" + userId + "&connectionId=" + connectionId);
+    }
+
     public retrieveMessage(): Observable<ChatMessage> {
         return this.messageSubject.asObservable();
     }
@@ -109,7 +113,9 @@ export class ChatSignalRService {
             .then(() => {
                 console.log("connection started")
                 this.connectionId = this.hubConnection.connectionId
-                this.connectionEstablished.next(true)
+                this.updateConnectionId(this.loginService.user.Id, this.connectionId).subscribe(() => {
+                    this.connectionEstablished.next(true)
+                })
             })
             .catch((err) => console.error("error while establishing signalr connection"))
     }
@@ -132,6 +138,9 @@ export class ChatSignalRService {
         })
         this.hubConnection.on("roomsUpdated", (chatrooms: ChatroomDto[]) => {
             this.chatroomsSubject.next(chatrooms)
+        })
+        this.hubConnection.on("gameInvite", (message: string) => {
+            console.log(message)
         })
     }
 }
