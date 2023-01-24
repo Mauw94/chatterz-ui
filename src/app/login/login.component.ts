@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     if (this.username && this.password) {
       this.loginService.login(this.username, this.password).subscribe({
         next: (res) => {
-          this.loginService.user = this.newUserLoginInfo(res.id, res.userName, res.password)
+          this.loginService.user = this.newUserLoginInfo(res.id, res.userName, res.password, res.chatroomId)
           this.loginService.userSubject.next(res)
           this.loginService.isLoggedIn = true
           this.loginService.setCookie()
@@ -33,11 +33,12 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private newUserLoginInfo(id: number, username: string, password: string): UserLoginInfo {
+  private newUserLoginInfo(id: number, username: string, password: string, chatroomId: number): UserLoginInfo {
     return {
       Id: id,
       UserName: username,
-      Password: password
+      Password: password,
+      ChatroomId: chatroomId
     }
   }
 

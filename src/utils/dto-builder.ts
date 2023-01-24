@@ -13,7 +13,7 @@ export class DtoBuilder {
             ConnectionId: connectionId
         }
     }
-    
+
     public static buildConnectionInfo(userId: number, connectionId: string): ConnectionInfo {
         return {
             ConnectionId: connectionId,
@@ -39,12 +39,13 @@ export class DtoBuilder {
             ChatroomId: chatroomId
         }
     }
-    
-    public static buildUserLoginInfo(username: string, password: string): UserLoginInfo {
+
+    public static buildUserLoginInfo(username: string, password: string, chatroomId: number): UserLoginInfo {
         return {
             Id: undefined,
             UserName: username,
-            Password: password
+            Password: password,
+            ChatroomId: chatroomId
         }
     }
 }

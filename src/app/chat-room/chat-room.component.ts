@@ -22,13 +22,18 @@ export class ChatRoomComponent implements OnInit {
     private loginService: LoginService) { }
 
   ngOnInit(): void {
+    console.log(this.loginService.user.ChatroomId)
+    if (this.loginService.user.ChatroomId !== undefined) {
+      console.log("chatroomId known" + this.loginService.user.ChatroomId)
+      this.joinRoom(this.loginService.user.ChatroomId)
+    }
+
     this.chatterzService.createChatroomSubject.subscribe((create) => {
       if (create) {
         this.create()
       }
     })
     this.retrieveChatroomsOnUpdate()
-    this.getAllChatrooms()
   }
 
   joinRoom(id: number): void {
@@ -76,27 +81,6 @@ export class ChatRoomComponent implements OnInit {
     })
   }
 
-  private getAllChatrooms(): void {
-    this.chatterzService.getAllChatrooms().subscribe({
-      next: (chatrooms) => {
-        console.log(chatrooms)
-        if (chatrooms !== null) {
-          this.chatrooms = []
-          chatrooms.forEach(cr => {
-            this.chatrooms.push(this.newChatroom(cr.id, cr.users))
-          })
-          let isInChatroom = this.isInChatroom(this.chatrooms)
-          console.log("is in chatroom" + isInChatroom)
-          this.chatterzService.inChatRoom.next(isInChatroom)
-          if (isInChatroom) {
-            this.joinRoom(this.chatroomId)
-          }
-        }
-      },
-      error: (err) => console.error(err)
-    })
-  }
-
   private isInChatroom(chatrooms: ChatroomDto[]): boolean {
     for (let i = 0; i < chatrooms.length; i++) {
       if (chatrooms[i].Users.map(u => u.Id).includes(this.loginService.user.Id)) {
@@ -117,7 +101,7 @@ export class ChatRoomComponent implements OnInit {
   private newUserLoginInfo(users): UserLoginInfo[] {
     var newUsers: UserLoginInfo[] = []
     users.forEach(u => {
-      newUsers.push({ Id: u.id, UserName: u.userName, Password: u.password })
+      newUsers.push({ Id: u.Id, UserName: u.UserName, Password: u.Password, ChatroomId: u.ChatroomId })
     })
 
     return newUsers

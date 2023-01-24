@@ -24,10 +24,10 @@ export class LoginService {
     public fetchTestUser(): Observable<any> {
         return this.http.get(this.apiUrl + "new")
     }
-    
+
     public login(username: string, password: string): Observable<any> {
         return this.http.post(this.apiUrl + "login",
-            DtoBuilder.buildUserLoginInfo(username, password))
+            DtoBuilder.buildUserLoginInfo(username, password, undefined))
     }
 
     public logout(): void {
@@ -35,11 +35,6 @@ export class LoginService {
         this.isLoggedIn = false
         this.user = undefined
         this.router.navigate(['login'])
-    }
-
-    public createTempUser(username: string, password: string): Observable<any> {
-        return this.http.post(this.apiUrl + "create",
-            DtoBuilder.buildUserLoginInfo(username, password))
     }
 
     public checkCookie(): void {
