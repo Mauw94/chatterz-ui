@@ -1,0 +1,7 @@
+div#chat-rooms {
+    width: 100%;
+    height: 65vh;
+    margin-bottom: 25px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}

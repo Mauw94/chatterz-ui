@@ -61,9 +61,9 @@ export class ChatSignalRService {
 
     public async sendMessageToHub(message: string, chatroomId: number): Promise<any> {
         var promise = await this.hubConnection.invoke("BroadcastAsync",
-            DtoBuilder.buildChatMessageInfo(chatroomId, this.loginService.user.UserName, message, this.hubConnection.connectionId))
+            DtoBuilder.buildChatMessageInfo(+chatroomId, this.loginService.user.UserName, message, this.hubConnection.connectionId))
             .then(() => console.log("message sent to hub"))
-            .catch((err) => console.error("error while sending message to hub"))
+            .catch((err) => console.error(err))
 
         return promise
     }

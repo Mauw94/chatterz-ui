@@ -22,9 +22,7 @@ export class ChatRoomComponent implements OnInit {
     private loginService: LoginService) { }
 
   ngOnInit(): void {
-    console.log(this.loginService.user.ChatroomId)
     if (this.loginService.user.ChatroomId !== undefined) {
-      console.log("chatroomId known" + this.loginService.user.ChatroomId)
       this.joinRoom(this.loginService.user.ChatroomId)
     }
 
@@ -37,7 +35,6 @@ export class ChatRoomComponent implements OnInit {
   }
 
   joinRoom(id: number): void {
-    console.log("joining chatroom")
     this.chatterzService.joinChatroom(id, this.loginService.user.Id, this.signalRService.connectionId)
       .subscribe({
         next: () => {
@@ -69,13 +66,13 @@ export class ChatRoomComponent implements OnInit {
   }
 
   private retrieveChatroomsOnUpdate(): void {
-    console.log("fetching chatrooms on update")
     this.signalRService.retrieveChatrooms().subscribe({
       next: (chatrooms) => {
         this.chatrooms = []
         chatrooms.forEach(cr => {
           this.chatrooms.push(this.newChatroom(cr.Id, cr.Users))
         });
+        this.isInChatroom(this.chatrooms)
       },
       error: (err) => console.error(err)
     })

@@ -37,8 +37,6 @@ export class ChatComponent implements OnInit {
         if (this.chatterzService.chatroomId) {
           this.chatterzService.getChatHistory(this.chatterzService.chatroomId).subscribe({
             next: (res) => {
-              console.log("getting chat history")
-              console.log(res)
               if (res != null) {
                 this.addChatHistoryToInbox(res)
               }
