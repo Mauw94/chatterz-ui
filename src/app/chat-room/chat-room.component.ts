@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { ChatroomDto } from '../models/chatroomDto';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
@@ -22,6 +22,9 @@ export class ChatRoomComponent implements OnInit {
     private loginService: LoginService) { }
 
   ngOnInit(): void {
+    // timeout so other components initialize first which are subscribed to
+    // observables that are used in this (chatroom) component
+    // little sketchy implementation, but it'll do for now
     setTimeout(() => {
       if (this.loginService.user.ChatroomId) {
         this.joinRoom(this.loginService.user.ChatroomId)
@@ -62,7 +65,7 @@ export class ChatRoomComponent implements OnInit {
     })
   }
 
-  create(): void {
+  private create(): void {
     this.chatterzService.createChatroom()
       .subscribe({
         next: (chatroomId: number) => { this.joinRoom(chatroomId) },
