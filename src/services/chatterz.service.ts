@@ -8,9 +8,9 @@ import { GameInviteDto } from "src/app/models/gameInviteDto";
 @Injectable({ providedIn: 'root' })
 export class ChatterzService {
 
-    public inChatRoom: Subject<boolean> = new Subject<boolean>()
     public chatroomId: number
-
+    
+    public inChatRoom: Subject<boolean> = new Subject<boolean>()
     public createChatroomSubject: Subject<boolean> = new Subject<boolean>()
 
     private apiChatroomUrl = Const.getBaseUrl() + "api/chatroom/"
@@ -53,6 +53,10 @@ export class ChatterzService {
 
     public getConnectedUsers(): Observable<any> {
         return this.http.get(this.apiChatroomUrl + "users?chatroomId=" + this.chatroomId)
+    }
+
+    public retrieveInChatroom(): Observable<boolean> {
+        return this.inChatRoom.asObservable()
     }
 
     public retrieveChatroomCreate(): Observable<boolean> {

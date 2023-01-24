@@ -23,18 +23,19 @@ export class ChatRoomComponent implements OnInit {
 
   ngOnInit(): void {
     setTimeout(() => {
-      this.getAllChatrooms()
-
       if (this.loginService.user.ChatroomId) {
         this.joinRoom(this.loginService.user.ChatroomId)
+      } else {
+        this.getAllChatrooms()
       }
     }, 1500)
 
-    this.chatterzService.createChatroomSubject.subscribe((create) => {
+    this.chatterzService.retrieveChatroomCreate().subscribe((create) => {
       if (create) {
         this.create()
       }
     })
+
     this.retrieveChatroomsOnUpdate()
   }
 
@@ -72,6 +73,7 @@ export class ChatRoomComponent implements OnInit {
   private getAllChatrooms(): void {
     this.chatterzService.getAllChatrooms().subscribe({
       next: (chatrooms) => {
+        this.chatrooms = []
         chatrooms.forEach(cr => {
           this.chatrooms.push(this.newChatroom(cr.id, cr.users))
         })

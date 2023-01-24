@@ -30,23 +30,23 @@ export class ChatComponent implements OnInit {
     public datePipe: DatePipe) { }
 
   ngOnInit(): void {
-      this.chatterzService.inChatRoom.subscribe({
-        next: (res) => {
-          this.isInChatroom = res
-          this.msgInbox = []
-          if (this.chatterzService.chatroomId) {
-            this.chatterzService.getChatHistory(this.chatterzService.chatroomId).subscribe({
-              next: (res) => {
-                if (res != null) {
-                  this.addChatHistoryToInbox(res)
-                }
-              },
-              error: (err) => console.error(err)
-            })
-          }
-        },
-        error: (err) => console.error(err)
-      })
+    this.chatterzService.retrieveInChatroom().subscribe({
+      next: (res) => {
+        this.isInChatroom = res
+        this.msgInbox = []
+        if (this.chatterzService.chatroomId) {
+          this.chatterzService.getChatHistory(this.chatterzService.chatroomId).subscribe({
+            next: (res) => {
+              if (res != null) {
+                this.addChatHistoryToInbox(res)
+              }
+            },
+            error: (err) => console.error(err)
+          })
+        }
+      },
+      error: (err) => console.error(err)
+    })
 
     this.chatSignalRService.retrieveUserConnected().subscribe((userName: string) => {
       this.msgInbox.push(userName + " joined")
