@@ -3,5 +3,5 @@ export class ChatMessage {
     Text: string
     ConnectionId: string
     DateTime: Date
-    ChatroomId: string
+    ChatroomId: number
 }

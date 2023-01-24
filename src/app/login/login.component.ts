@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private newUserLoginInfo(id: string, username: string, password: string): UserLoginInfo {
+  private newUserLoginInfo(id: number, username: string, password: string): UserLoginInfo {
     return {
       Id: id,
       UserName: username,

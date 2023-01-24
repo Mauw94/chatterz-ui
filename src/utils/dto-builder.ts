@@ -1,4 +1,4 @@
-import { ChatMessage } from "src/app/models/ChatMessage"
+import { ChatMessage } from "src/app/models/chatMessage"
 import { changeUsernameDto } from "src/app/models/changeUsernameDto"
 import { ChatroomJoinDto } from "src/app/models/chatroomJoinDto"
 import { ConnectionInfo } from "src/app/models/connectionInfo"
@@ -6,7 +6,7 @@ import { UserLoginInfo } from "src/app/models/userLoginInfo"
 
 export class DtoBuilder {
 
-    public static buildChatroomJoinDto(chatroomId: string, userId: string, connectionId: string): ChatroomJoinDto {
+    public static buildChatroomJoinDto(chatroomId: number, userId: number, connectionId: string): ChatroomJoinDto {
         return {
             ChatroomId: chatroomId,
             UserId: userId,
@@ -14,14 +14,14 @@ export class DtoBuilder {
         }
     }
     
-    public static buildConnectionInfo(userId: string, connectionId: string): ConnectionInfo {
+    public static buildConnectionInfo(userId: number, connectionId: string): ConnectionInfo {
         return {
             ConnectionId: connectionId,
             UserId: userId
         }
     }
 
-    public static buildChatMessageInfo(chatroomId: string, userName: string, message: string, connectionId: string): ChatMessage {
+    public static buildChatMessageInfo(chatroomId: number, userName: string, message: string, connectionId: string): ChatMessage {
         return {
             ChatroomId: chatroomId,
             UserName: userName,
@@ -31,7 +31,7 @@ export class DtoBuilder {
         }
     }
 
-    public static buildChangeUsernameDto(oldUsername: string, newUsername: string, userId: string, chatroomId: string): changeUsernameDto {
+    public static buildChangeUsernameDto(oldUsername: string, newUsername: string, userId: number, chatroomId: number): changeUsernameDto {
         return {
             OldUsername: oldUsername,
             NewUsername: newUsername,

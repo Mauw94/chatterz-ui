@@ -9,7 +9,7 @@ import { GameInviteDto } from "src/app/models/gameInviteDto";
 export class ChatterzService {
 
     public inChatRoom: Subject<boolean> = new Subject<boolean>()
-    public chatroomId: string = ""
+    public chatroomId: number
 
     public createChatroomSubject: Subject<boolean> = new Subject<boolean>()
 
@@ -23,12 +23,12 @@ export class ChatterzService {
         return this.http.post(this.apiChatroomUrl + "create", {}, { responseType: 'text' })
     }
 
-    public joinChatroom(chatroomId: string, userId: string, connectionId: string): Observable<any> {
+    public joinChatroom(chatroomId: number, userId: number, connectionId: string): Observable<any> {
         return this.http.post(this.apiChatroomUrl + "join",
             DtoBuilder.buildChatroomJoinDto(chatroomId, userId, connectionId))
     }
 
-    public leaveChatroom(chatroomId: string, userId: string, connectionId: string): Observable<any> {
+    public leaveChatroom(chatroomId: number, userId: number, connectionId: string): Observable<any> {
         return this.http.post(this.apiChatroomUrl + "leave",
             DtoBuilder.buildChatroomJoinDto(chatroomId, userId, connectionId))
     }
@@ -37,17 +37,17 @@ export class ChatterzService {
         return this.http.get(this.apiChatroomUrl + "all")
     }
 
-    public changeUsername(oldUsername: string, newUsername: string, userId: string, chatroomId: string): Observable<any> {
+    public changeUsername(oldUsername: string, newUsername: string, userId: number, chatroomId: number): Observable<any> {
         return this.http.post(this.apiUsersUrl + "change_username",
             DtoBuilder.buildChangeUsernameDto(oldUsername, newUsername, userId, chatroomId))
     }
 
-    public saveChat(chatroomId: string, userName: string, message: string, connectionId: string): Observable<any> {
+    public saveChat(chatroomId: number, userName: string, message: string, connectionId: string): Observable<any> {
         return this.http.post(this.apiChatroomUrl + "send",
             DtoBuilder.buildChatMessageInfo(chatroomId, userName, message, connectionId))
     }
 
-    public getChatHistory(chatroomId: string): Observable<any> {
+    public getChatHistory(chatroomId: number): Observable<any> {
         return this.http.get(this.apiChatroomUrl + "history?chatroomId=" + chatroomId)
     }
 
@@ -59,7 +59,7 @@ export class ChatterzService {
         return this.createChatroomSubject.asObservable()
     }
 
-    public challengePlayer(challengerUserId: string, userId: string, inviteMessage: string, gameId: number): Observable<any> {
+    public challengePlayer(challengerUserId: number, userId: number, inviteMessage: string, gameId: number): Observable<any> {
         return this.http.get(this.apiUsersUrl +
             "challenge?userId=" + userId +
             "&inviteMessage=" + inviteMessage +

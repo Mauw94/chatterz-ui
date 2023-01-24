@@ -2,7 +2,7 @@ import { UserLoginInfo } from "./userLoginInfo";
 
 export class GameInviteDto {
     Challenger: UserLoginInfo
-    UserId: string
+    UserId: number
     InviteMessage: string
     GameId: number
 }

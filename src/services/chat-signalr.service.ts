@@ -4,7 +4,7 @@ import * as signalR from "@microsoft/signalr"
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 import { Observable, Subject } from "rxjs";
 import { tap } from "rxjs/operators";
-import { ChatMessage } from "src/app/models/ChatMessage";
+import { ChatMessage } from "src/app/models/chatMessage";
 import { Const } from "src/utils/const";
 import { LoginService } from "./login.service";
 import { ChatroomDto } from "src/app/models/chatroomDto";
@@ -59,7 +59,7 @@ export class ChatSignalRService {
             .pipe(tap(_ => console.log("message sucessfully sent to api")))
     }
 
-    public async sendMessageToHub(message: string, chatroomId: string): Promise<any> {
+    public async sendMessageToHub(message: string, chatroomId: number): Promise<any> {
         var promise = await this.hubConnection.invoke("BroadcastAsync",
             DtoBuilder.buildChatMessageInfo(chatroomId, this.loginService.user.UserName, message, this.hubConnection.connectionId))
             .then(() => console.log("message sent to hub"))
@@ -100,7 +100,7 @@ export class ChatSignalRService {
         return this.usersListSubject.asObservable()
     }
     
-    public reconnectToChatrooms(currentChatroomId: string, userId: string, connectionId: string): Observable<any> {
+    public reconnectToChatrooms(currentChatroomId: number, userId: number, connectionId: string): Observable<any> {
         return this.http.post(this.apiSignalRUrl + "connect",
             DtoBuilder.buildChatroomJoinDto(currentChatroomId, userId, connectionId))
     }
@@ -133,7 +133,7 @@ export class ChatSignalRService {
             .catch((err) => console.error("error while establishing signalr connection"))
     }
 
-    private updateConnectionId(userId: string, connectionId: string): Observable<any> {
+    private updateConnectionId(userId: number, connectionId: string): Observable<any> {
         return this.http.get(this.apiSignalRUrl + "update?userId=" + userId + "&connectionId=" + connectionId);
     }
 

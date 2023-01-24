@@ -1,6 +1,6 @@
 import { UserLoginInfo } from "./userLoginInfo"
 
 export class ChatroomDto {
-    Id: string
+    Id: number
     Users: UserLoginInfo[]
 }

@@ -12,7 +12,7 @@ import { UserLoginInfo } from '../models/userLoginInfo';
 })
 export class ChatRoomComponent implements OnInit {
 
-  public chatroomId: string = ""
+  public chatroomId: number
   public chatrooms: ChatroomDto[] = []
   public MAX_USERS: number = 5
 
@@ -31,7 +31,7 @@ export class ChatRoomComponent implements OnInit {
     this.getAllChatrooms()
   }
 
-  joinRoom(id: string): void {
+  joinRoom(id: number): void {
     this.chatterzService.joinChatroom(id, this.loginService.user.Id, this.signalRService.connectionId)
       .subscribe({
         next: () => {
@@ -43,7 +43,7 @@ export class ChatRoomComponent implements OnInit {
       })
   }
 
-  leaveRoom(id: string): void {
+  leaveRoom(id: number): void {
     this.chatterzService.leaveChatroom(id, this.loginService.user.Id, this.signalRService.connectionId).subscribe({
       next: () => {
         this.chatroomId = undefined
@@ -57,7 +57,7 @@ export class ChatRoomComponent implements OnInit {
   create(): void {
     this.chatterzService.createChatroom()
       .subscribe({
-        next: (chatroomId: string) => { this.joinRoom(chatroomId) },
+        next: (chatroomId: number) => { this.joinRoom(chatroomId) },
         error: (err) => console.error(err)
       })
   }
@@ -103,7 +103,7 @@ export class ChatRoomComponent implements OnInit {
     return false
   }
 
-  private newChatroom(id: string, users: UserLoginInfo[]): ChatroomDto {
+  private newChatroom(id: number, users: UserLoginInfo[]): ChatroomDto {
     return {
       Id: id,
       Users: this.newUserLoginInfo(users)

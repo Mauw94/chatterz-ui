@@ -18,7 +18,7 @@ export class UsersComponent implements OnInit {
   public rightClickMenuPositionX: number
   public rightClickMenuPositionY: number
 
-  private userIdFromContextMenu: string = ""
+  private userIdFromContextMenu: number
 
   constructor(
     private chatterzService: ChatterzService,
@@ -30,7 +30,7 @@ export class UsersComponent implements OnInit {
     this.retrieveUsersList()
   }
 
-  public displayContextMenu(event: MouseEvent, userId: string): void {
+  public displayContextMenu(event: MouseEvent, userId: number): void {
     this.isDisplayContextMenu = true
     this.rightClickMenuItems =
       [

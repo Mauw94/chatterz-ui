@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ChatMessage } from '../models/ChatMessage';
+import { ChatMessage } from '../models/chatMessage';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { LoginService } from 'src/services/login.service';
 import { ChatterzService } from 'src/services/chatterz.service';

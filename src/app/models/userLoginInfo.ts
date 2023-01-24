@@ -1,5 +1,5 @@
 export class UserLoginInfo {
-    Id: string
+    Id: number
     UserName: string
     Password: string
 }
