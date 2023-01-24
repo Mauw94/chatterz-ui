@@ -32,6 +32,7 @@ export class ChatRoomComponent implements OnInit {
   }
 
   joinRoom(id: number): void {
+    console.log("joining chatroom")
     this.chatterzService.joinChatroom(id, this.loginService.user.Id, this.signalRService.connectionId)
       .subscribe({
         next: () => {
@@ -63,6 +64,7 @@ export class ChatRoomComponent implements OnInit {
   }
 
   private retrieveChatroomsOnUpdate(): void {
+    console.log("fetching chatrooms on update")
     this.signalRService.retrieveChatrooms().subscribe({
       next: (chatrooms) => {
         this.chatrooms = []
@@ -77,12 +79,14 @@ export class ChatRoomComponent implements OnInit {
   private getAllChatrooms(): void {
     this.chatterzService.getAllChatrooms().subscribe({
       next: (chatrooms) => {
+        console.log(chatrooms)
         if (chatrooms !== null) {
           this.chatrooms = []
           chatrooms.forEach(cr => {
             this.chatrooms.push(this.newChatroom(cr.id, cr.users))
           })
           let isInChatroom = this.isInChatroom(this.chatrooms)
+          console.log("is in chatroom" + isInChatroom)
           this.chatterzService.inChatRoom.next(isInChatroom)
           if (isInChatroom) {
             this.joinRoom(this.chatroomId)
