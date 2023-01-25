@@ -47,8 +47,9 @@ export class ChatSignalRService {
         await this.hubConnection.stop()
             .then(() => {
                 this.disconnectSignalRApi()
-                console.log("connection stopped")
+                this.loginService.logout()
                 this.connectionEstablished.next(false)
+                console.log("connection stopped")
             })
             .catch((err) => console.error(err))
     }

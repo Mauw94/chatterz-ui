@@ -92,7 +92,6 @@ export class UsersComponent implements OnInit {
   }
 
   private retrieveUsersList(): void {
-    // TODO not updating properly when user leaves chatroom
     this.signalRService.retrieveUsersList().subscribe((users) => {
       this.users = users
     })
