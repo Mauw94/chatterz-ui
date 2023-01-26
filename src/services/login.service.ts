@@ -30,11 +30,16 @@ export class LoginService {
             DtoBuilder.buildUserLoginInfo(username, password, undefined))
     }
 
-    public logout(): void {
-        this.cookieService.delete('loginInfo')
-        this.isLoggedIn = false
-        this.user = undefined
-        this.router.navigate(['login'])
+    public logout(chatroomId: number, connectionId: string): void {
+        this.apiLogout(this.user.Id, connectionId, chatroomId).subscribe({
+            next: () => {
+                this.cookieService.delete('loginInfo')
+                this.isLoggedIn = false
+                this.user = undefined
+                this.router.navigate(['login'])
+            },
+            error: (err) => console.error(err)
+        })
     }
 
     public checkCookie(): void {
@@ -52,5 +57,9 @@ export class LoginService {
         now.setHours(now.getHours() + 1) // cookie expires in 1hour
         this.cookieService.set('loginInfo', JSON.stringify(this.user), now)
         this.router.navigate(['main'])
+    }
+
+    private apiLogout(userId: number, connectionId: string, chatroomId: number): Observable<any> {
+        return this.http.post(this.apiUrl + "logout?userId=" + userId + "&connectionId=" + connectionId + "&chatroomId=" + chatroomId, {});
     }
 }

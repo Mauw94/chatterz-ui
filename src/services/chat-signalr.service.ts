@@ -7,6 +7,7 @@ import { tap } from "rxjs/operators";
 import { ChatMessage } from "src/app/models/chatMessage";
 import { Const } from "src/utils/const";
 import { LoginService } from "./login.service";
+import { ChatterzService } from "./chatterz.service";
 import { ChatroomDto } from "src/app/models/chatroomDto";
 import { DtoBuilder } from "src/utils/dto-builder";
 import { changeUsernameDto } from "src/app/models/changeUsernameDto";
@@ -36,7 +37,8 @@ export class ChatSignalRService {
     constructor(
         private http: HttpClient,
         private ngZone: NgZone,
-        private loginService: LoginService) { }
+        private loginService: LoginService,
+        private chatterzService: ChatterzService) { }
 
     public async connect() {
         await this.startConnection()
@@ -47,7 +49,7 @@ export class ChatSignalRService {
         await this.hubConnection.stop()
             .then(() => {
                 this.disconnectSignalRApi()
-                this.loginService.logout()
+                this.loginService.logout(this.chatterzService.chatroomId, this.connectionId)
                 this.connectionEstablished.next(false)
                 console.log("connection stopped")
             })
@@ -100,7 +102,7 @@ export class ChatSignalRService {
     public retrieveUsersList(): Observable<UserLoginInfo[]> {
         return this.usersListSubject.asObservable()
     }
-    
+
     public reconnectToChatrooms(currentChatroomId: number, userId: number, connectionId: string): Observable<any> {
         return this.http.post(this.apiSignalRUrl + "connect",
             DtoBuilder.buildChatroomJoinDto(currentChatroomId, userId, connectionId))

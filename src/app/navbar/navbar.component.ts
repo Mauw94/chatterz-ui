@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { LoginService } from 'src/services/login.service';
 
@@ -11,13 +12,14 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     public loginService: LoginService,
-    private chatterzService: ChatterzService) { }
+    private chatterzService: ChatterzService,
+    private chatSignalRService: ChatSignalRService) { }
 
   ngOnInit(): void {
   }
 
   logout(): void {
-    this.loginService.logout()
+    this.loginService.logout(this.chatterzService.chatroomId, this.chatSignalRService.connectionId)
   }
 
   createChatroom(): void {
