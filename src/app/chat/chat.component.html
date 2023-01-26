@@ -12,10 +12,10 @@
     </div>
     <div id="chat-form">
       <div class="input-group mb-3">
-        <input type="text" class="form-control" [(ngModel)]="message" placeholder="Message"
+        <input type="text" class="form-control" [(ngModel)]="message" placeholder="Send a message"
           (keyup.enter)="sendMessage()">
         <div class="input-group-append">
-          <button class="btn btn-primary" type="button" [disabled]="message.length==0"
+          <button class="btn btn-success" type="button" [disabled]="message.length==0"
             (click)="sendMessage()">Send</button>
         </div>
       </div>
