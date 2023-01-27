@@ -44,10 +44,12 @@ export class MainComponent implements OnInit, OnDestroy {
       let res = window.confirm(gameInvite.InviteMessage)
       if (res) {
         gameInvite.UserId = this.loginService.user.Id
+        // TODO not setting gameId in other user's service ofc........
         this.wordGuesserService.create().subscribe({
-          next: async (gameId: number) => {
+          next: (gameId: number) => {
+            console.log(gameId)
             this.wordGuesserService.gameId = gameId;
-            await this.wordGuesserService.connectSignalR();
+            this.wordGuesserService.connectSignalR();
           },
           error: (err) => console.error(err)
         })
@@ -55,7 +57,7 @@ export class MainComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.chatSignalRService.retrieveGameAccept().subscribe((gameType: GameType) => {
+    this.chatSignalRService.retrieveGameAccept().subscribe((gameType: number) => {
       console.log("game can start!!")
       console.log(gameType)
       this.router.navigate(['wordguesser'])
