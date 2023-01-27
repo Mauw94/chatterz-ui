@@ -16,6 +16,8 @@ export class WordGuesserComponent implements OnInit {
   ngOnInit(): void {
     // TODO: check for a game in progress\
     console.log("we're in the game component, what now?")
+    console.log(this.gameService.gameId)
+
     this.gameService.connect(
       this.gameService.gameId,
       this.loginService.user,

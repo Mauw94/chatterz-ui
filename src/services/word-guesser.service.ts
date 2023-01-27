@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { UserLoginInfo } from "src/app/models/userLoginInfo";
 import { Const } from "src/utils/const";
 import * as signalR from "@microsoft/signalr"
+import { GameConnectDto } from "src/app/models/gameConnectDto";
 
 @Injectable({ providedIn: 'root' })
 export class WordGuesserService {
@@ -27,11 +28,19 @@ export class WordGuesserService {
     }
 
     public connect(gameId: number, player: UserLoginInfo, connectionId: string): Observable<any> {
-        return this.http.post(this.apiUrl + "connect", { gameId: gameId, player: player, connectionId: connectionId });
+        return this.http.post(this.apiUrl + "connect", this.buildGameConnectDto(gameId, player, connectionId));
     }
 
     public start(gameId: number): Observable<any> {
         return this.http.get(this.apiUrl + "start?gameId=" + gameId);
+    }
+
+    private buildGameConnectDto(gameId: number, player: UserLoginInfo, connectionId: string): GameConnectDto {
+        return {
+            GameId: gameId,
+            Player: player,
+            ConnectionId: connectionId
+        }
     }
 
     private async startConnection(): Promise<void> {
@@ -39,7 +48,7 @@ export class WordGuesserService {
 
         await this.hubConnection.start()
             .then(() => {
-                console.log("connection started")
+                console.log("game signalr connection started")
                 this.connectionId = this.hubConnection.connectionId
             })
             .catch((err) => console.error(err))
