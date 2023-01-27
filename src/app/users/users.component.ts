@@ -2,7 +2,6 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { UserLoginInfo } from '../models/userLoginInfo';
 import { LoginService } from 'src/services/login.service';
-import { ChatroomDto } from '../models/chatroomDto';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
 
 @Component({
@@ -34,8 +33,8 @@ export class UsersComponent implements OnInit {
     this.isDisplayContextMenu = true
     this.rightClickMenuItems =
       [
-        "ChallengeWordGuesser",
-        "ChallengeBomberman"
+        "Play Wordguesser",
+        "Play Bomberman"
       ]
 
     this.rightClickMenuPositionX = event.clientX
@@ -46,16 +45,16 @@ export class UsersComponent implements OnInit {
 
   public handleMenuItemClick(event: string,) {
     let message: string = ""
-    let gameId: number
+    let gameType: GameType
 
     switch (event) {
-      case "ChallengeWordGuesser":
+      case "Play Wordguesser":
         message = "challenges you to play a game of word guesser! Do you accept?"
-        gameId = 1
+        gameType = GameType.WORDGUESSER
         break
-      case "ChallengeBomberman":
+      case "Play Bomberman":
         message = "challenges you to play a game of bomberman! Do you accept?"
-        gameId = 2
+        gameType = GameType.BOMBERMAN
         break
     }
 
@@ -63,7 +62,7 @@ export class UsersComponent implements OnInit {
       this.loginService.user.Id,
       this.userIdFromContextMenu,
       message,
-      gameId)
+      gameType)
       .subscribe({
         next: () => { },
         error: (err) => console.error(err)

@@ -4,6 +4,7 @@ import { LoginService } from 'src/services/login.service';
 import { GameInviteDto } from '../models/gameInviteDto';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { ChatroomDto } from '../models/chatroomDto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -18,7 +19,8 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(
     public loginService: LoginService,
     private chatterzService: ChatterzService,
-    private chatSignalRService: ChatSignalRService) { }
+    private chatSignalRService: ChatSignalRService,
+    private router: Router) { }
 
   async ngOnInit(): Promise<void> {
     this.chatSignalRService.connectionEstablished.subscribe((connectionEstablished) => {
@@ -49,9 +51,10 @@ export class MainComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.chatSignalRService.retrieveGameAccept().subscribe((gameId: number) => {
+    this.chatSignalRService.retrieveGameAccept().subscribe((gameType: GameType) => {
       console.log("game can start!!")
-      console.log(gameId)
+      console.log(gameType)
+      this.router.navigate(['wordguesser'])
     })
   }
 }

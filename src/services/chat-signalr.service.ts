@@ -31,7 +31,7 @@ export class ChatSignalRService {
     private userDisconnectedSubject = new Subject<string>()
     private usernameChangedSubject = new Subject<changeUsernameDto>()
     private gameInviteSubject = new Subject<GameInviteDto>()
-    private gameAcceptSubject = new Subject<number>()
+    private gameAcceptSubject = new Subject<GameType>()
     private usersListSubject = new Subject<UserLoginInfo[]>()
 
     constructor(
@@ -95,7 +95,7 @@ export class ChatSignalRService {
         return this.gameInviteSubject.asObservable()
     }
 
-    public retrieveGameAccept(): Observable<number> {
+    public retrieveGameAccept(): Observable<GameType> {
         return this.gameAcceptSubject.asObservable()
     }
 
@@ -165,8 +165,8 @@ export class ChatSignalRService {
         this.hubConnection.on("gameInvite", (gameInvite: GameInviteDto) => {
             this.gameInviteSubject.next(gameInvite)
         })
-        this.hubConnection.on("acceptGameInvite", (gameId: number) => {
-            this.gameAcceptSubject.next(gameId)
+        this.hubConnection.on("acceptGameInvite", (gameType: GameType) => {
+            this.gameAcceptSubject.next(gameType)
         })
     }
 }
