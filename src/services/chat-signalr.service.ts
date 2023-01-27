@@ -13,6 +13,7 @@ import { DtoBuilder } from "src/utils/dto-builder";
 import { changeUsernameDto } from "src/app/models/changeUsernameDto";
 import { GameInviteDto } from "src/app/models/gameInviteDto";
 import { UserLoginInfo } from "src/app/models/userLoginInfo";
+import { GameType } from "src/app/models/gameTypeEnum";
 
 @Injectable({ providedIn: 'root' })
 export class ChatSignalRService {
@@ -31,7 +32,7 @@ export class ChatSignalRService {
     private userDisconnectedSubject = new Subject<string>()
     private usernameChangedSubject = new Subject<changeUsernameDto>()
     private gameInviteSubject = new Subject<GameInviteDto>()
-    private gameAcceptSubject = new Subject<GameType>()
+    private gameAcceptSubject = new Subject<number>()
     private usersListSubject = new Subject<UserLoginInfo[]>()
 
     constructor(
@@ -95,7 +96,7 @@ export class ChatSignalRService {
         return this.gameInviteSubject.asObservable()
     }
 
-    public retrieveGameAccept(): Observable<GameType> {
+    public retrieveGameAccept(): Observable<number> {
         return this.gameAcceptSubject.asObservable()
     }
 
@@ -165,7 +166,7 @@ export class ChatSignalRService {
         this.hubConnection.on("gameInvite", (gameInvite: GameInviteDto) => {
             this.gameInviteSubject.next(gameInvite)
         })
-        this.hubConnection.on("acceptGameInvite", (gameType: GameType) => {
+        this.hubConnection.on("acceptGameInvite", (gameType: number) => {
             this.gameAcceptSubject.next(gameType)
         })
     }

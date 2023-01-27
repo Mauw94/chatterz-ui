@@ -6,6 +6,7 @@ import { ChatterzService } from 'src/services/chatterz.service';
 import { ChatroomDto } from '../models/chatroomDto';
 import { Router } from '@angular/router';
 import { WordGuesserService } from 'src/services/word-guesser.service';
+import { GameType } from 'src/app/models/gameTypeEnum';
 
 @Component({
   selector: 'app-main',

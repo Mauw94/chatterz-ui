@@ -3,6 +3,7 @@ import { ChatterzService } from 'src/services/chatterz.service';
 import { UserLoginInfo } from '../models/userLoginInfo';
 import { LoginService } from 'src/services/login.service';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
+import { GameType } from '../models/gameTypeEnum';
 
 @Component({
   selector: 'app-users',
@@ -45,16 +46,16 @@ export class UsersComponent implements OnInit {
 
   public handleMenuItemClick(event: string,) {
     let message: string = ""
-    let gameType: GameType
+    let gameType: number
 
     switch (event) {
       case "Play Wordguesser":
         message = "challenges you to play a game of word guesser! Do you accept?"
-        gameType = GameType.WORDGUESSER
+        gameType = 0
         break
       case "Play Bomberman":
         message = "challenges you to play a game of bomberman! Do you accept?"
-        gameType = GameType.BOMBERMAN
+        gameType = 1
         break
     }
 

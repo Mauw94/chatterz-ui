@@ -4,6 +4,7 @@ import { Const } from "src/utils/const";
 import { Observable, Subject } from "rxjs";
 import { DtoBuilder } from "src/utils/dto-builder";
 import { GameInviteDto } from "src/app/models/gameInviteDto";
+import { GameType } from "src/app/models/gameTypeEnum";
 
 @Injectable({ providedIn: 'root' })
 export class ChatterzService {
@@ -63,15 +64,16 @@ export class ChatterzService {
         return this.createChatroomSubject.asObservable()
     }
 
-    public challengePlayer(challengerUserId: number, userId: number, inviteMessage: string, gameId: number): Observable<any> {
+    public challengePlayer(challengerUserId: number, userId: number, inviteMessage: string, gameType: number): Observable<any> {
         return this.http.get(this.apiUsersUrl +
             "challenge?userId=" + userId +
             "&inviteMessage=" + inviteMessage +
             "&challengerUserId=" + challengerUserId +
-            "&gameId=" + gameId)
+            "&gameType=" + gameType)
     }
 
     public acceptGameInvite(gameInvite: GameInviteDto): Observable<any> {
+        console.log(gameInvite)
         return this.http.post(this.apiUsersUrl + "accept_gameinvite", gameInvite)
     }
 }
