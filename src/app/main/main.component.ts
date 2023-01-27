@@ -5,6 +5,7 @@ import { GameInviteDto } from '../models/gameInviteDto';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { ChatroomDto } from '../models/chatroomDto';
 import { Router } from '@angular/router';
+import { WordGuesserService } from 'src/services/word-guesser.service';
 
 @Component({
   selector: 'app-main',
@@ -20,6 +21,7 @@ export class MainComponent implements OnInit, OnDestroy {
     public loginService: LoginService,
     private chatterzService: ChatterzService,
     private chatSignalRService: ChatSignalRService,
+    private wordGuesserService: WordGuesserService,
     private router: Router) { }
 
   async ngOnInit(): Promise<void> {
@@ -36,17 +38,18 @@ export class MainComponent implements OnInit, OnDestroy {
     await this.chatSignalRService.disconnect()
   }
 
-  public updateChatroom(chatroom: ChatroomDto): void {
-    console.log("updating chatroom")
-    console.log(chatroom)
-    this.chatroom = chatroom
-  }
-
-  private retrieveGameInvite(): void {
+  private async retrieveGameInvite(): Promise<void> {
     this.chatSignalRService.retrieveGameInvite().subscribe((gameInvite: GameInviteDto) => {
       let res = window.confirm(gameInvite.InviteMessage)
       if (res) {
         gameInvite.UserId = this.loginService.user.Id
+        this.wordGuesserService.create().subscribe({
+          next: async (gameId: number) => {
+            this.wordGuesserService.gameId = gameId;
+            await this.wordGuesserService.connectSignalR();
+          },
+          error: (err) => console.error(err)
+        })
         this.chatterzService.acceptGameInvite(gameInvite).subscribe()
       }
     })

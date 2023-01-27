@@ -15,12 +15,15 @@ export class WordGuesserComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("we're in the game component, what now?")
-    this.gameService.connect(this.loginService.user).subscribe({
-      next: (game) => {
-        console.log(game)
-      },
-      error: (err) => console.error(err)
-    })
+    this.gameService.connect(
+      this.gameService.gameId,
+      this.loginService.user,
+      this.gameService.connectionId).subscribe({
+        next: (game) => {
+          console.log(game)
+        },
+        error: (err) => console.error(err)
+      })
   }
 
   closeWindow(): void {
