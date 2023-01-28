@@ -1,2 +1,19 @@
 <button type="button" class="btn-close close-button" style="background-color: white" (click)="closeWindow()"
     aria-label="Close"></button>
+
+<div class="row">
+
+    <div *ngFor="let g of guesses">
+        {{g}}
+    </div>
+
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" [(ngModel)]="guess" placeholder="Guess word"
+            (keyup.enter)="guessWord()">
+        <div class="input-group-append">
+            <button class="btn btn-success" type="button" [disabled]="guess.length==0"
+                (click)="guessWord()">Guess</button>
+        </div>
+    </div>
+
+</div>
