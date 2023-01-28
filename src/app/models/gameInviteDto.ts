@@ -5,4 +5,5 @@ export class GameInviteDto {
     UserId: number
     InviteMessage: string
     GameType: number
+    GameId: number
 }

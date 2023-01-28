@@ -48,18 +48,21 @@ export class MainComponent implements OnInit, OnDestroy {
         this.wordGuesserService.create().subscribe({
           next: (gameId: number) => {
             console.log(gameId)
-            this.wordGuesserService.gameId = gameId;
-            this.wordGuesserService.connectSignalR();
+            gameInvite.GameId = gameId
+            this.wordGuesserService.gameId = gameId
+            // TODO: pass gameId here?
+            this.chatterzService.acceptGameInvite(gameInvite).subscribe()
           },
           error: (err) => console.error(err)
         })
-        this.chatterzService.acceptGameInvite(gameInvite).subscribe()
+
       }
     })
 
-    this.chatSignalRService.retrieveGameAccept().subscribe((gameType: number) => {
+    this.chatSignalRService.retrieveGameAccept().subscribe((gameInvite: GameInviteDto) => {
       console.log("game can start!!")
-      console.log(gameType)
+      console.log(gameInvite)
+      this.wordGuesserService.gameId = gameInvite.GameId
       this.router.navigate(['wordguesser'])
     })
   }

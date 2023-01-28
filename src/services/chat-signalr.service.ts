@@ -32,7 +32,7 @@ export class ChatSignalRService {
     private userDisconnectedSubject = new Subject<string>()
     private usernameChangedSubject = new Subject<changeUsernameDto>()
     private gameInviteSubject = new Subject<GameInviteDto>()
-    private gameAcceptSubject = new Subject<number>()
+    private gameAcceptSubject = new Subject<GameInviteDto>()
     private usersListSubject = new Subject<UserLoginInfo[]>()
 
     constructor(
@@ -50,7 +50,7 @@ export class ChatSignalRService {
         await this.hubConnection.stop()
             .then(() => {
                 this.disconnectSignalRApi()
-                this.loginService.logout(this.chatterzService.chatroomId, this.connectionId)
+                // this.loginService.logout(this.chatterzService.chatroomId, this.connectionId)
                 this.connectionEstablished.next(false)
                 console.log("connection stopped")
             })
@@ -96,7 +96,7 @@ export class ChatSignalRService {
         return this.gameInviteSubject.asObservable()
     }
 
-    public retrieveGameAccept(): Observable<number> {
+    public retrieveGameAccept(): Observable<GameInviteDto> {
         return this.gameAcceptSubject.asObservable()
     }
 
@@ -166,8 +166,8 @@ export class ChatSignalRService {
         this.hubConnection.on("gameInvite", (gameInvite: GameInviteDto) => {
             this.gameInviteSubject.next(gameInvite)
         })
-        this.hubConnection.on("acceptGameInvite", (gameType: number) => {
-            this.gameAcceptSubject.next(gameType)
+        this.hubConnection.on("acceptGameInvite", (gameInvite: GameInviteDto) => {
+            this.gameAcceptSubject.next(gameInvite)
         })
     }
 }
