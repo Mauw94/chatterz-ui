@@ -10,12 +10,21 @@ import { LoginService } from 'src/services/login.service';
 })
 export class NavbarComponent implements OnInit {
 
+  public showWordGuesserRoute: boolean = false
+
   constructor(
     public loginService: LoginService,
     private chatterzService: ChatterzService,
     private chatSignalRService: ChatSignalRService) { }
 
   ngOnInit(): void {
+    this.chatterzService.checkWordGuesserInProgress(this.loginService.user.Id).subscribe({
+      next: (res) => {
+        if (res)
+          this.showWordGuesserRoute = true
+      },
+      error: (err) => console.error(err)
+    })
   }
 
   logout(): void {
@@ -38,5 +47,9 @@ export class NavbarComponent implements OnInit {
     } else {
       this.changeUsername()
     }
+  }
+
+  goToWordGuesser(): void {
+    console.log("go to wordguesser game in progress")
   }
 }

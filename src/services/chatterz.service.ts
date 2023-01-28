@@ -4,13 +4,12 @@ import { Const } from "src/utils/const";
 import { Observable, Subject } from "rxjs";
 import { DtoBuilder } from "src/utils/dto-builder";
 import { GameInviteDto } from "src/app/models/gameInviteDto";
-import { GameType } from "src/app/models/gameTypeEnum";
 
 @Injectable({ providedIn: 'root' })
 export class ChatterzService {
 
     public chatroomId: number
-    
+
     public inChatRoom: Subject<boolean> = new Subject<boolean>()
     public createChatroomSubject: Subject<boolean> = new Subject<boolean>()
 
@@ -46,6 +45,10 @@ export class ChatterzService {
     public saveChat(chatroomId: number, userName: string, message: string, connectionId: string): Observable<any> {
         return this.http.post(this.apiChatroomUrl + "send",
             DtoBuilder.buildChatMessageInfo(chatroomId, userName, message, connectionId))
+    }
+
+    public checkWordGuesserInProgress(userId: number): Observable<any> {
+        return this.http.get(this.apiUsersUrl + "check_game_inprogress?userId=" + userId)
     }
 
     public getChatHistory(chatroomId: number): Observable<any> {
