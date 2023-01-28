@@ -3,6 +3,7 @@ import { changeUsernameDto } from "src/app/models/changeUsernameDto"
 import { ChatroomJoinDto } from "src/app/models/chatroomJoinDto"
 import { ConnectionInfo } from "src/app/models/connectionInfo"
 import { UserLoginInfo } from "src/app/models/userLoginInfo"
+import { WordGuesserSendDto } from "src/app/models/wordguesserSendDto"
 
 export class DtoBuilder {
 
@@ -46,6 +47,15 @@ export class DtoBuilder {
             UserName: username,
             Password: password,
             ChatroomId: chatroomId
+        }
+    }
+
+    public static buildWordGuesserDto(guessedWord, gameroomId: string, playerId: number, connectionId: string): WordGuesserSendDto {
+        return {
+            GuessedWord: guessedWord,
+            GameroomId: gameroomId,
+            PlayerId: playerId,
+            ConnectionId: connectionId
         }
     }
 }

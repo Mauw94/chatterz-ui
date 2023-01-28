@@ -5,6 +5,8 @@ import { UserLoginInfo } from "src/app/models/userLoginInfo";
 import { Const } from "src/utils/const";
 import * as signalR from "@microsoft/signalr"
 import { GameConnectDto } from "src/app/models/gameConnectDto";
+import { DtoBuilder } from "src/utils/dto-builder";
+import { LoginService } from "./login.service";
 
 @Injectable({ providedIn: 'root' })
 export class WordGuesserService {
@@ -16,11 +18,22 @@ export class WordGuesserService {
     private connectionUrl = Const.getBaseUrl() + "signalr_game"
     private hubConnection: signalR.HubConnection
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        private loginService: LoginService) { }
 
     public async connectSignalR() {
         await this.startConnection()
         await this.addListeners()
+    }
+
+    public async sendToHub(guessedWord: string, gameroomId: string): Promise<any> {
+        var promise = await this.hubConnection.invoke("SendAsync",
+            DtoBuilder.buildWordGuesserDto(guessedWord, gameroomId, this.loginService.user.Id, this.connectionId))
+            .then(() => console.log("message sent to hub"))
+            .catch((err) => console.error(err))
+
+        return promise;
     }
 
     public create(): Observable<any> {
