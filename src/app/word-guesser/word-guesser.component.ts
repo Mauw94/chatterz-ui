@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoginService } from 'src/services/login.service';
 import { WordGuesserService } from 'src/services/word-guesser.service';
@@ -8,7 +8,7 @@ import { WordGuesserService } from 'src/services/word-guesser.service';
   templateUrl: './word-guesser.component.html',
   styleUrls: ['./word-guesser.component.css']
 })
-export class WordGuesserComponent implements OnInit {
+export class WordGuesserComponent implements OnInit, OnDestroy {
 
   public guess: string = ""
   public guesses: string[] = []
@@ -28,23 +28,36 @@ export class WordGuesserComponent implements OnInit {
       gameId = this.gameService.gameId
     }
 
-    console.log("we're in the game component, what now?")
+    this.gameService.retrieveConnectionEstablished().subscribe((connectionEstablished: boolean) => {
+      if (connectionEstablished) {
+        console.log("connection established")
+        this.gameService.connect(
+          gameId,
+          this.loginService.user,
+          this.gameService.connectionId).subscribe({
+            next: (game) => {
+              console.log(game)
+            },
+            error: (err) => console.error(err)
+          })
+      }
+    })
+
+    this.gameService.retrieveMessage().subscribe((message: string) => {
+      console.log("retrieving guess")
+      console.log(message)
+      this.guesses.push(message)
+    })
 
     await this.gameService.connectSignalR()
-
-    this.gameService.connect(
-      gameId,
-      this.loginService.user,
-      this.gameService.connectionId).subscribe({
-        next: (game) => {
-          console.log(game)
-        },
-        error: (err) => console.error(err)
-      })
 
     // TODO: when 2 players are connected
     // show start button
     // game starts
+  }
+
+  async ngOnDestroy(): Promise<void> {
+    await this.gameService.disconnect()
   }
 
   closeWindow(): void {
@@ -54,7 +67,7 @@ export class WordGuesserComponent implements OnInit {
   }
 
   guessWord(): void {
-    this.guesses.push(this.guess)
     console.log("guessing... " + this.guess)
+    this.gameService.sendToHub(this.guess, "wordguesser" + this.gameService.gameId)
   }
 }

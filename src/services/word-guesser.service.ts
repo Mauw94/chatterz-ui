@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { UserLoginInfo } from "src/app/models/userLoginInfo";
 import { Const } from "src/utils/const";
 import * as signalR from "@microsoft/signalr"
@@ -17,6 +17,8 @@ export class WordGuesserService {
     private apiUrl: string = Const.getBaseUrl() + "api/game/wordguesser/"
     private connectionUrl = Const.getBaseUrl() + "signalr_game"
     private hubConnection: signalR.HubConnection
+    private messageSubject: Subject<string> = new Subject<string>()
+    private connectionEstablishedSubject: Subject<boolean> = new Subject<boolean>()
 
     constructor(
         private http: HttpClient,
@@ -25,6 +27,16 @@ export class WordGuesserService {
     public async connectSignalR() {
         await this.startConnection()
         await this.addListeners()
+    }
+
+    public async disconnect() {
+        await this.hubConnection.stop()
+            .then(() => {
+                // call api to dc
+                this.connectionEstablishedSubject.next(false)
+                console.log("game signalr connection stoppped")
+            })
+            .catch((err) => console.error(err))
     }
 
     public async sendToHub(guessedWord: string, gameroomId: string): Promise<any> {
@@ -48,6 +60,14 @@ export class WordGuesserService {
         return this.http.get(this.apiUrl + "start?gameId=" + gameId);
     }
 
+    public retrieveMessage(): Observable<string> {
+        return this.messageSubject.asObservable()
+    }
+
+    public retrieveConnectionEstablished(): Observable<boolean> {
+        return this.connectionEstablishedSubject.asObservable()
+    }
+
     private buildGameConnectDto(gameId: number, player: UserLoginInfo, connectionId: string): GameConnectDto {
         return {
             GameId: gameId,
@@ -63,6 +83,7 @@ export class WordGuesserService {
             .then(() => {
                 console.log("game signalr connection started")
                 this.connectionId = this.hubConnection.connectionId
+                this.connectionEstablishedSubject.next(true)
             })
             .catch((err) => console.error(err))
     }
@@ -76,6 +97,10 @@ export class WordGuesserService {
     private async addListeners(): Promise<void> {
         this.hubConnection.on("PlayerJoined", (message: string) => {
             console.log(message)
+        })
+        this.hubConnection.on("gameUpdateReceievedFromHub", (message: string) => {
+            console.log(message)
+            this.messageSubject.next(message)
         })
     }
 }
