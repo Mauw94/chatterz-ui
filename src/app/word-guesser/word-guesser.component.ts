@@ -31,7 +31,8 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   public wordToGuessLength: number
 
   public playerTurn: boolean = true // set defautl false after implementation
-  
+  public gameStarted: boolean = false
+
   private guessedWordsHistory: string[] = [];
 
   constructor(
