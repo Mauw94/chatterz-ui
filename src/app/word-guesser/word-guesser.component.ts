@@ -1,7 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LoginService } from 'src/services/login.service';
 import { WordGuesserService } from 'src/services/word-guesser.service';
+
+export interface MatchingLetters {
+  word: Letter[];
+}
+
+export interface Letter {
+  match: boolean;
+  contains: boolean;
+  character: string;
+}
 
 @Component({
   selector: 'app-word-guesser',
@@ -10,8 +21,18 @@ import { WordGuesserService } from 'src/services/word-guesser.service';
 })
 export class WordGuesserComponent implements OnInit, OnDestroy {
 
-  public guess: string = ""
-  public guesses: string[] = []
+  public gameForm: FormGroup = new FormGroup({
+    word: new FormControl('', [
+      Validators.required
+    ])
+  });
+  public wordToGuess: string = ""
+  public matchingLetters: MatchingLetters[] = [];
+  public wordToGuessLength: number
+
+  public playerTurn: boolean = true // set defautl false after implementation
+  
+  private guessedWordsHistory: string[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -19,6 +40,7 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
     private gameService: WordGuesserService) { }
 
   async ngOnInit(): Promise<void> {
+    // TODO: also check for player turn, send in gamedto probaly?
     let id = this.activatedRoute.snapshot.params["id"]
     let gameId: number
 
@@ -36,17 +58,23 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
           this.loginService.user,
           this.gameService.connectionId).subscribe({
             next: (game) => {
-              console.log(game)
+              this.wordToGuess = game.wordToGuess
+              this.wordToGuessLength = this.wordToGuess.length
+              console.log(this.wordToGuess)
             },
             error: (err) => console.error(err)
           })
       }
     })
 
-    this.gameService.retrieveMessage().subscribe((message: string) => {
+    this.gameService.retrieveMessage().subscribe((guessedWord: string) => {
       console.log("retrieving guess")
-      console.log(message)
-      this.guesses.push(message)
+      console.log(guessedWord)
+      if (guessedWord.toLowerCase() === this.wordToGuess.toLowerCase()) {
+        console.log("you won pog")
+      }
+      this.guessedWordsHistory.push(guessedWord)
+      this.checkValidLetters()
     })
 
     await this.gameService.connectSignalR()
@@ -67,7 +95,38 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   }
 
   guessWord(): void {
-    console.log("guessing... " + this.guess)
-    this.gameService.sendToHub(this.guess, "wordguesser" + this.gameService.gameId)
+    let guess = this.gameForm.controls.word.value
+
+    console.log("guessing... " + guess)
+    this.gameService.sendToHub(guess, "wordguesser" + this.gameService.gameId)
+    this.gameForm.controls.word.setValue("")
   }
+
+
+  /**
+  * Check valid and matching letters in a word.
+  */
+  private checkValidLetters(): void {
+    var letterWord: Letter[] = [];
+    var wordToGuessChars = this.wordToGuess!.split('');
+
+    for (let i = 0; i < this.guessedWordsHistory.length; i++) {
+      var word = this.guessedWordsHistory[i].toUpperCase();
+      var wordChars = word.split('');
+      letterWord = [];
+
+      for (let j = 0; j < wordChars.length; j++) {
+        var letter: Letter = {} as Letter;
+        if (wordToGuessChars[j] === wordChars[j]) letter.match = true;
+        if (wordToGuessChars.includes(wordChars[j])) letter.contains = true;
+        letter.character = wordChars[j];
+        letterWord.push(letter);
+      }
+      this.matchingLetters.push({ word: letterWord });
+
+      this.guessedWordsHistory.shift();
+      i--;
+    }
+  }
+
 }
