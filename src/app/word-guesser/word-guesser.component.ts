@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LoginService } from 'src/services/login.service';
 import { WordGuesserService } from 'src/services/word-guesser.service';
+import { WordGuesserDto } from '../models/wordGuesserDto';
+import { DtoBuilder } from 'src/utils/dto-builder';
 
 export interface MatchingLetters {
   word: Letter[];
@@ -30,10 +32,13 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   public matchingLetters: MatchingLetters[] = [];
   public wordToGuessLength: number
 
-  public playerTurn: boolean = true // set defautl false after implementation
+  public playerTurn: boolean = false // set defautl false after implementation
   public gameStarted: boolean = false
+  public canStart: boolean = false
 
   private guessedWordsHistory: string[] = [];
+  private gameId: number
+  private game: WordGuesserDto
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,46 +48,71 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     // TODO: also check for player turn, send in gamedto probaly?
     let id = this.activatedRoute.snapshot.params["id"]
-    let gameId: number
 
     if (id != undefined) {
-      gameId = id
+      this.gameId = id
     } else {
-      gameId = this.gameService.gameId
+      this.gameId = this.gameService.gameId
     }
 
     this.gameService.retrieveConnectionEstablished().subscribe((connectionEstablished: boolean) => {
       if (connectionEstablished) {
         console.log("connection established")
         this.gameService.connect(
-          gameId,
+          this.gameId,
           this.loginService.user,
           this.gameService.connectionId).subscribe({
-            next: (game) => {
-              this.wordToGuess = game.wordToGuess
-              this.wordToGuessLength = this.wordToGuess.length
-              console.log(this.wordToGuess)
+            next: () => {
+              this.gameService.canStart(this.gameId).subscribe()
             },
             error: (err) => console.error(err)
           })
       }
     })
 
-    this.gameService.retrieveMessage().subscribe((guessedWord: string) => {
-      console.log("retrieving guess")
-      console.log(guessedWord)
-      if (guessedWord.toLowerCase() === this.wordToGuess.toLowerCase()) {
+    this.gameService.retrieveGameState().subscribe((dto: any) => {
+      console.log("retrieving gamestate")
+      this.game = DtoBuilder.buildWordGuesserDto(dto.guessedWord, dto.gameroomId, dto.playerToPlay, dto.playerIds, dto.wordToGuess)
+      console.log(this.game)
+      if (this.game.PlayerToPlay === this.loginService.user.Id) {
+        this.playerTurn = true
+      } else {
+        this.playerTurn = false
+      }
+      if (this.game.GuessedWord.toLowerCase() === this.wordToGuess.toLowerCase()) {
         console.log("you won pog")
       }
-      this.guessedWordsHistory.push(guessedWord)
+      this.guessedWordsHistory.push(this.game.GuessedWord)
       this.checkValidLetters()
     })
 
-    await this.gameService.connectSignalR()
+    this.gameService.retrieveCanStartGameSubject().subscribe((start: boolean) => {
+      if (start) {
+        this.canStart = true
+      }
+    })
 
-    // TODO: when 2 players are connected
-    // show start button
-    // game starts
+    this.gameService.retrieveStartGameSubject().subscribe((dto: any) => {
+      this.game = DtoBuilder.buildWordGuesserDto(dto.guessedWord, dto.gameroomId, dto.playerToPlay, dto.playerIds, dto.wordToGuess)
+      console.log("game info..")
+      console.log(this.game)
+      this.wordToGuess = this.game.WordToGuess
+      this.wordToGuessLength = this.wordToGuess.length
+
+      console.log(this.loginService.user.Id)
+
+      if (this.game.PlayerToPlay === this.loginService.user.Id) {
+        this.playerTurn = true
+      } else {
+        this.playerTurn = false
+      }
+
+      console.log(this.playerTurn)
+
+      this.gameStarted = true
+    })
+
+    await this.gameService.connectSignalR()
   }
 
   async ngOnDestroy(): Promise<void> {
@@ -97,12 +127,15 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
 
   guessWord(): void {
     let guess = this.gameForm.controls.word.value
-
     console.log("guessing... " + guess)
-    this.gameService.sendToHub(guess, "wordguesser" + this.gameService.gameId)
+    this.game.GuessedWord = guess
+    this.gameService.sendToHub(this.game)
     this.gameForm.controls.word.setValue("")
   }
 
+  start(): void {
+    this.gameService.start(this.gameId).subscribe()
+  }
 
   /**
   * Check valid and matching letters in a word.

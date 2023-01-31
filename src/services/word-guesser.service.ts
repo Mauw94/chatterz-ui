@@ -7,6 +7,7 @@ import * as signalR from "@microsoft/signalr"
 import { GameConnectDto } from "src/app/models/gameConnectDto";
 import { DtoBuilder } from "src/utils/dto-builder";
 import { LoginService } from "./login.service";
+import { WordGuesserDto } from "src/app/models/wordGuesserDto";
 
 @Injectable({ providedIn: 'root' })
 export class WordGuesserService {
@@ -17,8 +18,10 @@ export class WordGuesserService {
     private apiUrl: string = Const.getBaseUrl() + "api/game/wordguesser/"
     private connectionUrl = Const.getBaseUrl() + "signalr_game"
     private hubConnection: signalR.HubConnection
-    private messageSubject: Subject<string> = new Subject<string>()
+    private wordGuesserSubject: Subject<WordGuesserDto> = new Subject<WordGuesserDto>()
     private connectionEstablishedSubject: Subject<boolean> = new Subject<boolean>()
+    private canStartGameSubject: Subject<boolean> = new Subject<boolean>()
+    private startGameSubject: Subject<WordGuesserDto> = new Subject<WordGuesserDto>()
 
     constructor(
         private http: HttpClient,
@@ -39,9 +42,9 @@ export class WordGuesserService {
             .catch((err) => console.error(err))
     }
 
-    public async sendToHub(guessedWord: string, gameroomId: string): Promise<any> {
+    public async sendToHub(dto: WordGuesserDto): Promise<any> {
         var promise = await this.hubConnection.invoke("SendAsync",
-            DtoBuilder.buildWordGuesserDto(guessedWord, gameroomId, this.loginService.user.Id, this.connectionId))
+            DtoBuilder.buildWordGuesserDto(dto.GuessedWord, dto.GameroomId, dto.PlayerToPlay, dto.PlayerIds, dto.WordToGuess))
             .then(() => console.log("message sent to hub"))
             .catch((err) => console.error(err))
 
@@ -56,16 +59,28 @@ export class WordGuesserService {
         return this.http.post(this.apiUrl + "connect", this.buildGameConnectDto(gameId, player, connectionId));
     }
 
+    public canStart(gameId: number): Observable<any> {
+        return this.http.get(this.apiUrl + "can_start?gameId=" + gameId)
+    }
+
     public start(gameId: number): Observable<any> {
         return this.http.get(this.apiUrl + "start?gameId=" + gameId);
     }
 
-    public retrieveMessage(): Observable<string> {
-        return this.messageSubject.asObservable()
+    public retrieveGameState(): Observable<WordGuesserDto> {
+        return this.wordGuesserSubject.asObservable()
     }
 
     public retrieveConnectionEstablished(): Observable<boolean> {
         return this.connectionEstablishedSubject.asObservable()
+    }
+
+    public retrieveCanStartGameSubject(): Observable<boolean> {
+        return this.canStartGameSubject.asObservable()
+    }
+
+    public retrieveStartGameSubject(): Observable<WordGuesserDto> {
+        return this.startGameSubject.asObservable()
     }
 
     private buildGameConnectDto(gameId: number, player: UserLoginInfo, connectionId: string): GameConnectDto {
@@ -98,9 +113,15 @@ export class WordGuesserService {
         this.hubConnection.on("PlayerJoined", (message: string) => {
             console.log(message)
         })
-        this.hubConnection.on("gameUpdateReceievedFromHub", (message: string) => {
-            console.log(message)
-            this.messageSubject.next(message)
+        this.hubConnection.on("gameUpdateReceievedFromHub", (dto: WordGuesserDto) => {
+            this.wordGuesserSubject.next(dto)
         })
+        this.hubConnection.on("canStartGame", (start: boolean) => {
+            this.canStartGameSubject.next(start)
+        })
+        this.hubConnection.on("startGame", (dto: WordGuesserDto) => {
+            this.startGameSubject.next(dto)
+        })
+
     }
 }

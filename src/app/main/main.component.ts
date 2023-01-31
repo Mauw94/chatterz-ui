@@ -40,6 +40,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   private async retrieveGameInvite(): Promise<void> {
+    // TODO: distinction between different games
     this.chatSignalRService.retrieveGameInvite().subscribe((gameInvite: GameInviteDto) => {
       let res = window.confirm(gameInvite.InviteMessage)
       if (res) {
