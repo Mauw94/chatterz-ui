@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from 'src/services/login.service';
 import { WordGuesserService } from 'src/services/word-guesser.service';
 import { WordGuesserDto } from '../models/wordGuesserDto';
@@ -41,6 +41,7 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   private game: WordGuesserDto
 
   constructor(
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private loginService: LoginService,
     private gameService: WordGuesserService) { }
@@ -119,8 +120,13 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
     await this.gameService.disconnect()
   }
 
-  closeWindow(): void {
-    console.log("TODO: close game window")
+  async closeWindow(): Promise<void> {
+    let res = window.confirm("Are you sure you want to leave the game?")
+    if (res) {
+      await this.ngOnDestroy()
+      console.log("TODO: close game window")
+      this.router.navigate(['main'])
+    }
     // TODO: reconnect with chatsignalR
     // disconnect with gamesignalR
   }

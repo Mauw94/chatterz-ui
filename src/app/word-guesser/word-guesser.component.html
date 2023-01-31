@@ -8,25 +8,29 @@
 
 <div *ngIf="gameStarted" class="row">
 
-    <h2 *ngIf="playerTurn">Your turn</h2>
-    <h2 *ngIf="!playerTurn">Opponent's turn</h2>
-    
-    <li *ngFor="let matchingLetter of matchingLetters">
-        <span *ngFor="let letterWord of matchingLetter.word">
-            <span *ngIf="letterWord.match" style="color:red">
-                {{letterWord.character}}
-            </span>
-            <span *ngIf="!letterWord.match && !letterWord.contains">
-                {{letterWord.character}}
-            </span>
-            <span *ngIf="letterWord.contains && !letterWord.match" style="color: orange">
-                {{letterWord.character}}
-            </span>
-        </span>
-    </li>
+    <div class="col-md-3">nothing here</div>
 
-    <form [formGroup]="gameForm">
-        <div class="game">
+    <div class="col-md-6">
+        <h4 *ngIf="playerTurn">Your turn</h4>
+        <h4 *ngIf="!playerTurn">Opponent's turn</h4>
+        <hr>
+
+        <div id="word-guesses">
+            <li *ngFor="let matchingLetter of matchingLetters">
+                <span *ngFor="let letterWord of matchingLetter.word">
+                    <span *ngIf="letterWord.match" style="color:red">
+                        {{letterWord.character}}
+                    </span>
+                    <span *ngIf="!letterWord.match && !letterWord.contains">
+                        {{letterWord.character}}
+                    </span>
+                    <span *ngIf="letterWord.contains && !letterWord.match" style="color: orange">
+                        {{letterWord.character}}
+                    </span>
+                </span>
+            </li>
+        </div>
+        <form [formGroup]="gameForm">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" [attr.minlength]="wordToGuessLength"
                     [attr.maxlength]="wordToGuessLength" formControlName="word"
@@ -40,7 +44,9 @@
                         </svg></button>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
+
+    <div class="col-md-3">gamechat here</div>
 
 </div>
