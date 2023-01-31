@@ -6,17 +6,17 @@
     <div class="collapse navbar-collapse justify-content-between" id="navbarText">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link pointer" (click)="home()">Home</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link pointer" (click)="createChatroom()">Create chatroom</a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link pointer" (click)="changeUsername()">Change username</a>
             </li>
-            <li *ngIf="showWordGuesserRoute" class="nav-item">
+            <!-- <li *ngIf="showWordGuesserRoute" class="nav-item">
                 <a class="nav-link pointer" (click)="goToWordGuesser()">Wordguesser in progress</a>
-            </li>
+            </li> -->
 
         </ul>
         <ul class="navbar-nav ml-auto">

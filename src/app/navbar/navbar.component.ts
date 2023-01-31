@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { LoginService } from 'src/services/login.service';
+import { WordGuesserService } from 'src/services/word-guesser.service';
 
 @Component({
   selector: 'app-navbar',
@@ -18,19 +19,30 @@ export class NavbarComponent implements OnInit {
     public loginService: LoginService,
     private router: Router,
     private chatterzService: ChatterzService,
-    private chatSignalRService: ChatSignalRService) { }
+    private chatSignalRService: ChatSignalRService,
+    private gameService: WordGuesserService) { }
 
   ngOnInit(): void {
-    this.chatterzService.checkWordGuesserInProgress(this.loginService.user.Id).subscribe({
-      next: (res) => {
-        console.log(res)
-        if (res > 0) {
-          this.showWordGuesserRoute = true
-          this.gameId = res
-        }
-      },
-      error: (err) => console.error(err)
-    })
+    // this.chatterzService.checkWordGuesserInProgress(this.loginService.user.Id).subscribe({
+    //   next: (res) => {
+    //     console.log(res)
+    //     if (res > 0) {
+    //       this.showWordGuesserRoute = true
+    //       this.gameId = res
+    //     }
+    //   },
+    //   error: (err) => console.error(err)
+    // })
+  }
+
+  async home(): Promise<void> {
+    if (this.gameService.gameId !== undefined) {
+      let res = window.confirm("Are you sure you want to leave the game?")
+      if (res) {
+        await this.gameService.disconnect()
+        this.router.navigate(['main'])
+      }
+    }
   }
 
   logout(): void {

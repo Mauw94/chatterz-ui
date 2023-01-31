@@ -47,7 +47,6 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
     private gameService: WordGuesserService) { }
 
   async ngOnInit(): Promise<void> {
-    // TODO: also check for player turn, send in gamedto probaly?
     let id = this.activatedRoute.snapshot.params["id"]
 
     if (id != undefined) {
@@ -95,12 +94,8 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
 
     this.gameService.retrieveStartGameSubject().subscribe((dto: any) => {
       this.game = DtoBuilder.buildWordGuesserDto(dto.guessedWord, dto.gameroomId, dto.playerToPlay, dto.playerIds, dto.wordToGuess)
-      console.log("game info..")
-      console.log(this.game)
       this.wordToGuess = this.game.WordToGuess
       this.wordToGuessLength = this.wordToGuess.length
-
-      console.log(this.loginService.user.Id)
 
       if (this.game.PlayerToPlay === this.loginService.user.Id) {
         this.playerTurn = true
@@ -108,9 +103,13 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
         this.playerTurn = false
       }
 
-      console.log(this.playerTurn)
-
       this.gameStarted = true
+    })
+
+    this.gameService.retrieveGameEndSubject().subscribe((message: string) => {
+      let res = window.alert(message)
+      console.log(res)
+      this.router.navigate(['main'])
     })
 
     await this.gameService.connectSignalR()
@@ -124,16 +123,12 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
     let res = window.confirm("Are you sure you want to leave the game?")
     if (res) {
       await this.ngOnDestroy()
-      console.log("TODO: close game window")
       this.router.navigate(['main'])
     }
-    // TODO: reconnect with chatsignalR
-    // disconnect with gamesignalR
   }
 
   guessWord(): void {
     let guess = this.gameForm.controls.word.value
-    console.log("guessing... " + guess)
     this.game.GuessedWord = guess
     this.gameService.sendToHub(this.game)
     this.gameForm.controls.word.setValue("")
@@ -151,7 +146,7 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
     var wordToGuessChars = this.wordToGuess!.split('');
 
     for (let i = 0; i < this.guessedWordsHistory.length; i++) {
-      var word = this.guessedWordsHistory[i].toUpperCase();
+      var word = this.guessedWordsHistory[i].toLowerCase();
       var wordChars = word.split('');
       letterWord = [];
 

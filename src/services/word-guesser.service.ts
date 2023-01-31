@@ -22,6 +22,7 @@ export class WordGuesserService {
     private connectionEstablishedSubject: Subject<boolean> = new Subject<boolean>()
     private canStartGameSubject: Subject<boolean> = new Subject<boolean>()
     private startGameSubject: Subject<WordGuesserDto> = new Subject<WordGuesserDto>()
+    private gameEndSubject: Subject<string> = new Subject<string>()
 
     constructor(
         private http: HttpClient,
@@ -35,9 +36,11 @@ export class WordGuesserService {
     public async disconnect() {
         await this.hubConnection.stop()
             .then(() => {
-                // call api to dc
-                this.connectionEstablishedSubject.next(false)
-                console.log("game signalr connection stoppped")
+                this.disconnectApi(this.gameId, this.connectionId, this.loginService.user.Id).subscribe(() => {
+                    this.gameId = undefined
+                    this.connectionEstablishedSubject.next(false)
+                    console.log("game signalr connection stoppped")
+                })
             })
             .catch((err) => console.error(err))
     }
@@ -57,6 +60,10 @@ export class WordGuesserService {
 
     public connect(gameId: number, player: UserLoginInfo, connectionId: string): Observable<any> {
         return this.http.post(this.apiUrl + "connect", this.buildGameConnectDto(gameId, player, connectionId));
+    }
+
+    public disconnectApi(gameId: number, connectionId: string, playerId: number): Observable<any> {
+        return this.http.post(this.apiUrl + "disconnect?gameId=" + gameId + "&connectionId=" + connectionId + "&playerId=" + playerId, {})
     }
 
     public canStart(gameId: number): Observable<any> {
@@ -81,6 +88,10 @@ export class WordGuesserService {
 
     public retrieveStartGameSubject(): Observable<WordGuesserDto> {
         return this.startGameSubject.asObservable()
+    }
+
+    public retrieveGameEndSubject(): Observable<string> {
+        return this.gameEndSubject.asObservable()
     }
 
     private buildGameConnectDto(gameId: number, player: UserLoginInfo, connectionId: string): GameConnectDto {
@@ -122,6 +133,9 @@ export class WordGuesserService {
         this.hubConnection.on("startGame", (dto: WordGuesserDto) => {
             this.startGameSubject.next(dto)
         })
-
+        this.hubConnection.on("gameEnded", (message: string) => {
+            console.log(message)
+            this.gameEndSubject.next(message)
+        })
     }
 }
