@@ -15,7 +15,7 @@
         <h4 *ngIf="!playerTurn">Opponent's turn</h4>
         <hr>
 
-        <div id="word-guesses">
+        <div id="word-guesses" #scrollMe [scrollTop]="scrollMe.scrollHeight">
             <li *ngFor="let matchingLetter of matchingLetters">
                 <span *ngFor="let letterWord of matchingLetter.word">
                     <span *ngIf="letterWord.match" style="color:red">

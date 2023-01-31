@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from 'src/services/login.service';
 import { WordGuesserService } from 'src/services/word-guesser.service';
 import { WordGuesserDto } from '../models/wordGuesserDto';
 import { DtoBuilder } from 'src/utils/dto-builder';
+import { ScrollToBottomDirective } from '../directives/scroll-to-bottom.directive';
 
 export interface MatchingLetters {
   word: Letter[];
@@ -22,6 +23,8 @@ export interface Letter {
   styleUrls: ['./word-guesser.component.css']
 })
 export class WordGuesserComponent implements OnInit, OnDestroy {
+  @ViewChild(ScrollToBottomDirective)
+  scroll: ScrollToBottomDirective
 
   public gameForm: FormGroup = new FormGroup({
     word: new FormControl('', [
@@ -39,6 +42,7 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   private guessedWordsHistory: string[] = [];
   private gameId: number
   private game: WordGuesserDto
+  private gameWasWon: boolean = false
 
   constructor(
     private router: Router,
@@ -79,9 +83,6 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
       } else {
         this.playerTurn = false
       }
-      if (this.game.GuessedWord.toLowerCase() === this.wordToGuess.toLowerCase()) {
-        console.log("you won pog")
-      }
       this.guessedWordsHistory.push(this.game.GuessedWord)
       this.checkValidLetters()
     })
@@ -112,11 +113,18 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
       this.router.navigate(['main'])
     })
 
+    this.gameService.retrieveGameWinSubject().subscribe((message: string) => {
+      window.alert(message)
+      this.gameWasWon = true
+      this.router.navigate(['main'])
+    })
+
     await this.gameService.connectSignalR()
   }
 
   async ngOnDestroy(): Promise<void> {
-    await this.gameService.disconnect()
+    if (!this.gameWasWon)
+      await this.gameService.disconnect()
   }
 
   async closeWindow(): Promise<void> {
@@ -130,8 +138,14 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   guessWord(): void {
     let guess = this.gameForm.controls.word.value
     this.game.GuessedWord = guess
-    this.gameService.sendToHub(this.game)
-    this.gameForm.controls.word.setValue("")
+    if (this.game.GuessedWord.toLowerCase() === this.wordToGuess.toLowerCase()) {
+      this.gameService.win(this.gameId).subscribe(() => {
+        console.log("you won pog")
+      })
+    } else {
+      this.gameService.sendToHub(this.game)
+      this.gameForm.controls.word.setValue("")
+    }
   }
 
   start(): void {

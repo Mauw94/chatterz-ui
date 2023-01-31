@@ -23,6 +23,7 @@ export class WordGuesserService {
     private canStartGameSubject: Subject<boolean> = new Subject<boolean>()
     private startGameSubject: Subject<WordGuesserDto> = new Subject<WordGuesserDto>()
     private gameEndSubject: Subject<string> = new Subject<string>()
+    private gameWinSubject: Subject<string> = new Subject<string>()
 
     constructor(
         private http: HttpClient,
@@ -74,6 +75,10 @@ export class WordGuesserService {
         return this.http.get(this.apiUrl + "start?gameId=" + gameId);
     }
 
+    public win(gameId: number): Observable<any> {
+        return this.http.get(this.apiUrl + "win?gameId=" + gameId + "&playerId=" + this.loginService.user.Id)
+    }
+
     public retrieveGameState(): Observable<WordGuesserDto> {
         return this.wordGuesserSubject.asObservable()
     }
@@ -92,6 +97,10 @@ export class WordGuesserService {
 
     public retrieveGameEndSubject(): Observable<string> {
         return this.gameEndSubject.asObservable()
+    }
+
+    public retrieveGameWinSubject(): Observable<string> {
+        return this.gameWinSubject.asObservable()
     }
 
     private buildGameConnectDto(gameId: number, player: UserLoginInfo, connectionId: string): GameConnectDto {
@@ -134,8 +143,10 @@ export class WordGuesserService {
             this.startGameSubject.next(dto)
         })
         this.hubConnection.on("gameEnded", (message: string) => {
-            console.log(message)
             this.gameEndSubject.next(message)
+        })
+        this.hubConnection.on("gameWin", (message: string) => {
+            this.gameWinSubject.next(message)
         })
     }
 }
