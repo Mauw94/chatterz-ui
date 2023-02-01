@@ -46,7 +46,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(): void {
-    this.loginService.logout(this.chatterzService.chatroomId, this.chatSignalRService.connectionId)
+    this.loginService.logout(this.chatSignalRService.connectionId)
   }
 
   createChatroom(): void {

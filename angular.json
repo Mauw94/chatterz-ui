@@ -59,6 +59,14 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           }
         },
@@ -70,6 +78,9 @@
           "configurations": {
             "production": {
               "browserTarget": "Chatterz:build:production"
+            },
+            "development": {
+              "browserTarget": "Chatterz:build:development"
             }
           }
         },
@@ -122,6 +133,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "Chatterz"
 }

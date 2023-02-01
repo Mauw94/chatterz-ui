@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, } from '@angular/core';
 import { LoginService } from 'src/services/login.service';
 import { UserLoginInfo } from '../models/userLoginInfo';
 
@@ -7,15 +7,13 @@ import { UserLoginInfo } from '../models/userLoginInfo';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   username: string = ""
   password: string = ""
 
   constructor(
-    private loginService: LoginService) { }
-
-  ngOnInit(): void {
+    private loginService: LoginService) {
     this.loginService.checkCookie()
   }
 

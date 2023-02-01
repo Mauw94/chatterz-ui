@@ -30,8 +30,8 @@ export class LoginService {
             DtoBuilder.buildUserLoginInfo(username, password, undefined))
     }
 
-    public logout(chatroomId: number, connectionId: string): void {
-        this.apiLogout(this.user.Id, connectionId, chatroomId).subscribe({
+    public logout(connectionId: string): void {
+        this.apiLogout(this.user.Id, connectionId).subscribe({
             next: () => {
                 this.cookieService.delete('loginInfo')
                 this.isLoggedIn = false
@@ -59,7 +59,7 @@ export class LoginService {
         this.router.navigate(['main'])
     }
 
-    private apiLogout(userId: number, connectionId: string, chatroomId: number): Observable<any> {
-        return this.http.post(this.apiUrl + "logout?userId=" + userId + "&connectionId=" + connectionId + "&chatroomId=" + chatroomId, {});
+    private apiLogout(userId: number, connectionId: string): Observable<any> {
+        return this.http.post(this.apiUrl + "logout?userId=" + userId + "&connectionId=" + connectionId, {});
     }
 }

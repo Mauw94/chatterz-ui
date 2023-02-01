@@ -93,7 +93,6 @@ export class ChatSignalRService {
     }
 
     public retrieveGameInvite(): Observable<GameInviteDto> {
-        console.log(this.gameInviteSubject)
         return this.gameInviteSubject.asObservable()
     }
 
