@@ -79,6 +79,10 @@ export class WordGuesserService {
         return this.http.get(this.apiUrl + "win?gameId=" + gameId + "&playerId=" + this.loginService.user.Id)
     }
 
+    public guess(gameId: number): Observable<any> {
+        return this.http.post(this.apiUrl + "guess?gameId=" + gameId, {})
+    }
+
     public retrieveGameState(): Observable<WordGuesserDto> {
         return this.wordGuesserSubject.asObservable()
     }

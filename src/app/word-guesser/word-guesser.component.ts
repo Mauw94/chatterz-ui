@@ -153,6 +153,7 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   guessWord(): void {
     let guess = this.gameForm.controls.word.value
     this.game.GuessedWord = guess
+    this.gameService.guess(this.gameId).subscribe()
     if (this.game.GuessedWord.toLowerCase() === this.wordToGuess.toLowerCase()) {
       this.gameService.win(this.gameId).subscribe(() => {
         console.log("you won pog")
