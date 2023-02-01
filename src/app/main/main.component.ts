@@ -6,7 +6,7 @@ import { ChatterzService } from 'src/services/chatterz.service';
 import { ChatroomDto } from '../models/chatroomDto';
 import { Router } from '@angular/router';
 import { WordGuesserService } from 'src/services/word-guesser.service';
-import { GameType } from 'src/app/models/gameTypeEnum';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -17,6 +17,9 @@ export class MainComponent implements OnInit, OnDestroy {
 
   public signalRConnectionStarted: boolean = false
   public chatroom: ChatroomDto
+
+  private gameInviteSubscription = new Subscription()
+  private gameAcceptSubscription = new Subscription()
 
   constructor(
     public loginService: LoginService,
@@ -37,30 +40,32 @@ export class MainComponent implements OnInit, OnDestroy {
 
   async ngOnDestroy(): Promise<void> {
     await this.chatSignalRService.disconnect()
+
+    this.gameInviteSubscription.unsubscribe()
+    this.gameAcceptSubscription.unsubscribe()
   }
 
   private async retrieveGameInvite(): Promise<void> {
     // TODO: distinction between different games
-    this.chatSignalRService.retrieveGameInvite().subscribe((gameInvite: GameInviteDto) => {
-      let res = window.confirm(gameInvite.InviteMessage)
-      if (res) {
-        gameInvite.UserId = this.loginService.user.Id
-        // TODO not setting gameId in other user's service ofc........
-        this.wordGuesserService.create().subscribe({
-          next: (gameId: number) => {
-            console.log(gameId)
-            gameInvite.GameId = gameId
-            this.wordGuesserService.gameId = gameId
-            // TODO: pass gameId here?
-            this.chatterzService.acceptGameInvite(gameInvite).subscribe()
-          },
-          error: (err) => console.error(err)
-        })
+    this.gameInviteSubscription = this.chatSignalRService.retrieveGameInvite()
+      .subscribe((gameInvite: GameInviteDto) => {
+        let res = window.confirm(gameInvite.InviteMessage)
+        if (res) {
+          gameInvite.UserId = this.loginService.user.Id
+          this.wordGuesserService.create().subscribe({
+            next: (gameId: number) => {
+              console.log(gameId)
+              gameInvite.GameId = gameId
+              this.wordGuesserService.gameId = gameId
+              this.chatterzService.acceptGameInvite(gameInvite).subscribe()
+            },
+            error: (err) => console.error(err)
+          })
 
-      }
-    })
+        }
+      })
 
-    this.chatSignalRService.retrieveGameAccept().subscribe((gameInvite: GameInviteDto) => {
+    this.gameAcceptSubscription = this.chatSignalRService.retrieveGameAccept().subscribe((gameInvite: GameInviteDto) => {
       console.log("game can start!!")
       console.log(gameInvite)
       this.wordGuesserService.gameId = gameInvite.GameId

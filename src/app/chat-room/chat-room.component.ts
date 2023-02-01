@@ -1,20 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { ChatroomDto } from '../models/chatroomDto';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { LoginService } from 'src/services/login.service';
 import { UserLoginInfo } from '../models/userLoginInfo';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat-room',
   templateUrl: './chat-room.component.html',
   styleUrls: ['./chat-room.component.css']
 })
-export class ChatRoomComponent implements OnInit {
+export class ChatRoomComponent implements OnInit, OnDestroy {
 
   public chatroomId: number
   public chatrooms: ChatroomDto[] = []
   public MAX_USERS: number = 5
+
+  private chatroomsCreateSubscription = new Subscription()
+  private chatroomsUpdateSubscription = new Subscription()
 
   constructor(
     private chatterzService: ChatterzService,
@@ -33,13 +37,18 @@ export class ChatRoomComponent implements OnInit {
       }
     }, 1500)
 
-    this.chatterzService.retrieveChatroomCreate().subscribe((create) => {
+    this.chatroomsCreateSubscription = this.chatterzService.retrieveChatroomCreate().subscribe((create) => {
       if (create) {
         this.create()
       }
     })
 
     this.retrieveChatroomsOnUpdate()
+  }
+
+  ngOnDestroy(): void {
+    this.chatroomsCreateSubscription.unsubscribe()
+    this.chatroomsUpdateSubscription.unsubscribe()
   }
 
   joinRoom(id: number): void {
@@ -86,7 +95,7 @@ export class ChatRoomComponent implements OnInit {
   }
 
   private retrieveChatroomsOnUpdate(): void {
-    this.signalRService.retrieveChatrooms().subscribe({
+    this.chatroomsUpdateSubscription = this.signalRService.retrieveChatrooms().subscribe({
       next: (chatrooms) => {
         this.chatrooms = []
         chatrooms.forEach(cr => {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ChatMessage } from '../models/chatMessage';
 import { ChatSignalRService } from 'src/services/chat-signalr.service';
 import { LoginService } from 'src/services/login.service';
@@ -6,6 +6,7 @@ import { ChatterzService } from 'src/services/chatterz.service';
 import { DatePipe } from '@angular/common';
 import { ScrollToBottomDirective } from '../directives/scroll-to-bottom.directive';
 import { changeUsernameDto } from '../models/changeUsernameDto';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -14,7 +15,7 @@ import { changeUsernameDto } from '../models/changeUsernameDto';
   encapsulation: ViewEncapsulation.None
 })
 
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild(ScrollToBottomDirective)
   scroll: ScrollToBottomDirective
 
@@ -22,6 +23,11 @@ export class ChatComponent implements OnInit {
   public message: string = ""
   public msgInbox: string[] = []
   public isInChatroom: boolean = false;
+
+  private userConnectionSubscription = new Subscription()
+  private userDisconnectedSubscription = new Subscription()
+  private messageSubscription = new Subscription()
+  private userNameChangedSubscription = new Subscription()
 
   constructor(
     public loginService: LoginService,
@@ -48,18 +54,25 @@ export class ChatComponent implements OnInit {
       error: (err) => console.error(err)
     })
 
-    this.chatSignalRService.retrieveUserConnected().subscribe((userName: string) => {
+    this.userNameChangedSubscription = this.chatSignalRService.retrieveUserConnected().subscribe((userName: string) => {
       this.msgInbox.push(userName + " joined")
     })
-    this.chatSignalRService.retrieveUserDisconnected().subscribe((userName: string) => {
+    this.userDisconnectedSubscription = this.chatSignalRService.retrieveUserDisconnected().subscribe((userName: string) => {
       this.msgInbox.push(userName + " disconnected")
     })
-    this.chatSignalRService.retrieveMessage().subscribe((message: ChatMessage) => {
+    this.messageSubscription = this.chatSignalRService.retrieveMessage().subscribe((message: ChatMessage) => {
       this.addToInbox(message)
     })
-    this.chatSignalRService.retrieveUsernameChanged().subscribe((data: changeUsernameDto) => {
+    this.userNameChangedSubscription = this.chatSignalRService.retrieveUsernameChanged().subscribe((data: changeUsernameDto) => {
       this.msgInbox.push(data.OldUsername + " changed username to " + data.NewUsername)
     })
+  }
+
+  ngOnDestroy(): void {
+    this.userConnectionSubscription.unsubscribe()
+    this.userDisconnectedSubscription.unsubscribe()
+    this.messageSubscription.unsubscribe()
+    this.userNameChangedSubscription.unsubscribe()
   }
 
   async sendMessage(): Promise<void> {

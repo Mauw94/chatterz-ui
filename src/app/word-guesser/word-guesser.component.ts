@@ -6,6 +6,7 @@ import { WordGuesserService } from 'src/services/word-guesser.service';
 import { WordGuesserDto } from '../models/wordGuesserDto';
 import { DtoBuilder } from 'src/utils/dto-builder';
 import { ScrollToBottomDirective } from '../directives/scroll-to-bottom.directive';
+import { Subscription } from 'rxjs';
 
 export interface MatchingLetters {
   word: Letter[];
@@ -44,6 +45,13 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   private game: WordGuesserDto
   private gameWasWon: boolean = false
 
+  private connectionEstablishedSubcription = new Subscription()
+  private gameStateSubscription = new Subscription()
+  private canStartGameSubscription = new Subscription()
+  private startGameSubscription = new Subscription()
+  private endGameSubscription = new Subscription()
+  private gameWinSubscription = new Subscription()
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -59,7 +67,7 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
       this.gameId = this.gameService.gameId
     }
 
-    this.gameService.retrieveConnectionEstablished().subscribe((connectionEstablished: boolean) => {
+    this.connectionEstablishedSubcription = this.gameService.retrieveConnectionEstablished().subscribe((connectionEstablished: boolean) => {
       if (connectionEstablished) {
         console.log("connection established")
         this.gameService.connect(
@@ -74,7 +82,7 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.gameService.retrieveGameState().subscribe((dto: any) => {
+    this.gameStateSubscription = this.gameService.retrieveGameState().subscribe((dto: any) => {
       console.log("retrieving gamestate")
       this.game = DtoBuilder.buildWordGuesserDto(dto.guessedWord, dto.gameroomId, dto.playerToPlay, dto.playerIds, dto.wordToGuess)
       console.log(this.game)
@@ -87,13 +95,13 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
       this.checkValidLetters()
     })
 
-    this.gameService.retrieveCanStartGameSubject().subscribe((start: boolean) => {
+    this.canStartGameSubscription = this.gameService.retrieveCanStartGameSubject().subscribe((start: boolean) => {
       if (start) {
         this.canStart = true
       }
     })
 
-    this.gameService.retrieveStartGameSubject().subscribe((dto: any) => {
+    this.startGameSubscription = this.gameService.retrieveStartGameSubject().subscribe((dto: any) => {
       this.game = DtoBuilder.buildWordGuesserDto(dto.guessedWord, dto.gameroomId, dto.playerToPlay, dto.playerIds, dto.wordToGuess)
       this.wordToGuess = this.game.WordToGuess
       this.wordToGuessLength = this.wordToGuess.length
@@ -107,13 +115,13 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
       this.gameStarted = true
     })
 
-    this.gameService.retrieveGameEndSubject().subscribe((message: string) => {
+    this.endGameSubscription = this.gameService.retrieveGameEndSubject().subscribe((message: string) => {
       let res = window.alert(message)
       console.log(res)
       this.router.navigate(['main'])
     })
 
-    this.gameService.retrieveGameWinSubject().subscribe((message: string) => {
+    this.gameWinSubscription = this.gameService.retrieveGameWinSubject().subscribe((message: string) => {
       window.alert(message)
       this.gameWasWon = true
       this.router.navigate(['main'])
@@ -125,6 +133,13 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   async ngOnDestroy(): Promise<void> {
     if (!this.gameWasWon)
       await this.gameService.disconnect()
+
+    this.connectionEstablishedSubcription.unsubscribe()
+    this.gameStateSubscription.unsubscribe()
+    this.canStartGameSubscription.unsubscribe()
+    this.startGameSubscription.unsubscribe()
+    this.endGameSubscription.unsubscribe()
+    this.gameWinSubscription.unsubscribe()
   }
 
   async closeWindow(): Promise<void> {
