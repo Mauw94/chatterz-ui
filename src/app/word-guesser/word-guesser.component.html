@@ -32,7 +32,7 @@
         </div>
         <form [formGroup]="gameForm">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" [attr.minlength]="wordToGuessLength"
+                <input [disabled]="!playerTurn" type="text" class="form-control" [attr.minlength]="wordToGuessLength"
                     [attr.maxlength]="wordToGuessLength" formControlName="word"
                     placeholder="Guess word {{wordToGuessLength}}-letter word" (keyup.enter)="guessWord()">
                 <div class="input-group-append">

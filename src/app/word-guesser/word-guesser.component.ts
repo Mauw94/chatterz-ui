@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from 'src/services/login.service';
@@ -51,6 +51,10 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   private startGameSubscription = new Subscription()
   private endGameSubscription = new Subscription()
   private gameWinSubscription = new Subscription()
+
+  @HostListener('window:beforeunload') goToPage() {
+    this.router.navigate(['/main']);
+  }
 
   constructor(
     private router: Router,
