@@ -1,0 +1,23 @@
+div#chat-messages {
+    width: 100%;
+    height: 50vh;
+    margin-bottom: 25px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+div#chat-form button {
+    cursor: pointer;
+}
+
+div.message.green {
+    color: #95d592;
+}
+
+.msg-red {
+    color: #eb6767;
+}
+
+.msg-blue {
+    color: #8e89e8;
+}

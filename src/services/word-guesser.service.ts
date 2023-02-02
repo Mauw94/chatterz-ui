@@ -8,6 +8,7 @@ import { GameConnectDto } from "src/app/models/gameConnectDto";
 import { DtoBuilder } from "src/utils/dto-builder";
 import { LoginService } from "./login.service";
 import { WordGuesserDto } from "src/app/models/wordGuesserDto";
+import { ChatMessage } from "src/app/models/chatMessage";
 
 @Injectable({ providedIn: 'root' })
 export class WordGuesserService {
@@ -24,6 +25,7 @@ export class WordGuesserService {
     private startGameSubject: Subject<WordGuesserDto> = new Subject<WordGuesserDto>()
     private gameEndSubject: Subject<string> = new Subject<string>()
     private gameWinSubject: Subject<string> = new Subject<string>()
+    private messageSubject: Subject<ChatMessage> = new Subject<ChatMessage>()
 
     constructor(
         private http: HttpClient,
@@ -55,6 +57,15 @@ export class WordGuesserService {
         return promise;
     }
 
+    public async sendMessageToHub(message: string, chatroomId: number): Promise<any> {
+        var promise = await this.hubConnection.invoke("BroadcastAsync",
+            DtoBuilder.buildChatMessageInfo(+chatroomId, this.loginService.user.UserName, message, this.hubConnection.connectionId))
+            .then(() => console.log("message sent to hub"))
+            .catch((err) => console.error(err))
+
+        return promise
+    }
+
     public create(): Observable<any> {
         return this.http.get(this.apiUrl + "create");
     }
@@ -81,6 +92,10 @@ export class WordGuesserService {
 
     public guess(gameId: number): Observable<any> {
         return this.http.post(this.apiUrl + "guess?gameId=" + gameId, {})
+    }
+
+    public retrieveMessage(): Observable<ChatMessage> {
+        return this.messageSubject.asObservable()
     }
 
     public retrieveGameState(): Observable<WordGuesserDto> {
@@ -136,6 +151,10 @@ export class WordGuesserService {
     private async addListeners(): Promise<void> {
         this.hubConnection.on("PlayerJoined", (message: string) => {
             console.log(message)
+        })
+        this.hubConnection.on("messageReceivedFromHub", (message: ChatMessage) => {
+            console.log(message)
+            this.messageSubject.next(message)
         })
         this.hubConnection.on("gameUpdateReceievedFromHub", (dto: WordGuesserDto) => {
             this.wordGuesserSubject.next(dto)

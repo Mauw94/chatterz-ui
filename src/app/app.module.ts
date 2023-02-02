@@ -17,6 +17,7 @@ import { ScrollToBottomDirective } from './directives/scroll-to-bottom.directive
 import { WordGuesserComponent } from './word-guesser/word-guesser.component';
 import { UsersComponent } from './users/users.component';
 import { ContextMenuComponentComponent } from './context-menu-component/context-menu-component.component';
+import { GameChatComponent } from './game-chat/game-chat.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ContextMenuComponentComponent } from './context-menu-component/context-
     ScrollToBottomDirective,
     WordGuesserComponent,
     UsersComponent,
-    ContextMenuComponentComponent
+    ContextMenuComponentComponent,
+    GameChatComponent
   ],
   imports: [
     BrowserModule,

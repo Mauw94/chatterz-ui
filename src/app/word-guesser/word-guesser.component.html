@@ -1,67 +1,69 @@
 <button type="button" class="btn-close close-button" style="background-color: white" (click)="closeWindow()"
     aria-label="Close"></button>
 
-<div *ngIf="!gameStarted" class="row">
+<div class="row">
+
     <div class="col-md-3"></div>
 
     <div class="col-md-6">
-        <form [formGroup]="inputForm">
-            <div class="input-group mb-3">
-                <input type="number" class="form-control w-50" formControlName="wordLength" min="4" max="10"
-                    placeholder="Wordlength">
-                <div class="input-group-append">
-                    <button *ngIf="canStart" [disabled]="!inputForm.valid" class="btn btn-primary"
-                        (click)="start()">Start!</button>
-                </div>
-                <p *ngIf="!inputForm.valid">Enter a word length (4-10) for the word to guess</p>
+
+        <div *ngIf="!gameStarted">
+            <div id="word-guesses">
+                <form [formGroup]="inputForm">
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control w-50" formControlName="wordLength" min="4" max="10"
+                            placeholder="Word length">
+                        <div class="input-group-append">
+                            <button *ngIf="canStart" [disabled]="!inputForm.valid" class="btn btn-primary"
+                                (click)="start()">Start!</button>
+                        </div>
+                        <p *ngIf="!inputForm.valid">Enter a word length (4-10) for the word to guess</p>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-
-    <div class="col-md-3"></div>
-</div>
-
-<div *ngIf="gameStarted" class="row">
-
-    <div class="col-md-3">nothing here</div>
-
-    <div class="col-md-6">
-        <h4 *ngIf="playerTurn">Your turn</h4>
-        <h4 *ngIf="!playerTurn">Opponent's turn</h4>
-        <hr>
-
-        <div id="word-guesses" #scrollMe [scrollTop]="scrollMe.scrollHeight">
-            <li *ngFor="let matchingLetter of matchingLetters">
-                <span *ngFor="let letterWord of matchingLetter.word">
-                    <span *ngIf="letterWord.match" style="color:red">
-                        {{letterWord.character}}
-                    </span>
-                    <span *ngIf="!letterWord.match && !letterWord.contains">
-                        {{letterWord.character}}
-                    </span>
-                    <span *ngIf="letterWord.contains && !letterWord.match" style="color: orange">
-                        {{letterWord.character}}
-                    </span>
-                </span>
-            </li>
         </div>
-        <form [formGroup]="gameForm">
-            <div class="input-group mb-3">
-                <input [disabled]="!playerTurn" type="text" class="form-control" [attr.minlength]="wordToGuessLength"
-                    [attr.maxlength]="wordToGuessLength" formControlName="word"
-                    placeholder="Guess word {{wordToGuessLength}}-letter word" (keyup.enter)="guessWord()">
-                <div class="input-group-append">
-                    <button class="btn btn-success" type="button" [disabled]="!gameForm.valid || !playerTurn"
-                        (click)="guessWord()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                            fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                            <path
-                                d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                        </svg></button>
-                </div>
+
+        <div *ngIf="gameStarted">
+            <h4 *ngIf="playerTurn">Your turn</h4>
+            <h4 *ngIf="!playerTurn">Opponent's turn</h4>
+            <hr>
+
+            <div id="word-guesses" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+                <li *ngFor="let matchingLetter of matchingLetters">
+                    <span *ngFor="let letterWord of matchingLetter.word">
+                        <span *ngIf="letterWord.match" style="color:red">
+                            {{letterWord.character}}
+                        </span>
+                        <span *ngIf="!letterWord.match && !letterWord.contains">
+                            {{letterWord.character}}
+                        </span>
+                        <span *ngIf="letterWord.contains && !letterWord.match" style="color: orange">
+                            {{letterWord.character}}
+                        </span>
+                    </span>
+                </li>
             </div>
-        </form>
+            <form [formGroup]="gameForm">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control"
+                        [attr.minlength]="wordToGuessLength" [attr.maxlength]="wordToGuessLength" formControlName="word"
+                        placeholder="Guess {{wordToGuessLength}}-letter word" (keyup.enter)="guessWord()">
+                    <div class="input-group-append">
+                        <button class="btn btn-success" type="button" [disabled]="!gameForm.valid || !playerTurn"
+                            (click)="guessWord()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                <path
+                                    d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                            </svg></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
     </div>
 
-    <div class="col-md-3">gamechat here</div>
+    <div class="col-md-3">
+        <app-game-chat></app-game-chat>
+    </div>
 
 </div>

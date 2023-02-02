@@ -164,13 +164,11 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
     let guess = this.gameForm.controls.word.value
     this.game.GuessedWord = guess
     this.gameService.guess(this.gameId).subscribe()
+    this.gameService.sendToHub(this.game)
+    this.gameForm.controls.word.setValue("")
+
     if (this.game.GuessedWord.toLowerCase() === this.wordToGuess.toLowerCase()) {
-      this.gameService.win(this.gameId).subscribe(() => {
-        console.log("you won pog")
-      })
-    } else {
-      this.gameService.sendToHub(this.game)
-      this.gameForm.controls.word.setValue("")
+      this.gameService.win(this.gameId).subscribe(() => { })
     }
   }
 
@@ -187,7 +185,7 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
     var wordToGuessChars = this.wordToGuess!.split('');
 
     for (let i = 0; i < this.guessedWordsHistory.length; i++) {
-      var word = this.guessedWordsHistory[i].toLowerCase();
+      var word = this.guessedWordsHistory[i].toUpperCase();
       var wordChars = word.split('');
       letterWord = [];
 
