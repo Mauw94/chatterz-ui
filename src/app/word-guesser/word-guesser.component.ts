@@ -31,7 +31,13 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
     word: new FormControl('', [
       Validators.required
     ])
-  });
+  })
+  public inputForm: FormGroup = new FormGroup({
+    wordLength: new FormControl('', [
+      Validators.required
+    ])
+  })
+
   public wordToGuess: string = ""
   public matchingLetters: MatchingLetters[] = [];
   public wordToGuessLength: number
@@ -169,7 +175,8 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
   }
 
   start(): void {
-    this.gameService.start(this.gameId).subscribe()
+    let wordLength = this.inputForm.controls.wordLength.value
+    this.gameService.start(this.gameId, wordLength).subscribe()
   }
 
   /**

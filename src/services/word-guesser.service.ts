@@ -71,8 +71,8 @@ export class WordGuesserService {
         return this.http.get(this.apiUrl + "can_start?gameId=" + gameId)
     }
 
-    public start(gameId: number): Observable<any> {
-        return this.http.get(this.apiUrl + "start?gameId=" + gameId);
+    public start(gameId: number, wordLength: number): Observable<any> {
+        return this.http.get(this.apiUrl + "start?gameId=" + gameId + "&wordLength=" + wordLength);
     }
 
     public win(gameId: number): Observable<any> {
