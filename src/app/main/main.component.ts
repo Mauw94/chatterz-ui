@@ -19,7 +19,8 @@ export class MainComponent implements OnInit, OnDestroy {
   public chatroom: ChatroomDto
 
   private gameInviteSubscription = new Subscription()
-  private gameAcceptSubscription = new Subscription()
+  private gameInviteAcceptSubscription = new Subscription()
+  private gameInviteDeclineSubscription = new Subscription()
 
   constructor(
     public loginService: LoginService,
@@ -36,13 +37,16 @@ export class MainComponent implements OnInit, OnDestroy {
     await this.chatSignalRService.connect()
 
     this.retrieveGameInvite()
+    this.retrieveGameInviteAccept()
+    this.retrieveGameInviteDecline()
   }
 
   async ngOnDestroy(): Promise<void> {
     await this.chatSignalRService.disconnect()
 
     this.gameInviteSubscription.unsubscribe()
-    this.gameAcceptSubscription.unsubscribe()
+    this.gameInviteAcceptSubscription.unsubscribe()
+    this.gameInviteDeclineSubscription.unsubscribe()
   }
 
   private async retrieveGameInvite(): Promise<void> {
@@ -61,15 +65,24 @@ export class MainComponent implements OnInit, OnDestroy {
             },
             error: (err) => console.error(err)
           })
-
+        } else {
+          this.chatterzService.declineGameInvite(gameInvite).subscribe()
         }
       })
+  }
 
-    this.gameAcceptSubscription = this.chatSignalRService.retrieveGameAccept().subscribe((gameInvite: GameInviteDto) => {
+  private retrieveGameInviteAccept(): void {
+    this.gameInviteAcceptSubscription = this.chatSignalRService.retrieveGameAccept().subscribe((gameInvite: GameInviteDto) => {
       console.log("game can start!!")
       console.log(gameInvite)
       this.wordGuesserService.gameId = gameInvite.GameId
       this.router.navigate(['wordguesser'])
+    })
+  }
+
+  private retrieveGameInviteDecline(): void {
+    this.gameInviteDeclineSubscription = this.chatSignalRService.retrieveGameDecline().subscribe((message: string) => {
+      window.alert(message)
     })
   }
 }

@@ -76,7 +76,10 @@ export class ChatterzService {
     }
 
     public acceptGameInvite(gameInvite: GameInviteDto): Observable<any> {
-        console.log(gameInvite)
         return this.http.post(this.apiUsersUrl + "accept_gameinvite", gameInvite)
+    }
+
+    public declineGameInvite(gameInvite: GameInviteDto): Observable<any> {
+        return this.http.post(this.apiUsersUrl + "decline_gameinvite", gameInvite)
     }
 }

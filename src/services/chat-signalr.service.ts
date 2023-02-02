@@ -13,7 +13,6 @@ import { DtoBuilder } from "src/utils/dto-builder";
 import { changeUsernameDto } from "src/app/models/changeUsernameDto";
 import { GameInviteDto } from "src/app/models/gameInviteDto";
 import { UserLoginInfo } from "src/app/models/userLoginInfo";
-import { GameType } from "src/app/models/gameTypeEnum";
 
 @Injectable({ providedIn: 'root' })
 export class ChatSignalRService {
@@ -34,6 +33,7 @@ export class ChatSignalRService {
     private gameInviteSubject = new Subject<GameInviteDto>()
     private gameAcceptSubject = new Subject<GameInviteDto>()
     private usersListSubject = new Subject<UserLoginInfo[]>()
+    private gameDeclineSubject = new Subject<string>()
 
     constructor(
         private http: HttpClient,
@@ -104,6 +104,10 @@ export class ChatSignalRService {
         return this.usersListSubject.asObservable()
     }
 
+    public retrieveGameDecline(): Observable<string> {
+        return this.gameDeclineSubject.asObservable()
+    }
+    
     public reconnectToChatrooms(currentChatroomId: number, userId: number, connectionId: string): Observable<any> {
         return this.http.post(this.apiSignalRUrl + "connect",
             DtoBuilder.buildChatroomJoinDto(currentChatroomId, userId, connectionId))
@@ -168,6 +172,9 @@ export class ChatSignalRService {
         })
         this.hubConnection.on("acceptGameInvite", (gameInvite: GameInviteDto) => {
             this.gameAcceptSubject.next(gameInvite)
+        })
+        this.hubConnection.on("declineGameInvite", (message: string) => {
+            this.gameDeclineSubject.next(message)
         })
     }
 }
