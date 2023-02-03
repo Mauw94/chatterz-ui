@@ -35,7 +35,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
       } else {
         this.getAllChatrooms()
       }
-    }, 1500)
+    }, 2000)
 
     this.chatroomsCreateSubscription = this.chatterzService.retrieveChatroomCreate().subscribe((create) => {
       if (create) {
