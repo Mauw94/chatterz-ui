@@ -6,6 +6,7 @@ import Animation from "./engine/Animation"
 import Range from "./engine/Range"
 import Entity from "./engine/Entity"
 import CollisionBox from "./engine/collision/CollisionBox"
+import Bomb from "./Bomb"
 
 class Player extends Entity {
 
@@ -15,7 +16,10 @@ class Player extends Entity {
   private velX = 0
   private velY = 0
 
-  public setup(gameData: GameData) {
+  private bombCooldownMS: number = 1000
+  private currBombCooldownMS: number = 0
+
+  public setup() {
     let img = new Image()
     img.src = "./assets/bomberman/player_spritesheet.png"
     const spriteSheetImage = img
@@ -34,29 +38,9 @@ class Player extends Entity {
   }
 
   public update(gameData: GameData, delta: number) {
-    const { keyListener } = gameData
-
-    this.velX = 0
-    this.velY = 0
-
-    if (keyListener.isAnyKeyDown(["d", "ArrowRight"])) {
-      this.velX = this.speed * delta
-    } else if (keyListener.isAnyKeyDown(["q", "a", "ArrowLeft"])) {
-      this.velX = -(this.speed * delta)
-    }
-
-    if (keyListener.isAnyKeyDown(["s", "ArrowDown"])) {
-      this.velY = this.speed * delta
-    } else if (keyListener.isAnyKeyDown(["z", "w", "ArrowUp"])) {
-      this.velY = -(this.speed * delta)
-    }
-
-    this.calculateCollision(gameData);
-
-    this.xPos += this.velX
-    this.yPos += this.velY
-
+    this.updatePosition(gameData, delta)
     this.getMovingSprite().update(gameData, delta)
+    this.updateBombs(gameData, delta)
   }
 
   public render(gameData: GameData) {
@@ -84,6 +68,30 @@ class Player extends Entity {
     }
   }
 
+  private updatePosition(gameData: GameData, delta: number) {
+    const { keyListener } = gameData
+
+    this.velX = 0
+    this.velY = 0
+
+    if (keyListener.isAnyKeyDown(["d", "ArrowRight"])) {
+      this.velX = this.speed * delta
+    } else if (keyListener.isAnyKeyDown(["q", "a", "ArrowLeft"])) {
+      this.velX = -(this.speed * delta)
+    }
+
+    if (keyListener.isAnyKeyDown(["s", "ArrowDown"])) {
+      this.velY = this.speed * delta
+    } else if (keyListener.isAnyKeyDown(["z", "w", "ArrowUp"])) {
+      this.velY = -(this.speed * delta)
+    }
+
+    this.calculateCollision(gameData);
+
+    this.xPos += this.velX
+    this.yPos += this.velY
+  }
+
   private getMovingSprite() {
     if (this.velX === 0 && this.velY === 0) return this.sprites["idle"]
     if (this.velX > 0) return this.sprites["right"]
@@ -92,6 +100,24 @@ class Player extends Entity {
     return this.sprites["forward"]
   }
 
+  private updateBombs(gameData: GameData, delta: number) {
+    console.log("updating bombs")
+
+    if (this.currBombCooldownMS > 0) {
+      this.currBombCooldownMS -= delta * 1000
+    }
+
+    if (gameData.keyListener.isKeyDown(" ")) {
+      console.log("key down ")
+    }
+
+    if (gameData.keyListener.isKeyDown(" ") && this.currBombCooldownMS <= 0) {
+      console.log("dropping a bomb")
+      const bomb = new Bomb(this.xPos + (this.width / 2) - 24, this.yPos + this.height - 48)
+      gameData.entityManager.addEntity(bomb)
+      this.currBombCooldownMS = this.bombCooldownMS
+    }
+  }
 }
 
 export default Player

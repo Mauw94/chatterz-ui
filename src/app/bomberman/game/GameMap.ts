@@ -5,16 +5,19 @@ class GameMap extends Entity {
 
   private tileImage: HTMLImageElement
 
-  constructor() {
+  private screenWidth: number
+  private screenHeight: number
+
+  constructor(screenWidth: number, screenHeight: number) {
     super()
+    this.width = screenWidth
+    this.height= screenHeight
   }
 
-  public setup(gameData: GameData) {
+  public setup() {
     let img = new Image()
     img.src = "./assets/bomberman/bg.png"
     this.tileImage = img
-    this.width = gameData.screenWidth
-    this.height = gameData.screenHeight
   }
 
   public render({ context }: GameData) {

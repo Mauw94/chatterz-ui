@@ -4,6 +4,7 @@ import KeyListener from "./KeyListener"
 import Entity from "./Entity"
 import CollisionHandler from "./collision/CollisionHandler"
 import Collidable from "./collision/Collidable"
+import EntityManager from "./EntityManager"
 
 abstract class Game {
 
@@ -18,13 +19,15 @@ abstract class Game {
       screenWidth: canvasEl.width,
       screenHeight: canvasEl.height,
       keyListener: new KeyListener(),
-      collisionHandler: new CollisionHandler()
+      collisionHandler: new CollisionHandler(),
+      entityManager: new EntityManager()
     }
   }
 
   public run() {
     this.gameData.keyListener.setup(this.canvasEl)
 
+    this.preload(this.gameData) // TODO: add imageCache to gameData
     this.setup(this.gameData)
 
     this.setupEntities()
@@ -37,25 +40,26 @@ abstract class Game {
   }
 
   public addEntity(entity: Entity) {
-    this.entities.push(entity)
+    this.gameData.entityManager.addEntity(entity)
 
     if (this.isCollidable(entity)) {
       this.gameData.collisionHandler.addCollidable(entity);
     }
   }
 
+  protected abstract preload(gameData: GameData): void
   protected abstract setup(gameData: GameData): void;
 
   private setupEntities() {
-    this.entities.map(e => e.setup(this.gameData))
+    this.gameData.entityManager.getEntities().map(e => e.setup())
   }
 
   private update(delta: number) {
-    this.entities.forEach(e => e.update(this.gameData, delta))
+    this.gameData.entityManager.getEntities().forEach(e => e.update(this.gameData, delta))
   }
 
   private render() {
-    this.entities.forEach(e => e.render(this.gameData))
+    this.gameData.entityManager.getEntities().forEach(e => e.render(this.gameData))
   }
 
   private isCollidable(entity: Entity | Collidable): entity is Collidable {
