@@ -41,6 +41,9 @@ class Bomb extends Entity {
 
         this.currBlinkTimeMS -= delta * 1000
         if (this.currBlinkTimeMS <= -this.blinkTimeMS) {
+            // TODO bomb explodes
+            // 2 rectangle sprites: 1 horizontal, 1 vertical?
+            // collision with a brick removes the brick?
             this.currBlinkTimeMS = this.blinkTimeMS
         }
     }
