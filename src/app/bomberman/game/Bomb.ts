@@ -29,7 +29,6 @@ class Bomb extends Entity {
         image.src = "./assets/bomberman/bomb.png"
         const sheet = new SpriteSheet(image, this.width, this.height)
         this.sprite = new SpriteSheetSprite(sheet, 0, 0)
-        console.log(this.sprite)
     }
 
     public update(gameData: GameData, delta: number): void {

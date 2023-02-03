@@ -57,13 +57,11 @@ class Player extends Entity {
 
     const collisionsX = collisionHandler.testMovement(collisionBox, this.velX, 0);
     if (collisionsX.length > 0) {
-      // TODO: move the distance you're still allowed
       this.velX = 0;
     }
 
     const collisionsY = collisionHandler.testMovement(collisionBox, 0, this.velY);
     if (collisionsY.length > 0) {
-      // TODO: move the distance you're still allowed
       this.velY = 0;
     }
   }
@@ -101,18 +99,12 @@ class Player extends Entity {
   }
 
   private updateBombs(gameData: GameData, delta: number) {
-    console.log("updating bombs")
-
     if (this.currBombCooldownMS > 0) {
       this.currBombCooldownMS -= delta * 1000
     }
 
-    if (gameData.keyListener.isKeyDown(" ")) {
-      console.log("key down ")
-    }
-
+    // keydown " " = SPACEBAR
     if (gameData.keyListener.isKeyDown(" ") && this.currBombCooldownMS <= 0) {
-      console.log("dropping a bomb")
       const bomb = new Bomb(this.xPos + (this.width / 2) - 24, this.yPos + this.height - 48)
       gameData.entityManager.addEntity(bomb)
       this.currBombCooldownMS = this.bombCooldownMS

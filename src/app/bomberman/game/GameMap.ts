@@ -5,9 +5,6 @@ class GameMap extends Entity {
 
   private tileImage: HTMLImageElement
 
-  private screenWidth: number
-  private screenHeight: number
-
   constructor(screenWidth: number, screenHeight: number) {
     super()
     this.width = screenWidth
