@@ -42,6 +42,8 @@ export class NavbarComponent implements OnInit {
         await this.gameService.disconnect()
         this.router.navigate(['main'])
       }
+    } else {
+      this.router.navigate(['main'])
     }
   }
 
@@ -70,5 +72,9 @@ export class NavbarComponent implements OnInit {
   goToWordGuesser(): void {
     console.log("go to wordguesser game in progress")
     this.router.navigate(['wordguesser', this.gameId])
+  }
+
+  launchBomberman(): void {
+    this.router.navigate(['bomberman'])
   }
 }

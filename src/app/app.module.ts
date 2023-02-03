@@ -18,6 +18,7 @@ import { WordGuesserComponent } from './word-guesser/word-guesser.component';
 import { UsersComponent } from './users/users.component';
 import { ContextMenuComponentComponent } from './context-menu-component/context-menu-component.component';
 import { GameChatComponent } from './game-chat/game-chat.component';
+import { BombermanComponent } from './bomberman/bomberman.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { GameChatComponent } from './game-chat/game-chat.component';
     WordGuesserComponent,
     UsersComponent,
     ContextMenuComponentComponent,
-    GameChatComponent
+    GameChatComponent,
+    BombermanComponent
   ],
   imports: [
     BrowserModule,

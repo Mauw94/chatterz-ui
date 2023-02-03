@@ -58,6 +58,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
           this.chatroomId = id
           this.chatterzService.chatroomId = id
           this.chatterzService.inChatRoom.next(true)
+          this.loginService.user.ChatroomId = id
         },
         error: (err) => console.error(err)
       })
