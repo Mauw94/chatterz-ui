@@ -18,7 +18,9 @@ abstract class Entity {
     this.setup()
   }
 
-  public setup(): void { }
+  public setup(): void {
+    this.hasBeenSetup = true
+  }
   public update(gameData: GameData, delta: number): void { }
   public abstract render(gameData: GameData): void;
 

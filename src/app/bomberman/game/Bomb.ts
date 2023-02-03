@@ -25,6 +25,7 @@ class Bomb extends Entity {
     }
 
     public setup() {
+        super.setup()
         let image = new Image()
         image.src = "./assets/bomberman/bomb.png"
         const sheet = new SpriteSheet(image, this.width, this.height)

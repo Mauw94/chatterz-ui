@@ -20,6 +20,7 @@ class Player extends Entity {
   private currBombCooldownMS: number = 0
 
   public setup() {
+    super.setup()
     let img = new Image()
     img.src = "./assets/bomberman/player_spritesheet.png"
     const spriteSheetImage = img

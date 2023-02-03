@@ -32,6 +32,8 @@ class CollisionHandler {
     return collisions;
   }
 
+  // TODO: expand with bombs
+  // colliding with a bomb will push the bomb forward a little 
   private findCollision(driverBox: CollisionBox, brick: Collidable): null | Collision {
     const brickBox = brick.getCollisionBox();
 

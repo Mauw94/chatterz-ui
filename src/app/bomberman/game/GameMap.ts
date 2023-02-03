@@ -12,6 +12,7 @@ class GameMap extends Entity {
   }
 
   public setup() {
+    super.setup()
     let img = new Image()
     img.src = "./assets/bomberman/bg.png"
     this.tileImage = img

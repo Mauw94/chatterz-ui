@@ -10,7 +10,6 @@ abstract class Game {
 
   private canvasEl: HTMLCanvasElement
   private gameData: GameData
-  private entities: Entity[] = []
 
   constructor(canvasEl: HTMLCanvasElement) {
     this.canvasEl = canvasEl

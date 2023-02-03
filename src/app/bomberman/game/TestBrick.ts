@@ -9,6 +9,7 @@ class TestBrick extends Entity implements Collidable {
   private sheet: SpriteSheet;
 
   public setup() {
+    super.setup()
     let image = new Image()
     image.src = "./assets/bomberman/blocks.png"
     const img = image

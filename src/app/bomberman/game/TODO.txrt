@@ -1,0 +1,7 @@
+--- BOMBERMAN ---
+* be able to push the bomb (direction which the player currently faces)
+* expand collidables with bombs as well
+* create explosion image when bombtimer runs
+* play sound when bomb explodes
+* create a real map to play in
+* when bomb explosion hits a brick, remove that brick
