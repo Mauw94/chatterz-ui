@@ -5,6 +5,7 @@ import SpriteSheet from "./engine/SpriteSheet";
 import { GameData } from "./engine/types";
 
 class TestBrick extends Entity implements Collidable {
+
   private sheet: SpriteSheet;
 
   public setup(gameData: GameData) {
@@ -12,18 +13,23 @@ class TestBrick extends Entity implements Collidable {
     image.src = "./assets/bomberman/blocks.png"
     const img = image
     this.sheet = new SpriteSheet(img, 64, 64)
+
+    this.xPos = 128
+    this.yPos = 128
+    this.width = 64
+    this.height = 64
   }
 
   public render(gameData: GameData): void {
-    this.sheet.render(gameData, 1, 0, 128, 128, 64, 64);
+    this.sheet.render(gameData, 1, 0, this.xPos, this.yPos, this.width, this.height);
   }
 
   public getCollisionBox(): CollisionBox {
     return {
-      xPos: 128,
-      yPos: 128,
-      width: 64,
-      height: 64
+      xPos: this.xPos,
+      yPos: this.yPos,
+      width: this.width,
+      height: this.height
     }
   }
 

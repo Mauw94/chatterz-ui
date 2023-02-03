@@ -8,7 +8,7 @@ class BombermanGame extends Game {
 
   protected setup(gameData: GameData) {
     this.addEntity(new GameMap())
-    // this.addEntity(new TestBrick())
+    this.addEntity(new TestBrick())
     this.addEntity(new Player())
   }
 

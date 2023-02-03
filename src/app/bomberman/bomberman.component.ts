@@ -26,6 +26,8 @@ export class BombermanComponent implements OnInit {
 
     const game = new BombermanGame(canvasEl)
     game.run()
+
+    this.gameStarted = true
   }
 
 }

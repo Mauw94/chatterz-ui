@@ -4,8 +4,6 @@ import Entity from "./engine/Entity"
 class GameMap extends Entity {
 
   private tileImage: HTMLImageElement
-  private width: number
-  private height: number
 
   constructor() {
     super()

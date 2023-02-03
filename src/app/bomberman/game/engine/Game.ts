@@ -47,8 +47,7 @@ abstract class Game {
   protected abstract setup(gameData: GameData): void;
 
   private setupEntities() {
-    let promises = this.entities.map(e => e.setup(this.gameData))
-    return Promise.all(promises)
+    this.entities.map(e => e.setup(this.gameData))
   }
 
   private update(delta: number) {

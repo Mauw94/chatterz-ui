@@ -11,17 +11,11 @@ class Player extends Entity {
 
   private sprites: { [direction: string]: Sprite } = {}
 
-  private xPos = 0
-  private yPos = 0
-  private width: number
-  private height: number
-
   private speed = 150
   private velX = 0
   private velY = 0
 
   public setup(gameData: GameData) {
-
     let img = new Image()
     img.src = "./assets/bomberman/player_spritesheet.png"
     const spriteSheetImage = img
