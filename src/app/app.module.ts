@@ -19,6 +19,7 @@ import { UsersComponent } from './users/users.component';
 import { ContextMenuComponentComponent } from './context-menu-component/context-menu-component.component';
 import { GameChatComponent } from './game-chat/game-chat.component';
 import { BombermanComponent } from './bomberman/bomberman.component';
+import { SpaceInvadersComponent } from './space-invaders/space-invaders.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { BombermanComponent } from './bomberman/bomberman.component';
     UsersComponent,
     ContextMenuComponentComponent,
     GameChatComponent,
-    BombermanComponent
+    BombermanComponent,
+    SpaceInvadersComponent
   ],
   imports: [
     BrowserModule,

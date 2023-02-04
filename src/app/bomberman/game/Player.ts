@@ -12,10 +12,6 @@ class Player extends Entity {
 
   private sprites: { [direction: string]: Sprite } = {}
 
-  private speed = 150
-  private velX = 0
-  private velY = 0
-
   private bombCooldownMS: number = 1000
   private currBombCooldownMS: number = 0
 
@@ -36,6 +32,7 @@ class Player extends Entity {
 
     this.width = 64
     this.height = 128
+    this.speed = 150
   }
 
   public update(gameData: GameData, delta: number) {
@@ -81,7 +78,7 @@ class Player extends Entity {
 
     if (keyListener.isAnyKeyDown(["s", "ArrowDown"])) {
       this.velY = this.speed * delta
-    } else if (keyListener.isAnyKeyDown(["z", "w", "ArrowUp"])) {
+    } else if (keyListener.isAnyKeyDown(["w", "ArrowUp"])) {
       this.velY = -(this.speed * delta)
     }
 
