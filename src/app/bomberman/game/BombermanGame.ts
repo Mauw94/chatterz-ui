@@ -1,7 +1,7 @@
-import Game from "./engine/Game";
+import Game from "../../game-engine/engine/Game";
 import GameMap from "./GameMap"
 import Player from "./Player"
-import { GameData } from "./engine/types";
+import { GameData } from "../../game-engine/engine/types";
 import TestBrick from "./TestBrick";
 
 class BombermanGame extends Game {

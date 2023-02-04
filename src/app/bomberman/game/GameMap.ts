@@ -1,5 +1,5 @@
-import { GameData } from "./engine/types"
-import Entity from "./engine/Entity"
+import { GameData } from "../../game-engine/engine/types"
+import Entity from "../../game-engine/engine/Entity"
 
 class GameMap extends Entity {
 

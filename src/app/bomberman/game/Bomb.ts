@@ -1,8 +1,8 @@
-import Entity from "./engine/Entity";
-import Sprite from "./engine/Sprite";
-import SpriteSheet from "./engine/SpriteSheet";
-import SpriteSheetSprite from "./engine/SpriteSheetSprite";
-import { GameData } from "./engine/types";
+import Entity from "../../game-engine/engine/Entity";
+import Sprite from "../../game-engine/engine/Sprite";
+import SpriteSheet from "../../game-engine/engine/SpriteSheet";
+import SpriteSheetSprite from "../../game-engine/engine/SpriteSheetSprite";
+import { GameData } from "../../game-engine/engine/types";
 
 class Bomb extends Entity {
 

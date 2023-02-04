@@ -1,8 +1,8 @@
-import Collidable from "./engine/collision/Collidable";
-import CollisionBox from "./engine/collision/CollisionBox";
-import Entity from "./engine/Entity";
-import SpriteSheet from "./engine/SpriteSheet";
-import { GameData } from "./engine/types";
+import Collidable from "../../game-engine/engine/collision/Collidable";
+import CollisionBox from "../../game-engine/engine/collision/CollisionBox";
+import Entity from "../../game-engine/engine/Entity";
+import SpriteSheet from "../../game-engine/engine/SpriteSheet";
+import { GameData } from "../../game-engine/engine/types"
 
 class TestBrick extends Entity implements Collidable {
 
