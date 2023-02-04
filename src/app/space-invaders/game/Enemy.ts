@@ -23,13 +23,21 @@ class Enemy extends Entity {
 
         this.width = 44
         this.height = 32
-        this.speed = 75
+        this.speed = 15
 
         this.dieSound = new Audio("./assets/space-invaders/sounds/enemy-death.wav")
+
+        // TODO: have enemy shoot at random intervals; depending on the level
+        // increase enemy speed, depending on level
+        // have some variation in the speed
+        // spawn enemies at n interval in a level
     }
 
     public update(gameData: GameData, delta: number) {
         this.sprite.update(gameData, delta)
+
+        this.velY = (this.speed * delta)
+        this.yPos += this.velY
     }
 
     public render(gameData: GameData): void {

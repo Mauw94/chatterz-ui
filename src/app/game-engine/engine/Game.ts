@@ -9,6 +9,7 @@ import EntityManager from "./EntityManager"
 abstract class Game {
 
   public isGameOver: boolean = false
+  public isRoundOver: boolean = false
 
   protected gameData: GameData
   protected canvasEl: HTMLCanvasElement
@@ -65,15 +66,15 @@ abstract class Game {
   protected update(delta: number) {
     const { keyListener } = this.gameData
 
-    if (!this.isGameOver) {
+    if (!this.isGameOver && !this.isRoundOver) {
       this.gameData.entityManager.getEntities().forEach(e => e.update(this.gameData, delta))
       this.checkRoundOver(this.gameData)
       this.checkGameOver(this.gameData)
     } else {
-      this.gameData.entityManager.clear()
-
-      if (keyListener.isKeyDown("Enter")) {
-        this.restart()
+      if (this.isGameOver && !this.isRoundOver) {
+        if (keyListener.isKeyDown("Enter")) {
+          this.restart()
+        }
       }
     }
   }
@@ -81,28 +82,29 @@ abstract class Game {
   protected render() {
     this.gameData.entityManager.getEntities().forEach(e => e.render(this.gameData))
     if (this.isGameOver) {
-      this.drawBigTextMiddleScreen("Game Over", 80, this.gameData.screenWidth / 2, this.gameData.screenHeight / 2)
-      this.drawSmallTextMiddleScreen("Press ENTER to restart", 90, this.gameData.screenWidth / 2, (this.gameData.screenHeight / 2) + 50)
+      this.drawBigText("Game Over", 80, this.gameData.screenWidth / 2, this.gameData.screenHeight / 2)
+      this.drawSmallText("Press ENTER to restart", 90, this.gameData.screenWidth / 2, (this.gameData.screenHeight / 2) + 50)
     }
   }
 
-  private isCollidable(entity: Entity | Collidable): entity is Collidable {
-    return (entity as Collidable).getCollisionBox !== undefined;
-  }
-
-  private drawBigTextMiddleScreen(text: string, offset: number, x: number, y: number): void {
+  public drawBigText(text: string, offset: number, x: number, y: number): void {
     const { context } = this.gameData
     context.fillStyle = "white"
     context.font = "35px Arial"
     context.fillText(text, x - offset, y)
   }
 
-  private drawSmallTextMiddleScreen(text: string, offset: number, x: number, y: number): void {
+  public drawSmallText(text: string, offset: number, x: number, y: number): void {
     const { context } = this.gameData
     context.fillStyle = "white"
     context.font = "20px Arial"
     context.fillText(text, x - offset, y)
   }
+
+  private isCollidable(entity: Entity | Collidable): entity is Collidable {
+    return (entity as Collidable).getCollisionBox !== undefined;
+  }
+
 }
 
 export default Game

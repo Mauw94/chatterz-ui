@@ -97,6 +97,10 @@ class EntityManager {
         this.bullets = []
         this.objects = []
     }
+
+    public clearBullets(): void {
+        this.bullets = []
+    }
 }
 
 export default EntityManager

@@ -8,6 +8,12 @@ class Player extends Entity {
     private sprite: ImageSprite
     private timeTillNextBulletAllowedMS = 10
 
+    constructor(x: number, y: number) {
+        super()   
+        this.xPos = x
+        this.yPos = y
+    }
+
     public setup() {
         super.setup()
         let img = new Image()
@@ -17,9 +23,6 @@ class Player extends Entity {
         this.width = 50
         this.height = 48
         this.speed = 175
-
-        this.xPos = 450
-        this.yPos = 450
     }
 
     public update(gameData: GameData, delta: number) {
@@ -31,7 +34,7 @@ class Player extends Entity {
     public render(gameData: GameData): void {
         this.sprite.render(gameData, this.xPos, this.yPos, this.width, this.height)
     }
-
+    
     private updatePosition(gameData: GameData, delta: number) {
         const { keyListener } = gameData
 
