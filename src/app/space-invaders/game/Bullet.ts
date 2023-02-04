@@ -1,6 +1,6 @@
 import Entity from "src/app/game-engine/engine/Entity";
 import { GameData } from "src/app/game-engine/engine/types";
-import Enemy1 from "./Enemy";
+import Enemy from "./Enemy";
 
 class Bullet extends Entity {
 
@@ -32,7 +32,7 @@ class Bullet extends Entity {
         }
 
         let collision = gameData.collisionHandler
-            .checkCollisionWith(this, gameData.entityManager.getEnemies()) as Enemy1
+            .checkCollisionWith(this, gameData.entityManager.getEnemies()) as Enemy
 
         if (collision != null) {
             collision.playDieSound()
