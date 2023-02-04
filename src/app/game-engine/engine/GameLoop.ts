@@ -9,6 +9,8 @@ class GameLoop {
   private updateFunction: GameUpdateFunction
   private deltaTracker: DeltaTracker
 
+  private animationFrame
+
   constructor(
     updateFunction: GameUpdateFunction,
     renderFunction: GameRenderFunction
@@ -19,7 +21,11 @@ class GameLoop {
   }
 
   public run() {
-    window.requestAnimationFrame(this.loop.bind(this))
+    this.animationFrame = window.requestAnimationFrame(this.loop.bind(this))
+  }
+
+  public stop() {
+    window.cancelAnimationFrame(this.animationFrame)
   }
 
   private loop() {

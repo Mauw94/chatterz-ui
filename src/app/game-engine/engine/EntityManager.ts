@@ -83,6 +83,14 @@ class EntityManager {
         this.objects = this.objects.filter(o => o.id !== entity.id)
         this.removeEntity(entity)
     }
+
+    public clear(): void {
+        this.entities = []
+        this.players = []
+        this.enemies = []
+        this.objects = []
+        this.bullets = []
+    }
 }
 
 export default EntityManager

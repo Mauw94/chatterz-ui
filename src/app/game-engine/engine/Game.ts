@@ -10,6 +10,7 @@ abstract class Game {
 
   private canvasEl: HTMLCanvasElement
   private gameData: GameData
+  private gameLoop: GameLoop
 
   constructor(canvasEl: HTMLCanvasElement) {
     this.canvasEl = canvasEl
@@ -31,11 +32,18 @@ abstract class Game {
 
     this.setupEntities()
 
-    const gameLoop = new GameLoop(
+    this.gameLoop = new GameLoop(
       this.update.bind(this),
       this.render.bind(this)
     )
-    gameLoop.run()
+    this.gameLoop.run()
+  }
+
+  public stop() {
+    this.gameLoop.stop()
+    // TODO: call entitymanager and remove everything or something
+    // IDK
+    this.gameData.entityManager.clear()
   }
 
   public addObject(entity: Entity) {

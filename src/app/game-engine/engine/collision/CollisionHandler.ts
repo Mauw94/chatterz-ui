@@ -14,9 +14,6 @@ class CollisionHandler {
 
   public checkCollisionWith(object: Entity, objects: Entity[]) {
 
-    console.log(object)
-    console.log(objects)
-
   }
 
   public testMovement(driverBox: CollisionBox, xMovement: number, yMovement: number) {

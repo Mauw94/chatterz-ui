@@ -19,7 +19,9 @@ export class SpaceInvadersComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     // TODO: setting undefined is not enough, still things are being run in the bg
-    this.game = undefined
+    console.log("should destroy game AND REMOVE FROM MEMORY")
+    this.game.stop()
+    this.game = null
   }
 
   start(): void {
