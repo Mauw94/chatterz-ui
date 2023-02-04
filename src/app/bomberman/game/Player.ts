@@ -104,7 +104,7 @@ class Player extends Entity {
     // keydown " " = SPACEBAR
     if (gameData.keyListener.isKeyDown(" ") && this.currBombCooldownMS <= 0) {
       const bomb = new Bomb(this.xPos + (this.width / 2) - 24, this.yPos + this.height - 48)
-      gameData.entityManager.addEntity(bomb)
+      gameData.entityManager.addObject(bomb)
       this.currBombCooldownMS = this.bombCooldownMS
     }
   }

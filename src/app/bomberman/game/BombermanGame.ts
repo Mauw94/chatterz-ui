@@ -11,9 +11,9 @@ class BombermanGame extends Game {
   }
 
   protected setup(gameData: GameData) {
-    this.addEntity(new GameMap(gameData.screenWidth, gameData.screenHeight))
-    this.addEntity(new TestBrick())
-    this.addEntity(new Player())
+    this.addObject(new GameMap(gameData.screenWidth, gameData.screenHeight))
+    this.addObject(new TestBrick())
+    this.addPlayer(new Player())
   }
 
 }

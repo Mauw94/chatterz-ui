@@ -27,8 +27,10 @@ class Bullet extends Entity {
         this.yPos += this.velY
 
         if (this.yPos - this.height <= 0) {
-            gameData.entityManager.removeEntity(this)
+            gameData.entityManager.removeBullet(this)
         }
+
+        gameData.collisionHandler.checkCollisionWith(this, gameData.entityManager.getEnemies())
     }
 
     public render(gameData: GameData): void {

@@ -19,7 +19,7 @@ abstract class Game {
       screenHeight: canvasEl.height,
       keyListener: new KeyListener(),
       collisionHandler: new CollisionHandler(),
-      entityManager: new EntityManager()
+      entityManager: new EntityManager
     }
   }
 
@@ -38,9 +38,22 @@ abstract class Game {
     gameLoop.run()
   }
 
-  public addEntity(entity: Entity) {
-    this.gameData.entityManager.addEntity(entity)
+  public addObject(entity: Entity) {
+    this.gameData.entityManager.addObject(entity)
+    if (this.isCollidable(entity)) {
+      this.gameData.collisionHandler.addCollidable(entity);
+    }
+  }
 
+  public addEnemy(entity: Entity) {
+    this.gameData.entityManager.addEnemy(entity)
+    if (this.isCollidable(entity)) {
+      this.gameData.collisionHandler.addCollidable(entity);
+    }
+  }
+
+  public addPlayer(entity: Entity) {
+    this.gameData.entityManager.addPlayer(entity)
     if (this.isCollidable(entity)) {
       this.gameData.collisionHandler.addCollidable(entity);
     }

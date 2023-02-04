@@ -11,9 +11,9 @@ class SpaceInvadersGame extends Game {
     }
 
     protected setup(gameData: GameData): void {
-        this.addEntity(new GameMap())
-        this.addEntity(new Player())
-        this.addEntity(new Enemy1())
+        this.addObject(new GameMap())
+        this.addPlayer(new Player())
+        this.addEnemy(new Enemy1())
     }
 
 }

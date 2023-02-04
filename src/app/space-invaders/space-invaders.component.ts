@@ -18,6 +18,7 @@ export class SpaceInvadersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // TODO: setting undefined is not enough, still things are being run in the bg
     this.game = undefined
   }
 

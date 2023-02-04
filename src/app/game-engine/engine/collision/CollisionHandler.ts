@@ -1,3 +1,5 @@
+import Entity from "../Entity";
+import EntityManager from "../EntityManager";
 import Collidable from "./Collidable";
 import Collision from "./Collision";
 import CollisionBox from "./CollisionBox";
@@ -8,6 +10,13 @@ class CollisionHandler {
 
   public addCollidable(collidable: Collidable) {
     this.collidables.push(collidable);
+  }
+
+  public checkCollisionWith(object: Entity, objects: Entity[]) {
+
+    console.log(object)
+    console.log(objects)
+
   }
 
   public testMovement(driverBox: CollisionBox, xMovement: number, yMovement: number) {

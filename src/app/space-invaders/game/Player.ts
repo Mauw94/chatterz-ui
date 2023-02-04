@@ -6,10 +6,7 @@ import Bullet from "./Bullet";
 class Player extends Entity {
 
     private sprite: ImageSprite
-    private canShoot: boolean = false
     private timeTillNextBulletAllowedMS = 10
-    private maxBulletsAtATime = 10
-    private bullets: Bullet[] = []
 
     public setup() {
         super.setup()
@@ -23,8 +20,6 @@ class Player extends Entity {
 
         this.xPos = 450
         this.yPos = 450
-
-        this.canShoot = true
     }
 
     public update(gameData: GameData, delta: number) {
@@ -74,19 +69,16 @@ class Player extends Entity {
     private updateBullets(gameData: GameData, delta: number) {
         const { entityManager } = gameData
         const { keyListener } = gameData
-        // TODO: create bullet manager or something to handle sounds as well
-        // TODO time between shots
-        // max bullets allowed
-        // play sound when shooting
+
         if (this.timeTillNextBulletAllowedMS > 0) {
             this.timeTillNextBulletAllowedMS--
         }
 
         if (keyListener.isKeyDown(" ")) {
-            if (this.timeTillNextBulletAllowedMS <= 0 && this.bullets.length < this.maxBulletsAtATime) {
+            if (this.timeTillNextBulletAllowedMS <= 0) {
                 const bullet = new Bullet(this.xPos + this.width / 2, this.yPos, 300, "red")
-                entityManager.addEntity(bullet)
-                this.timeTillNextBulletAllowedMS = 10
+                this.timeTillNextBulletAllowedMS = 15
+                entityManager.addBullet(bullet)
             }
         }
     }
