@@ -8,13 +8,13 @@ import SpaceInvadersGame from './game/SpaceInvadersGame';
 })
 export class SpaceInvadersComponent implements OnInit, OnDestroy {
 
-  public gameStarted: boolean = false
-
   private game: SpaceInvadersGame
 
   constructor() { }
 
   ngOnInit(): void {
+    this.start()
+    // TODO: do we want a chatroom here?
   }
 
   ngOnDestroy(): void {
@@ -24,7 +24,7 @@ export class SpaceInvadersComponent implements OnInit, OnDestroy {
     this.game = null
   }
 
-  start(): void {
+  private start(): void {
     const canvasEl = document.getElementById("game-canvas") as HTMLCanvasElement | undefined
     if (canvasEl == null) {
       console.log("couldn't find the canvas")
@@ -35,7 +35,5 @@ export class SpaceInvadersComponent implements OnInit, OnDestroy {
 
     this.game = new SpaceInvadersGame(canvasEl)
     this.game.run()
-
-    this.gameStarted = true
   }
 }

@@ -8,20 +8,19 @@ import BombermanGame from './game/BombermanGame';
 })
 export class BombermanComponent implements OnInit, OnDestroy {
 
-  public gameStarted: boolean = false
-
   private game: BombermanGame
 
   constructor() { }
 
   ngOnInit(): void {
+    this.start()
   }
 
   ngOnDestroy(): void {
     this.game = undefined
   }
 
-  start() {
+  private start() {
     const canvasEl = document.getElementById("game-canvas") as HTMLCanvasElement | undefined
     if (canvasEl == null) {
       console.log("Couldn't find the canvas")
@@ -32,8 +31,6 @@ export class BombermanComponent implements OnInit, OnDestroy {
 
     this.game = new BombermanGame(canvasEl)
     this.game.run()
-
-    this.gameStarted = true
   }
 
 }
