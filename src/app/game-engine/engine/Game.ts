@@ -28,6 +28,20 @@ abstract class Game {
     }
   }
 
+  public run() {
+    this.gameData.keyListener.setup(this.canvasEl)
+
+    this.preload()
+    this.setup()
+
+    this.setupEntities()
+    this.gameLoop = new GameLoop(
+      this.update.bind(this),
+      this.render.bind(this)
+    )
+    this.gameLoop.run()
+  }
+
   public stop() {
     this.gameLoop.stop()
     this.gameData.entityManager.clear()
@@ -54,8 +68,8 @@ abstract class Game {
     }
   }
 
-  protected abstract preload(gameData: GameData): void
-  protected abstract setup(gameData: GameData): void
+  protected abstract preload(): void
+  protected abstract setup(): void
   protected abstract setupEntities(): void
   protected abstract restart(): void
   protected checkRoundOver(gameData: GameData): void { }

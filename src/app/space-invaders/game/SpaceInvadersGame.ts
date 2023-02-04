@@ -3,7 +3,6 @@ import { GameData } from "src/app/game-engine/engine/types";
 import GameMap from "./GameMap";
 import Player from "./Player";
 import EnemyController from "./EnemyController";
-import GameLoop from "src/app/game-engine/engine/GameLoop";
 
 
 class SpaceInvadersGame extends Game {
@@ -16,20 +15,6 @@ class SpaceInvadersGame extends Game {
 
     constructor(canvasEl: HTMLCanvasElement) {
         super(canvasEl);
-    }
-
-    public run() {
-        this.gameData.keyListener.setup(this.canvasEl)
-
-        this.preload()
-        this.setup()
-
-        this.setupEntities()
-        const gameLoop = new GameLoop(
-            this.update.bind(this),
-            this.render.bind(this)
-        )
-        gameLoop.run()
     }
 
     protected preload(): void {
@@ -62,8 +47,11 @@ class SpaceInvadersGame extends Game {
     protected checkRoundOver(gameData: GameData): void {
         const { entityManager } = gameData
         if (entityManager.getEnemies().length === 0) {
-            console.log("killed all the enemies")
             this.isRoundOver = true
+
+            // remove remaining bullets
+            const bullets = this.gameData.entityManager.getBullets()
+            bullets.forEach(b => this.gameData.entityManager.removeBullet(b))
         }
     }
 
@@ -114,9 +102,6 @@ class SpaceInvadersGame extends Game {
         this.isRoundOver = false
         this.player.xPos = this.playerStartingPositions[0]
         this.player.yPos = this.playerStartingPositions[1]
-
-        const bullets = this.gameData.entityManager.getBullets()
-        bullets.forEach(b => this.gameData.entityManager.removeBullet(b))
 
         this.enemyController.spawnEnemies(this.level)
         const enemies = this.enemyController.enemies()
