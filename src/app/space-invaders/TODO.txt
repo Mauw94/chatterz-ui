@@ -7,3 +7,5 @@
     * etc
 
 * when all enemies are dead in a level -> show round won; clicking on start or next starts the next level
+
+* add comments to methods

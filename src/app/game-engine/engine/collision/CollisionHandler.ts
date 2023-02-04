@@ -11,6 +11,12 @@ class CollisionHandler {
     this.collidables.push(collidable);
   }
 
+  /**
+   * Returns first entity object collides with.
+   * @param object to check for collision
+   * @param objects list to check collisions with
+   * @returns 
+   */
   public checkCollisionWith(object: Entity, objects: Entity[]): Entity {
     let collision: Entity
 

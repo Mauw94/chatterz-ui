@@ -28,6 +28,9 @@ abstract class Game {
     }
   }
 
+  /**
+   * Execute the setup methods and initialize the gameloop
+   */
   public run() {
     this.gameData.keyListener.setup(this.canvasEl)
 
@@ -42,11 +45,18 @@ abstract class Game {
     this.gameLoop.run()
   }
 
+  /**
+   * Stop the gameloop
+   */
   public stop() {
     this.gameLoop.stop()
     this.gameData.entityManager.clear()
   }
 
+  /**
+   * Add entity to entitymanager
+   * @param entity 
+   */
   public addObject(entity: Entity) {
     this.gameData.entityManager.addObject(entity)
     if (this.isCollidable(entity)) {
@@ -54,6 +64,10 @@ abstract class Game {
     }
   }
 
+  /**
+   * Add entity to entitymanager
+   * @param entity 
+   */
   public addEnemy(entity: Entity) {
     this.gameData.entityManager.addEnemy(entity)
     if (this.isCollidable(entity)) {
@@ -61,6 +75,10 @@ abstract class Game {
     }
   }
 
+  /**
+   * Add entity to entitymanager
+   * @param entity 
+   */
   public addPlayer(entity: Entity) {
     this.gameData.entityManager.addPlayer(entity)
     if (this.isCollidable(entity)) {
@@ -76,7 +94,10 @@ abstract class Game {
   protected checkGameOver(gameData: GameData): void { }
   protected checkIsPlayAlive(gameData: GameData): void { }
 
-
+  /**
+   * Update game every x delta cycle
+   * @param delta delta in ms
+   */
   protected update(delta: number) {
     const { keyListener } = this.gameData
 
@@ -93,6 +114,9 @@ abstract class Game {
     }
   }
 
+  /**
+   * Render game every x delta cycle
+   */
   protected render() {
     this.gameData.entityManager.getEntities().forEach(e => e.render(this.gameData))
     if (this.isGameOver) {
@@ -101,6 +125,13 @@ abstract class Game {
     }
   }
 
+  /**
+   * Draw text with big font (35px)
+   * @param text 
+   * @param offset 
+   * @param x x coord
+   * @param y y coord
+   */
   public drawBigText(text: string, offset: number, x: number, y: number): void {
     const { context } = this.gameData
     context.fillStyle = "white"
@@ -108,6 +139,13 @@ abstract class Game {
     context.fillText(text, x - offset, y)
   }
 
+  /**
+   * Draw text with small(er) front (20px)
+   * @param text 
+   * @param offset 
+   * @param x x coord
+   * @param y y coord
+   */
   public drawSmallText(text: string, offset: number, x: number, y: number): void {
     const { context } = this.gameData
     context.fillStyle = "white"

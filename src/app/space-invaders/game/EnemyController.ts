@@ -20,6 +20,10 @@ class EnemyController {
     ]
     private enemyRows = []
 
+    /**
+     * Spawn enemies based on the current game level
+     * @param level 
+     */
     public spawnEnemies(level: number) {
         this.enemyMapEasiest.forEach((row, rowIndex) => {
             this.enemyRows[rowIndex] = []
@@ -34,6 +38,10 @@ class EnemyController {
         })
     }
 
+    /**
+     * Get all the current enemies that were spawned (dead or alive)
+     * @returns 
+     */
     public enemies() {
         return this.enemyRows.flat()
     }
