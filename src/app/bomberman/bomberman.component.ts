@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import BombermanGame from './game/BombermanGame';
 
 @Component({
@@ -6,13 +6,19 @@ import BombermanGame from './game/BombermanGame';
   templateUrl: './bomberman.component.html',
   styleUrls: ['./bomberman.component.css']
 })
-export class BombermanComponent implements OnInit {
+export class BombermanComponent implements OnInit, OnDestroy {
 
   public gameStarted: boolean = false
+
+  private game: BombermanGame
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.game = undefined
   }
 
   start() {
@@ -24,8 +30,8 @@ export class BombermanComponent implements OnInit {
 
     canvasEl.focus()
 
-    const game = new BombermanGame(canvasEl)
-    game.run()
+    this.game = new BombermanGame(canvasEl)
+    this.game.run()
 
     this.gameStarted = true
   }

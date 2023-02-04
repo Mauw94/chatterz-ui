@@ -12,7 +12,7 @@ class GameMap extends Entity {
     public setup() {
         super.setup()
         let img = new Image()
-        img.src = "./assets/space-invaders/space.png"
+        img.src = "./assets/space-invaders/images/space.png"
         this.bgImage = img
     }
 

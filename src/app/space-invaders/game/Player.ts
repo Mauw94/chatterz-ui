@@ -1,28 +1,36 @@
 import Entity from "src/app/game-engine/engine/Entity";
 import ImageSprite from "src/app/game-engine/engine/ImageSprite";
 import { GameData } from "src/app/game-engine/engine/types";
+import Bullet from "./Bullet";
 
 class Player extends Entity {
 
     private sprite: ImageSprite
+    private canShoot: boolean = false
+    private timeTillNextBulletAllowedMS = 10
+    private maxBulletsAtATime = 10
+    private bullets: Bullet[] = []
 
     public setup() {
         super.setup()
         let img = new Image()
-        img.src = "./assets/space-invaders/player.png"
+        img.src = "./assets/space-invaders/images/player.png"
         this.sprite = new ImageSprite(img)
 
         this.width = 50
         this.height = 48
-        this.speed = 100
+        this.speed = 175
 
         this.xPos = 450
         this.yPos = 450
+
+        this.canShoot = true
     }
 
     public update(gameData: GameData, delta: number) {
         this.sprite.update(gameData, delta)
         this.updatePosition(gameData, delta)
+        this.updateBullets(gameData, delta)
     }
 
     public render(gameData: GameData): void {
@@ -60,6 +68,26 @@ class Player extends Entity {
             this.yPos = gameData.screenHeight - this.height
         } else if (this.yPos <= 0) {
             this.yPos = 0
+        }
+    }
+
+    private updateBullets(gameData: GameData, delta: number) {
+        const { entityManager } = gameData
+        const { keyListener } = gameData
+        // TODO: create bullet manager or something to handle sounds as well
+        // TODO time between shots
+        // max bullets allowed
+        // play sound when shooting
+        if (this.timeTillNextBulletAllowedMS > 0) {
+            this.timeTillNextBulletAllowedMS--
+        }
+
+        if (keyListener.isKeyDown(" ")) {
+            if (this.timeTillNextBulletAllowedMS <= 0 && this.bullets.length < this.maxBulletsAtATime) {
+                const bullet = new Bullet(this.xPos + this.width / 2, this.yPos, 300, "red")
+                entityManager.addEntity(bullet)
+                this.timeTillNextBulletAllowedMS = 10
+            }
         }
     }
 }
