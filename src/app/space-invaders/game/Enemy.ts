@@ -2,7 +2,7 @@ import Entity from "src/app/game-engine/engine/Entity";
 import ImageSprite from "src/app/game-engine/engine/ImageSprite";
 import { GameData } from "src/app/game-engine/engine/types";
 
-abstract class Enemy extends Entity {
+class Enemy extends Entity {
 
     private sprite: ImageSprite
     private dieSound: HTMLAudioElement

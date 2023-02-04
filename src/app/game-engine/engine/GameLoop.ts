@@ -9,7 +9,7 @@ class GameLoop {
   private updateFunction: GameUpdateFunction
   private deltaTracker: DeltaTracker
 
-  private animationFrame
+  private animationFrame: number
 
   constructor(
     updateFunction: GameUpdateFunction,

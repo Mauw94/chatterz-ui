@@ -8,8 +8,11 @@ import EntityManager from "./EntityManager"
 
 abstract class Game {
 
-  private canvasEl: HTMLCanvasElement
-  private gameData: GameData
+  public isGameOver: boolean = false
+
+  protected gameData: GameData
+  protected canvasEl: HTMLCanvasElement
+
   private gameLoop: GameLoop
 
   constructor(canvasEl: HTMLCanvasElement) {
@@ -20,29 +23,12 @@ abstract class Game {
       screenHeight: canvasEl.height,
       keyListener: new KeyListener(),
       collisionHandler: new CollisionHandler(),
-      entityManager: new EntityManager
+      entityManager: new EntityManager()
     }
-  }
-
-  public run() {
-    this.gameData.keyListener.setup(this.canvasEl)
-
-    this.preload(this.gameData) // TODO: add imageCache to gameData
-    this.setup(this.gameData)
-
-    this.setupEntities()
-
-    this.gameLoop = new GameLoop(
-      this.update.bind(this),
-      this.render.bind(this)
-    )
-    this.gameLoop.run()
   }
 
   public stop() {
     this.gameLoop.stop()
-    // TODO: call entitymanager and remove everything or something
-    // IDK
     this.gameData.entityManager.clear()
   }
 
@@ -68,24 +54,55 @@ abstract class Game {
   }
 
   protected abstract preload(gameData: GameData): void
-  protected abstract setup(gameData: GameData): void;
+  protected abstract setup(gameData: GameData): void
+  protected abstract setupEntities(): void
+  protected abstract restart(): void
+  protected checkRoundOver(gameData: GameData): void { }
+  protected checkGameOver(gameData: GameData): void { }
+  protected checkIsPlayAlive(gameData: GameData): void { }
 
-  private setupEntities() {
-    this.gameData.entityManager.getEntities().map(e => e.setup())
+
+  protected update(delta: number) {
+    const { keyListener } = this.gameData
+
+    if (!this.isGameOver) {
+      this.gameData.entityManager.getEntities().forEach(e => e.update(this.gameData, delta))
+      this.checkRoundOver(this.gameData)
+      this.checkGameOver(this.gameData)
+    } else {
+      this.gameData.entityManager.clear()
+
+      if (keyListener.isKeyDown("Enter")) {
+        this.restart()
+      }
+    }
   }
 
-  private update(delta: number) {
-    this.gameData.entityManager.getEntities().forEach(e => e.update(this.gameData, delta))
-  }
-
-  private render() {
+  protected render() {
     this.gameData.entityManager.getEntities().forEach(e => e.render(this.gameData))
+    if (this.isGameOver) {
+      this.drawBigTextMiddleScreen("Game Over", 80, this.gameData.screenWidth / 2, this.gameData.screenHeight / 2)
+      this.drawSmallTextMiddleScreen("Press ENTER to restart", 90, this.gameData.screenWidth / 2, (this.gameData.screenHeight / 2) + 50)
+    }
   }
 
   private isCollidable(entity: Entity | Collidable): entity is Collidable {
     return (entity as Collidable).getCollisionBox !== undefined;
   }
 
+  private drawBigTextMiddleScreen(text: string, offset: number, x: number, y: number): void {
+    const { context } = this.gameData
+    context.fillStyle = "white"
+    context.font = "35px Arial"
+    context.fillText(text, x - offset, y)
+  }
+
+  private drawSmallTextMiddleScreen(text: string, offset: number, x: number, y: number): void {
+    const { context } = this.gameData
+    context.fillStyle = "white"
+    context.font = "20px Arial"
+    context.fillText(text, x - offset, y)
+  }
 }
 
 export default Game

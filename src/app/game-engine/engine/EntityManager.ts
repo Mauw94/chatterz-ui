@@ -84,12 +84,18 @@ class EntityManager {
         this.removeEntity(entity)
     }
 
+    public checkEnemies() {
+        if (this.enemies.length === 0) {
+            console.log("trigger round won screen")
+        }
+    }
+
     public clear(): void {
         this.entities = []
         this.players = []
         this.enemies = []
-        this.objects = []
         this.bullets = []
+        this.objects = []
     }
 }
 

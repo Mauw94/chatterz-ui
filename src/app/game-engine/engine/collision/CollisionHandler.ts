@@ -11,7 +11,7 @@ class CollisionHandler {
     this.collidables.push(collidable);
   }
 
-  public checkCollisionWith(object: Entity, objects: Entity[]) {
+  public checkCollisionWith(object: Entity, objects: Entity[]): Entity {
     let collision: Entity
 
     for (let i = 0; i < objects.length; i++) {

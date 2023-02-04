@@ -1,0 +1,9 @@
+--- SPACEINVADERS ---
+* create levels (endlessly generating)
+-- with each level
+    * increase enemy count
+    * increase enemy dmg
+    * increase enemy movement speed
+    * etc
+
+* when all enemies are dead in a level -> show round won; clicking on start or next starts the next level
