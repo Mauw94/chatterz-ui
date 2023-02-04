@@ -1,5 +1,4 @@
 import Entity from "../Entity";
-import EntityManager from "../EntityManager";
 import Collidable from "./Collidable";
 import Collision from "./Collision";
 import CollisionBox from "./CollisionBox";
@@ -13,7 +12,21 @@ class CollisionHandler {
   }
 
   public checkCollisionWith(object: Entity, objects: Entity[]) {
+    let collision: Entity
 
+    for (let i = 0; i < objects.length; i++) {
+      const sprite = objects[i]
+      if (
+        object.xPos + object.width > sprite.xPos &&
+        object.xPos < sprite.xPos + sprite.width &&
+        object.yPos + object.height > sprite.yPos &&
+        object.yPos < sprite.yPos + sprite.height) {
+        collision = sprite
+        return collision
+      }
+    }
+
+    return null
   }
 
   public testMovement(driverBox: CollisionBox, xMovement: number, yMovement: number) {

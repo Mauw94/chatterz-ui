@@ -5,8 +5,8 @@ abstract class Entity {
   public hasBeenSetup: boolean = false
   public readonly id: Symbol
 
-  protected xPos: number = 0
-  protected yPos: number = 0
+  public xPos: number = 0
+  public yPos: number = 0
   protected velX: number = 0
   protected velY: number = 0
   protected speed: number = 0

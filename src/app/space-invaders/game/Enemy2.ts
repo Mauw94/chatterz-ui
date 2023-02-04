@@ -1,10 +1,10 @@
 import { GameData } from "src/app/game-engine/engine/types";
 import Enemy from "./Enemy";
 
-class Enemy1 extends Enemy {
+class Enemy2 extends Enemy {
 
     constructor() {
-        super(1, 20, 20);
+        super(2, 60, 150);
     }
 
     public setup() {
@@ -20,4 +20,4 @@ class Enemy1 extends Enemy {
     }
 }
 
-export default Enemy1
+export default Enemy2
