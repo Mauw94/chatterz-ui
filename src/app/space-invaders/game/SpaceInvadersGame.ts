@@ -67,9 +67,12 @@ class SpaceInvadersGame extends Game {
             }
         })
 
-        // TODO: when enemy reaces the other side subtract 1 live
-        // when 0, game ends
-        // back to 3 lives when starting new round
+        enemies.forEach(e => {
+            if (e.yPos + e.height >= this.gameData.screenHeight) {
+                this.gameData.entityManager.removeEnemy(e)
+                this.lives--
+            }
+        })
     }
 
     protected update(delta: number): void {
@@ -79,6 +82,10 @@ class SpaceInvadersGame extends Game {
             if (keyListener.isKeyDown("Enter")) {
                 this.setupNextLevel()
             }
+        }
+
+        if (this.lives <= 0) {
+            this.isGameOver = true
         }
     }
 

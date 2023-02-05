@@ -92,7 +92,7 @@ abstract class Game {
   protected abstract restart(): void
   protected checkRoundOver(gameData: GameData): void { }
   protected checkGameOver(gameData: GameData): void { }
-  protected checkIsPlayAlive(gameData: GameData): void { }
+  protected checkIfPlayerIsAlive(gameData: GameData): void { }
 
   /**
    * Update game every x delta cycle
