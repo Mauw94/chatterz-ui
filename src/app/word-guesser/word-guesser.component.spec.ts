@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WordGuesserComponent } from './word-guesser.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('WordGuesserComponent', () => {
   let component: WordGuesserComponent;
@@ -8,9 +10,10 @@ describe('WordGuesserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WordGuesserComponent ]
+      imports: [HttpClientModule, RouterTestingModule],
+      declarations: [WordGuesserComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GameChatComponent } from './game-chat.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 describe('GameChatComponent', () => {
   let component: GameChatComponent;
@@ -8,9 +11,11 @@ describe('GameChatComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GameChatComponent ]
+      imports: [HttpClientModule, RouterTestingModule],
+      declarations: [GameChatComponent],
+      providers: [DatePipe]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

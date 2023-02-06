@@ -96,7 +96,7 @@ class EnemyController {
     private findXSpawnPoint(): number {
         let x = this.random(0, this.gameData.screenWidth - 44)
         for (let xi = 0; xi < this.xSpawns.length; xi++) {
-            if (x >= this.xSpawns[xi] && x <= (this.xSpawns[xi] + 44)) {
+            if (x > this.xSpawns[xi] && x < (this.xSpawns[xi] + 44)) {
                 return this.findXSpawnPoint()
             }
         }

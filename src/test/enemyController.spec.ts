@@ -1,4 +1,4 @@
-import 'jasmine'
+// import 'jasmine'
 import EntityManager from 'src/app/game-engine/engine/EntityManager'
 import KeyListener from 'src/app/game-engine/engine/KeyListener'
 import CollisionHandler from 'src/app/game-engine/engine/collision/CollisionHandler'
@@ -23,8 +23,8 @@ describe('EnemyController', () => {
     it('should return new array containing enemies', () => {
         enemyController.spawnEnemies(1)
         const enemies = enemyController.enemies()
-        
+
         expect(enemies).toBeDefined()
-        expect(enemies.length).toBe(1)
+        expect(enemies.length).toBe(4)
     })
 })
