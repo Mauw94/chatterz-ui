@@ -10,10 +10,6 @@ class Bomb extends Entity {
 
     private timerBeforeExplodeMS: number
 
-    private blinkTimeMS: number = 300
-    private currBlinkTimeMS: number
-    private minBlinkOpacity = 0.5
-
     constructor(xPos: number, yPos: number) {
         super()
         this.xPos = xPos
@@ -21,7 +17,6 @@ class Bomb extends Entity {
         this.width = 48
         this.height = 48
         this.timerBeforeExplodeMS = 3000
-        this.currBlinkTimeMS = this.blinkTimeMS
     }
 
     public setup() {
@@ -39,21 +34,11 @@ class Bomb extends Entity {
             gameData.entityManager.removeEntity(this)
         }
 
-        this.currBlinkTimeMS -= delta * 1000
-        if (this.currBlinkTimeMS <= -this.blinkTimeMS) {
-            // TODO bomb explodes
-            // 2 rectangle sprites: 1 horizontal, 1 vertical?
-            // collision with a brick removes the brick?
-            this.currBlinkTimeMS = this.blinkTimeMS
-        }
+        this.doFlinch(delta) // show flinching on the bomb all the time
     }
 
     public render(gameData: GameData): void {
-        const opacityVariance = 1 - this.minBlinkOpacity
-        const opacityValue = (Math.abs(this.currBlinkTimeMS) / this.blinkTimeMS) * opacityVariance
-        const opacity = this.minBlinkOpacity + opacityValue
-
-        this.sprite.render(gameData, this.xPos, this.yPos, this.width, this.height, { opacity })
+        this.sprite.render(gameData, this.xPos, this.yPos, this.width, this.height, { opacity: this.calculateOpacity() })
     }
 }
 

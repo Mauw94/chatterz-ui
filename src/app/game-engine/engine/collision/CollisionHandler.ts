@@ -19,7 +19,7 @@ class CollisionHandler {
    */
   public checkCollisionWith(object: Entity, objects: Entity[]): Entity {
     let collision: Entity
-
+    
     for (let i = 0; i < objects.length; i++) {
       const sprite = objects[i]
       if (
