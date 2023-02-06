@@ -102,10 +102,6 @@ class EnemyController {
     }
 
     private getSpawnPoint(rowIndex: number): [number, number] {
-        // TODO: spawn enemies across the whole x
-        // every x enemies spawn them a little further
-        // check if an x spawn (+width) doesn't overlap another spawn
-
         const x = this.findXSpawnPoint()
         const y = this.findYSpawnPoint(rowIndex, x)
 
@@ -117,9 +113,7 @@ class EnemyController {
     private findXSpawnPoint(): number {
         let x = this.random(0, this.gameData.screenWidth - 44)
         for (let xi = 0; xi < this.xSpawns.length; xi++) {
-            if (x > this.xSpawns[xi] && x < (this.xSpawns[xi] + 44)) {
-                console.log("can not spawn on top of another enemy")
-                console.log([this.xSpawns[xi], this.xSpawns[xi] + 44])
+            if (x >= this.xSpawns[xi] && x <= (this.xSpawns[xi] + 44)) {
                 return this.findXSpawnPoint()
             }
         }
@@ -128,13 +122,7 @@ class EnemyController {
     }
 
     private findYSpawnPoint(rowIndex: number, x: number): number {
-        let y = rowIndex * this.random(-75, -150)
-
-        if (x % 2 === 0) {
-            y -= 60
-        }
-
-        return y
+        return rowIndex * this.random(-75, -250)
     }
 }
 
