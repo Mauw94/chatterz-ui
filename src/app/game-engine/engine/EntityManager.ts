@@ -46,8 +46,13 @@ class EntityManager {
         return this.enemyBullets;
     }
 
+    public getAllBulletsLeftOnScreen(): Entity[] {
+        return [...this.bullets, ...this.enemyBullets]
+    }
+
     public removeEnemyBullet(entity: Entity) {
         this.enemyBullets = this.enemyBullets.filter(x => x.id !== entity.id)
+        this.removeEntity(entity)
     }
 
     public addEnemy(enemy: Entity) {
@@ -117,6 +122,7 @@ class EntityManager {
 
     public clearBullets(): void {
         this.bullets = []
+        this.enemyBullets = []
     }
 }
 

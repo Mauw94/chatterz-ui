@@ -24,7 +24,7 @@ class EnemyController {
     private gameData: GameData
 
     private enemyRows = []
-    private occupiedPoints: [number, number][]
+    private xSpawns: number[]
 
     constructor(gameData: GameData) {
         this.gameData = gameData
@@ -35,14 +35,14 @@ class EnemyController {
      * @param level 
      */
     public spawnEnemies(level: number) {
-        this.occupiedPoints = []
+        this.xSpawns = []
         const enemyMap = this.createEnemyMap(level, 0.5)
 
         enemyMap.forEach((row, rowIndex) => {
             this.enemyRows[rowIndex] = []
             row.forEach((enemyNumber, enemyIndex) => {
                 if (enemyNumber > 0) {
-                    const spawn = this.getSpawnPoint(rowIndex, enemyIndex)
+                    const spawn = this.getSpawnPoint(rowIndex)
                     const enemy = new Enemy(
                         enemyNumber,
                         spawn[0],
@@ -64,13 +64,12 @@ class EnemyController {
     }
 
     private modifyEnemyBasedOnlevel(enemy: Enemy, level: number): Enemy {
-        let shootIntervalMin = 500
-        let shootIntervalMax = 750
+        const shootIntervalMin = 250
+        let shootIntervalMax = 1000
         let speed = 15
 
         if (level % 3 === 0) {
-            shootIntervalMin = shootIntervalMin - (level * 15)
-            shootIntervalMax = shootIntervalMax - (level * 15)
+            shootIntervalMax = shootIntervalMax - (level * 20)
             speed = speed + (level * 2)
         }
 
@@ -102,16 +101,40 @@ class EnemyController {
         return (Math.floor(Math.random() * (max - min + 1) + min))
     }
 
-    private getSpawnPoint(rowIndex: number, enemyIndex: number): [number, number] {
-        let x = enemyIndex * this.random(50, 150)
+    private getSpawnPoint(rowIndex: number): [number, number] {
+        // TODO: spawn enemies across the whole x
+        // every x enemies spawn them a little further
+        // check if an x spawn (+width) doesn't overlap another spawn
+
+        const x = this.findXSpawnPoint()
+        const y = this.findYSpawnPoint(rowIndex, x)
+
+        this.xSpawns.push(x)
+
+        return [x, y]
+    }
+
+    private findXSpawnPoint(): number {
+        let x = this.random(0, this.gameData.screenWidth - 44)
+        for (let xi = 0; xi < this.xSpawns.length; xi++) {
+            if (x > this.xSpawns[xi] && x < (this.xSpawns[xi] + 44)) {
+                console.log("can not spawn on top of another enemy")
+                console.log([this.xSpawns[xi], this.xSpawns[xi] + 44])
+                return this.findXSpawnPoint()
+            }
+        }
+
+        return x
+    }
+
+    private findYSpawnPoint(rowIndex: number, x: number): number {
         let y = rowIndex * this.random(-75, -150)
 
-        if (x + 44 >= this.gameData.screenWidth) {
-            x = this.random(0, this.gameData.screenWidth - 44)
+        if (x % 2 === 0) {
             y -= 60
         }
 
-        return [x, y]
+        return y
     }
 }
 

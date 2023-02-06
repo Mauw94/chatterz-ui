@@ -49,8 +49,8 @@ class SpaceInvadersGame extends Game {
             this.isRoundOver = true
 
             // remove remaining bullets
-            const bullets = this.gameData.entityManager.getBullets()
-            bullets.forEach(b => this.gameData.entityManager.removeBullet(b))
+            const bullets = this.gameData.entityManager.getAllBulletsLeftOnScreen()
+            bullets.forEach(b => this.gameData.entityManager.removeEntity(b))
         }
     }
 
@@ -109,6 +109,7 @@ class SpaceInvadersGame extends Game {
         this.player.xPos = this.playerStartingPositions[0]
         this.player.yPos = this.playerStartingPositions[1]
 
+        this.gameData.entityManager.clearBullets()
         this.enemyController.spawnEnemies(this.level)
         const enemies = this.enemyController.enemies()
         enemies.forEach(e => this.gameData.entityManager.addEnemy(e))

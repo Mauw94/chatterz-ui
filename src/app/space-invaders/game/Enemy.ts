@@ -21,6 +21,7 @@ class Enemy extends Entity {
 
     public setup() {
         super.setup()
+        // TODO: move across x 
         let img = new Image()
         img.src = "./assets/space-invaders/images/enemy" + this.enemyType + ".png"
         this.sprite = new ImageSprite(img)
@@ -64,7 +65,6 @@ class Enemy extends Entity {
         }
 
         if (this.bulletShootIntervalMS <= 0) {
-            console.log("enemy shooting")
             const bullet = new EnemyBullet(this.xPos + this.width / 2, this.yPos + this.height, 250, "white")
             this.bulletShootIntervalMS = this.baseShootIntervalMS
             entityManager.addEnemyBullet(bullet)
