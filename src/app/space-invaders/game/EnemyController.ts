@@ -4,23 +4,6 @@ import Enemy from "./Enemy"
 // TODO: create unit tests for this 
 class EnemyController {
 
-    // TODO: generate enemymap for each level again
-    // private enemyMapEasiest = [
-    //     [1, 1],
-    //     [2]
-    // ]
-    // private enemyMapEasy = [
-    //     [1, 1, 1],
-    //     [1, 2, 1],
-    //     [3, 1, 1]
-    // ]
-    // private enemyMapModest = [
-    //     [1, 1, 1, 2, 1],
-    //     [1, 1, 1, 1, 3],
-    //     [1, 3, 3, 2, 3],
-    //     [1, 2, 2, 1, 1],
-    // ]
-
     private gameData: GameData
 
     private enemyRows = []
