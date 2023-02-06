@@ -1,12 +1,14 @@
 import Entity from "src/app/game-engine/engine/Entity";
 import ImageSprite from "src/app/game-engine/engine/ImageSprite";
 import { GameData } from "src/app/game-engine/engine/types";
+import Bullet from "./Bullet";
 
 class Enemy extends Entity {
 
     private sprite: ImageSprite
     private dieSound: HTMLAudioElement
     private enemyType: number
+    private bulletShootIntervalMS: number = 100
 
     constructor(enemyType: number, x: number, y: number) {
         super();
@@ -38,6 +40,8 @@ class Enemy extends Entity {
 
         this.velY = (this.speed * delta)
         this.yPos += this.velY
+
+        this.updateBullets(gameData)
     }
 
     public render(gameData: GameData): void {
@@ -48,6 +52,21 @@ class Enemy extends Entity {
         this.dieSound.volume = 0.1
         this.dieSound.currentTime = 0
         this.dieSound.play()
+    }
+
+    private updateBullets(gameData: GameData): void {
+        const { entityManager } = gameData
+
+        if (this.bulletShootIntervalMS > 0) {
+            this.bulletShootIntervalMS--
+        }
+
+        if (this.bulletShootIntervalMS <= 0) {
+            console.log("enemy shooting")
+            const bullet = new Bullet(this.xPos + this.width / 2, this.yPos + this.height, 250, "white")
+            this.bulletShootIntervalMS = 50
+            entityManager.addEnemyBullet(bullet)
+        }
     }
 }
 

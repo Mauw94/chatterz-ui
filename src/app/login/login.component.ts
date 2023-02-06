@@ -9,8 +9,9 @@ import { UserLoginInfo } from '../models/userLoginInfo';
 })
 export class LoginComponent {
 
-  username: string = ""
-  password: string = ""
+  public loginFailed: boolean = false
+  public username: string = ""
+  public password: string = ""
 
   constructor(
     private loginService: LoginService) {
@@ -25,8 +26,12 @@ export class LoginComponent {
           this.loginService.userSubject.next(res)
           this.loginService.isLoggedIn = true
           this.loginService.setCookie()
+          this.loginFailed = false
         },
-        error: (err) => console.error(err)
+        error: (err) => { 
+          this.loginFailed = true
+          console.error(err) 
+        }
       })
     }
   }

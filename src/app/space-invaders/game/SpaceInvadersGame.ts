@@ -18,7 +18,7 @@ class SpaceInvadersGame extends Game {
     }
 
     protected preload(): void {
-        this.enemyController = new EnemyController()
+        this.enemyController = new EnemyController(this.gameData)
         this.enemyController.spawnEnemies(this.level)
     }
 
@@ -105,7 +105,7 @@ class SpaceInvadersGame extends Game {
 
     private setupNextLevel() {
         this.level++
-        this.lives = 3
+        this.lives++
         this.isRoundOver = false
         this.player.xPos = this.playerStartingPositions[0]
         this.player.yPos = this.playerStartingPositions[1]

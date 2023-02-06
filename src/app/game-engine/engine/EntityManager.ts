@@ -7,6 +7,7 @@ class EntityManager {
     private players: Entity[] = []
     private objects: Entity[] = []
     private bullets: Entity[] = []
+    private enemyBullets: Entity[] = []
 
     public getEntities(): Entity[] {
         return this.entities
@@ -31,6 +32,21 @@ class EntityManager {
     public removeBullet(entity: Entity) {
         this.bullets = this.bullets.filter(b => b.id !== entity.id)
         this.removeEntity(entity)
+    }
+
+    public addEnemyBullet(entity: Entity) {
+        if (!entity.hasBeenSetup) {
+            entity.setup()
+        }
+        this.enemyBullets.push(entity)
+    }
+
+    public getEnemyBullets(): Entity[] {
+        return this.enemyBullets;
+    }
+
+    public removeEnemyBullet(entity: Entity) {
+        this.enemyBullets = this.enemyBullets.filter(x => x.id !== entity.id)
     }
 
     public addEnemy(enemy: Entity) {
