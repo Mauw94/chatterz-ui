@@ -8,7 +8,6 @@ import EnemyController from "./EnemyController";
 class SpaceInvadersGame extends Game {
 
     private level: number = 1
-    private lives: number = 3
     private playerStartingPositions = [260, 550]
     private player: Player
     private enemyController: EnemyController
@@ -70,7 +69,7 @@ class SpaceInvadersGame extends Game {
         enemies.forEach(e => {
             if (e.yPos + e.height >= this.gameData.screenHeight) {
                 this.gameData.entityManager.removeEnemy(e)
-                this.lives--
+                this.player.health--
             }
         })
     }
@@ -84,7 +83,7 @@ class SpaceInvadersGame extends Game {
             }
         }
 
-        if (this.lives <= 0) {
+        if (this.player.health <= 0) {
             this.isGameOver = true
         }
     }
@@ -92,7 +91,7 @@ class SpaceInvadersGame extends Game {
     protected render(): void {
         super.render()
         this.drawSmallText("Level: " + this.level, 0, 10, this.gameData.screenHeight - 10)
-        this.drawSmallText("Lives: " + this.lives, 0, this.gameData.screenWidth - 75, this.gameData.screenHeight - 10)
+        this.drawSmallText("Health: " + this.player.health, 0, this.gameData.screenWidth - 90, this.gameData.screenHeight - 10)
 
         if (this.isRoundOver && !this.isGameOver) {
             this.drawSmallText(
@@ -105,7 +104,7 @@ class SpaceInvadersGame extends Game {
 
     private setupNextLevel() {
         this.level++
-        this.lives++
+        this.player.health++
         this.isRoundOver = false
         this.player.xPos = this.playerStartingPositions[0]
         this.player.yPos = this.playerStartingPositions[1]

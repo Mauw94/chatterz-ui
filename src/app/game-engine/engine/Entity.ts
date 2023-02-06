@@ -7,9 +7,9 @@ abstract class Entity {
 
   public xPos: number = 0
   public yPos: number = 0
+  public speed: number = 0
   protected velX: number = 0
   protected velY: number = 0
-  protected speed: number = 0
   
   public width: number
   public height: number

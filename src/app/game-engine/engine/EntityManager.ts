@@ -39,6 +39,7 @@ class EntityManager {
             entity.setup()
         }
         this.enemyBullets.push(entity)
+        this.entities.push(entity)
     }
 
     public getEnemyBullets(): Entity[] {

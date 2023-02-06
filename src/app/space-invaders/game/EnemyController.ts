@@ -64,7 +64,19 @@ class EnemyController {
     }
 
     private modifyEnemyBasedOnlevel(enemy: Enemy, level: number): Enemy {
-        // enemy.stats * level or something
+        let shootIntervalMin = 500
+        let shootIntervalMax = 750
+        let speed = 15
+
+        if (level % 3 === 0) {
+            shootIntervalMin = shootIntervalMin - (level * 15)
+            shootIntervalMax = shootIntervalMax - (level * 15)
+            speed = speed + (level * 2)
+        }
+
+        enemy.setBulletShootInterval(this.random(shootIntervalMin, shootIntervalMax))
+        enemy.speed = speed
+
         return enemy
     }
 

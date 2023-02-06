@@ -5,11 +5,14 @@ import Bullet from "./Bullet";
 
 class Player extends Entity {
 
+    public health: number = 3
+    
     private sprite: ImageSprite
     private timeTillNextBulletAllowedMS = 10
+    private MAX_BULLETS = 5
 
     constructor(x: number, y: number) {
-        super()   
+        super()
         this.xPos = x
         this.yPos = y
     }
@@ -34,7 +37,7 @@ class Player extends Entity {
     public render(gameData: GameData): void {
         this.sprite.render(gameData, this.xPos, this.yPos, this.width, this.height)
     }
-    
+
     private updatePosition(gameData: GameData, delta: number) {
         const { keyListener } = gameData
 
@@ -78,7 +81,8 @@ class Player extends Entity {
         }
 
         if (keyListener.isKeyDown(" ")) {
-            if (this.timeTillNextBulletAllowedMS <= 0) {
+            if (this.timeTillNextBulletAllowedMS <= 0
+                && entityManager.getBullets().length < this.MAX_BULLETS) {
                 const bullet = new Bullet(this.xPos + this.width / 2, this.yPos, 300, "red")
                 this.timeTillNextBulletAllowedMS = 15
                 entityManager.addBullet(bullet)

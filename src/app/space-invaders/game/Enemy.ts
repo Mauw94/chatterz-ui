@@ -1,14 +1,16 @@
 import Entity from "src/app/game-engine/engine/Entity";
 import ImageSprite from "src/app/game-engine/engine/ImageSprite";
 import { GameData } from "src/app/game-engine/engine/types";
-import Bullet from "./Bullet";
+import EnemyBullet from "./EnemyBullet";
 
 class Enemy extends Entity {
 
+    public bulletShootIntervalMS: number
+
+    private baseShootIntervalMS: number
     private sprite: ImageSprite
     private dieSound: HTMLAudioElement
     private enemyType: number
-    private bulletShootIntervalMS: number = 100
 
     constructor(enemyType: number, x: number, y: number) {
         super();
@@ -28,11 +30,6 @@ class Enemy extends Entity {
         this.speed = 15
 
         this.dieSound = new Audio("./assets/space-invaders/sounds/enemy-death.wav")
-
-        // TODO: have enemy shoot at random intervals; depending on the level
-        // increase enemy speed, depending on level
-        // have some variation in the speed
-        // spawn enemies at n interval in a level
     }
 
     public update(gameData: GameData, delta: number) {
@@ -54,6 +51,11 @@ class Enemy extends Entity {
         this.dieSound.play()
     }
 
+    public setBulletShootInterval(interval: number) {
+        this.bulletShootIntervalMS = interval
+        this.baseShootIntervalMS = interval
+    }
+
     private updateBullets(gameData: GameData): void {
         const { entityManager } = gameData
 
@@ -63,8 +65,8 @@ class Enemy extends Entity {
 
         if (this.bulletShootIntervalMS <= 0) {
             console.log("enemy shooting")
-            const bullet = new Bullet(this.xPos + this.width / 2, this.yPos + this.height, 250, "white")
-            this.bulletShootIntervalMS = 50
+            const bullet = new EnemyBullet(this.xPos + this.width / 2, this.yPos + this.height, 250, "white")
+            this.bulletShootIntervalMS = this.baseShootIntervalMS
             entityManager.addEnemyBullet(bullet)
         }
     }
