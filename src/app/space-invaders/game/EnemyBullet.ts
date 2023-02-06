@@ -34,9 +34,10 @@ class EnemyBullet extends Entity {
 
         let collision = collisionHandler.checkCollisionWith(this, entityManager.getPlayers()) as Player
 
-        if (collision != null) {
+        if (collision != null && !collision.gotHit) {
             entityManager.removeEnemyBullet(this)
             collision.health--
+            collision.gotHit = true
         }
     }
 

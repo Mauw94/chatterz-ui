@@ -1,12 +1,7 @@
 --- SPACEINVADERS ---
-* create levels (endlessly generating)
--- with each level
-    * increase enemy count
-    * increase enemy dmg
-    * increase enemy movement speed
-    * etc
+* if player hit, flicker the player for 2 sec and become immune to dmg
+* increase enemy speed when level increases (ever 2 levels)
 
-* when all enemies are dead in a level -> show round won; clicking on start or next starts the next level
 
 * add comments to methods
 * change some lets into consts

@@ -6,10 +6,16 @@ import Bullet from "./Bullet";
 class Player extends Entity {
 
     public health: number = 3
-    
+    public gotHit: boolean = false
+
     private sprite: ImageSprite
     private timeTillNextBulletAllowedMS = 10
     private MAX_BULLETS = 5
+
+    private blinkTimeMS: number = 300
+    private currBlinkTimeMS: number
+    private minBlinkOpacity = 0.5
+    private hitTimeMS: number = 2000
 
     constructor(x: number, y: number) {
         super()
@@ -26,16 +32,36 @@ class Player extends Entity {
         this.width = 50
         this.height = 48
         this.speed = 175
+        this.currBlinkTimeMS = this.blinkTimeMS
     }
 
     public update(gameData: GameData, delta: number) {
         this.sprite.update(gameData, delta)
         this.updatePosition(gameData, delta)
         this.updateBullets(gameData, delta)
+
+        // TODO: refactor hit and opacity logic to game engine level
+        if (this.gotHit && this.hitTimeMS >= 0) {
+            this.hitTimeMS -= delta * 1000
+            this.currBlinkTimeMS -= delta * 1000
+            if (this.currBlinkTimeMS <= -this.blinkTimeMS) {
+                this.currBlinkTimeMS = this.blinkTimeMS
+            }
+
+            if (this.hitTimeMS <= 0) {
+                this.gotHit = false
+                this.hitTimeMS = 2000
+                this.currBlinkTimeMS = this.blinkTimeMS
+            }
+        }
     }
 
     public render(gameData: GameData): void {
-        this.sprite.render(gameData, this.xPos, this.yPos, this.width, this.height)
+        const opacityVariance = 1 - this.minBlinkOpacity
+        const opacityValue = (Math.abs(this.currBlinkTimeMS) / this.blinkTimeMS) * opacityVariance
+        const opacity = this.minBlinkOpacity + opacityValue
+
+        this.sprite.render(gameData, this.xPos, this.yPos, this.width, this.height, { opacity })
     }
 
     private updatePosition(gameData: GameData, delta: number) {
