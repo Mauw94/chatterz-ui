@@ -6,10 +6,10 @@ import Bullet from "./Bullet";
 class Player extends Entity {
 
     public health: number = 3
+    public readonly MAX_BULLETS = 3
 
     private sprite: ImageSprite
     private timeTillNextBulletAllowedMS = 10
-    private MAX_BULLETS = 3
 
     constructor(x: number, y: number) {
         super()

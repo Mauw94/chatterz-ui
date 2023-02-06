@@ -1,5 +1,4 @@
 --- SPACEINVADERS ---
-* if player hit, flicker the player for 2 sec and become immune to dmg
 * increase enemy speed when level increases (ever 2 levels)
 
 

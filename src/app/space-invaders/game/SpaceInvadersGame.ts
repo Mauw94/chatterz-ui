@@ -90,8 +90,13 @@ class SpaceInvadersGame extends Game {
 
     protected render(): void {
         super.render()
-        this.drawSmallText("Level: " + this.level, 0, 10, this.gameData.screenHeight - 10)
-        this.drawSmallText("Health: " + this.player.health, 0, this.gameData.screenWidth - 90, this.gameData.screenHeight - 10)
+        this.drawSmallText("Level: " + this.level, 0, 10, 20)
+        this.drawSmallText("Health: " + this.player.health, 0, this.gameData.screenWidth - 90, 20)
+        this.drawSmallText("Bullets: " +
+            (this.player.MAX_BULLETS - this.gameData.entityManager.getBullets().length) + "/" + this.player.MAX_BULLETS,
+            0,
+            this.gameData.screenWidth / 2 - 75,
+            20)
 
         if (this.isRoundOver && !this.isGameOver) {
             this.drawSmallText(

@@ -54,7 +54,6 @@ abstract class Entity {
 
   protected doFlinch(delta: number) {
     this.currBlinkTimeMS -= delta * 1000
-    console.log(this.currBlinkTimeMS)
     if (this.currBlinkTimeMS <= -this.blinkTimeMS) {
       this.currBlinkTimeMS = this.blinkTimeMS
     }
