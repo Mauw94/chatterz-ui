@@ -117,6 +117,7 @@ class EntityManager {
         this.players = []
         this.enemies = []
         this.bullets = []
+        this.enemyBullets = []
         this.objects = []
     }
 

@@ -1,6 +1,2 @@
 --- SPACEINVADERS ---
-* increase enemy speed when level increases (ever 2 levels)
-
-
-* add comments to methods
 * change some lets into consts

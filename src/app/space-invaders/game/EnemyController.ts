@@ -1,7 +1,6 @@
 import { GameData } from "src/app/game-engine/engine/types"
 import Enemy from "./Enemy"
 
-// TODO: create unit tests for this 
 class EnemyController {
 
     private gameData: GameData
@@ -49,15 +48,18 @@ class EnemyController {
     private modifyEnemyBasedOnlevel(enemy: Enemy, level: number): Enemy {
         const shootIntervalMin = 250
         let shootIntervalMax = 1000
-        let speed = 15
+        let speed = 30
 
         if (level % 3 === 0) {
-            shootIntervalMax = shootIntervalMax - (level * 20)
-            speed = speed + (level * 2)
+            shootIntervalMax -= (level * 20)
+        }
+
+        if (level % 2 === 0) {
+            speed += (level * 2)
         }
 
         enemy.setBulletShootInterval(this.random(shootIntervalMin, shootIntervalMax))
-        enemy.speed = speed
+        enemy.speed = this.random(speed / 2, speed)
 
         return enemy
     }
