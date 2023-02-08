@@ -1,3 +1,4 @@
+import CollisionBox from "src/app/game-engine/engine/collision/CollisionBox";
 import Entity from "../../game-engine/engine/Entity";
 import Sprite from "../../game-engine/engine/Sprite";
 import SpriteSheet from "../../game-engine/engine/SpriteSheet";
@@ -39,11 +40,19 @@ class Bomb extends Entity {
             this.exploded = true
         }
         if (this.exploded) {
+            // TODO: maybe itll be better if we moved this to a seperate file
+            // called bomb explosion or something
+            const collisionBox: CollisionBox = {
+                xPos: this.xPos - 48,
+                yPos: this.yPos,
+                width: this.explosionRectWidth,
+                height: this.explosionRectHeight
+            }
             const collisions = gameData.collisionHandler
                 .checkCollisionsWith(
-                    this.xPos - 48, this.yPos, this.explosionRectWidth, this.explosionRectHeight,
+                    collisionBox,
                     gameData.entityManager.getObjects())
-            
+
             collisions.forEach(collision => {
                 if (collision === this) return // do not remove self
                 gameData.collisionHandler.removeCollidable(collision.id)

@@ -14,7 +14,7 @@ class CollisionHandler {
   public removeCollidable(id: Symbol) {
     this.collidables = this.collidables.filter(c => c.id !== id)
   }
-  
+
   /**
    * Returns first entity object collides with.
    * @param object to check for collision
@@ -39,16 +39,16 @@ class CollisionHandler {
     return null
   }
 
-  public checkCollisionsWith(x: number, y: number, width: number, height: number, objects: Entity[]): Entity[] {
+  public checkCollisionsWith(box: CollisionBox, objects: Entity[]): Entity[] {
     let collisions: Entity[] = []
 
     for (let i = 0; i < objects.length; i++) {
       const sprite = objects[i]
       if (
-        x + width > sprite.xPos &&
-        x < sprite.xPos + sprite.width &&
-        y + height > sprite.yPos &&
-        y < sprite.yPos + sprite.height) {
+        box.xPos + box.width > sprite.xPos &&
+        box.xPos < sprite.xPos + sprite.width &&
+        box.yPos + box.height > sprite.yPos &&
+        box.yPos < sprite.yPos + sprite.height) {
         collisions.push(sprite)
       }
     }
