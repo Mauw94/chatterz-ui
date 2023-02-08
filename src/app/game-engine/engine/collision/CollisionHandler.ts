@@ -11,6 +11,10 @@ class CollisionHandler {
     this.collidables.push(collidable);
   }
 
+  public removeCollidable(id: Symbol) {
+    this.collidables = this.collidables.filter(c => c.id !== id)
+  }
+  
   /**
    * Returns first entity object collides with.
    * @param object to check for collision
@@ -19,7 +23,7 @@ class CollisionHandler {
    */
   public checkCollisionWith(object: Entity, objects: Entity[]): Entity {
     let collision: Entity
-    
+
     for (let i = 0; i < objects.length; i++) {
       const sprite = objects[i]
       if (
@@ -33,6 +37,23 @@ class CollisionHandler {
     }
 
     return null
+  }
+
+  public checkCollisionsWith(x: number, y: number, width: number, height: number, objects: Entity[]): Entity[] {
+    let collisions: Entity[] = []
+
+    for (let i = 0; i < objects.length; i++) {
+      const sprite = objects[i]
+      if (
+        x + width > sprite.xPos &&
+        x < sprite.xPos + sprite.width &&
+        y + height > sprite.yPos &&
+        y < sprite.yPos + sprite.height) {
+        collisions.push(sprite)
+      }
+    }
+
+    return collisions
   }
 
   public testMovement(driverBox: CollisionBox, xMovement: number, yMovement: number) {
@@ -57,8 +78,6 @@ class CollisionHandler {
     return collisions;
   }
 
-  // TODO: expand with bombs
-  // colliding with a bomb will push the bomb forward a little 
   private findCollision(driverBox: CollisionBox, brick: Collidable): null | Collision {
     const brickBox = brick.getCollisionBox();
 
