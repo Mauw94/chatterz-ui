@@ -11,12 +11,15 @@ class Enemy extends Entity {
     private sprite: ImageSprite
     private dieSound: HTMLAudioElement
     private enemyType: number
+    private bulletColor: string
 
     constructor(enemyType: number, x: number, y: number) {
         super();
         this.enemyType = enemyType
         this.xPos = x
         this.yPos = y
+
+        this.decideBulletColor()
     }
 
     public setup() {
@@ -65,9 +68,23 @@ class Enemy extends Entity {
         }
 
         if (this.bulletShootIntervalMS <= 0) {
-            const bullet = new EnemyBullet(this.xPos + this.width / 2, this.yPos + this.height, 250, "white")
+            const bullet = new EnemyBullet(
+                this.xPos + this.width / 2,
+                this.yPos + this.height,
+                250,
+                this.bulletColor)
             this.bulletShootIntervalMS = this.baseShootIntervalMS
             entityManager.addEnemyBullet(bullet)
+        }
+    }
+
+    private decideBulletColor(): void {
+        if (this.enemyType === 1) {
+            this.bulletColor = "orange"
+        } else if (this.enemyType === 2) {
+            this.bulletColor = "green"
+        } else {
+            this.bulletColor = "blue"
         }
     }
 }

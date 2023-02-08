@@ -100,8 +100,14 @@ class SpaceInvadersGame extends Game {
 
         if (this.isRoundOver && !this.isGameOver) {
             this.drawSmallText(
+                "Round won!",
+                50,
+                this.gameData.screenWidth / 2,
+                (this.gameData.screenHeight / 2) - 30)
+
+            this.drawSmallText(
                 "Press ENTER for the next level",
-                120,
+                150,
                 this.gameData.screenWidth / 2,
                 this.gameData.screenHeight / 2)
         }
