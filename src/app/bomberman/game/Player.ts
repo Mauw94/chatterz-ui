@@ -117,6 +117,12 @@ class Player extends Entity {
     }
   }
 
+  /**
+   * Get a clean X and Y value so a bomb will always be placed in the middle of a tile.
+   * @param currX 
+   * @param currY 
+   * @returns 
+   */
   private calculateCleanXAndY(currX: number, currY: number): [number, number] {
     const x = currX - (currX % 64)
     const y = currY - (currY % 64)
@@ -124,6 +130,12 @@ class Player extends Entity {
     return [x, y]
   }
 
+  /**
+   * Check if the bomb is placed on an empty tile and not overlapping with a brick/wall.
+   * @param param0 
+   * @param x_y 
+   * @returns 
+   */
   private checkValidLocation({ entityManager, collisionHandler }: GameData, x_y: [number, number]): boolean {
     const objects = entityManager.getObjects()
     const bombCollisionBox: CollisionBox = {
