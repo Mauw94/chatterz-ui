@@ -33,6 +33,9 @@ class Player extends Entity {
     this.width = 64
     this.height = 128
     this.speed = 150
+
+    this.xPos = 64 * 2
+    this.yPos = 65 * 2
   }
 
   public update(gameData: GameData, delta: number) {

@@ -1,2 +1,4 @@
 --- SPACEINVADERS ---
+
 * change some lets into consts
+* save high scores for players

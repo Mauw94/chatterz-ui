@@ -8,15 +8,18 @@ class TestBrick extends Entity implements Collidable {
 
   private sheet: SpriteSheet;
 
+  constructor(x: number, y: number) {
+    super()
+    this.xPos = x
+    this.yPos = y
+  }
+  
   public setup() {
     super.setup()
     let image = new Image()
     image.src = "./assets/bomberman/blocks.png"
     const img = image
     this.sheet = new SpriteSheet(img, 64, 64)
-
-    this.xPos = 128
-    this.yPos = 128
     this.width = 64
     this.height = 64
   }

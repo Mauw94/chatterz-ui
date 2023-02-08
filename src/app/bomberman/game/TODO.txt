@@ -1,4 +1,8 @@
 --- BOMBERMAN ---
+* create a world map and fill with bricks 
+    (like enemyMap for spaceinvaders)
+* target walls/bricks that would be remove after a bomb explodes
+
 * be able to push the bomb (direction which the player currently faces)
 * expand collidables with bombs as well
 * create explosion image when bombtimer runs
