@@ -7,7 +7,8 @@ import Range from "../../game-engine/engine/Range"
 import Entity from "../../game-engine/engine/Entity"
 import CollisionBox from "../../game-engine/engine/collision/CollisionBox"
 import Bomb from "./Bomb"
-import TestBrick from "./TestBrick"
+import Wall from "./Wall"
+import Brick from "./Brick"
 
 class Player extends Entity {
 
@@ -137,7 +138,10 @@ class Player extends Entity {
    * @returns 
    */
   private checkValidLocation({ entityManager, collisionHandler }: GameData, x_y: [number, number]): boolean {
-    const objects = entityManager.getObjects()
+    const bricks = entityManager.getObjects()
+    const walls = entityManager.getWalls()
+    const objects = [...bricks, ...walls]
+
     const bombCollisionBox: CollisionBox = {
       xPos: x_y[0],
       yPos: x_y[1],
@@ -146,7 +150,7 @@ class Player extends Entity {
     }
 
     for (let i = 0; i < objects.length; i++) {
-      if (objects[i] instanceof TestBrick) {
+      if (objects[i] instanceof Brick || objects[i] instanceof Wall) {
         if (collisionHandler.overlaps(bombCollisionBox, objects[i])) {
           return true
         }

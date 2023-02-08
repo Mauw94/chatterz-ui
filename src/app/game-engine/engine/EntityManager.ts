@@ -4,6 +4,7 @@ class EntityManager {
 
     private entities: Entity[] = []
     private backgrounds: Entity[] = []
+    private walls: Entity[] = []
     private enemies: Entity[] = []
     private players: Entity[] = []
     private objects: Entity[] = []
@@ -113,6 +114,23 @@ class EntityManager {
     public removeObject(entity: Entity) {
         this.objects = this.objects.filter(o => o.id !== entity.id)
         this.removeEntity(entity)
+    }
+
+    public addWall(entity: Entity) {
+        if (!entity.hasBeenSetup) {
+            entity.setup()
+        }
+        this.walls.push(entity)
+        this.entities.push(entity)
+    }
+
+    public removeWall(entity: Entity) {
+        this.walls = this.walls.filter(w => w.id !== entity.id)
+        this.removeEntity(entity)
+    }
+
+    public getWalls(): Entity[] {
+        return this.walls
     }
 
     public checkEnemies() {

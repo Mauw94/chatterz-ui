@@ -1,5 +1,6 @@
 import { GameData } from "src/app/game-engine/engine/types";
-import TestBrick from "./TestBrick";
+import Wall from "./Wall";
+import Brick from "./Brick";
 
 class GameFieldController {
 
@@ -9,14 +10,14 @@ class GameFieldController {
     private gameData: GameData
     private field = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1],
+        [1, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 1, 2, 2, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1],
+        [1, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 1, 2, 2, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ]
@@ -25,20 +26,26 @@ class GameFieldController {
         this.gameData = gameData
     }
 
-    public createPlayingField(): TestBrick[][] {
+    public createPlayingField(): [Wall[][], Brick[][]] {
         let bricks = []
+        let walls = []
 
         this.field.forEach((row, rowIndex) => {
+            walls[rowIndex] = []
             bricks[rowIndex] = []
             row.forEach((_, colIndex) => {
                 if (this.field[rowIndex][colIndex] === 1) {
-                    const brick = new TestBrick(colIndex * 64, rowIndex * 64)
+                    const wall = new Wall(colIndex * 64, rowIndex * 64)
+                    walls[rowIndex].push(wall)
+                }
+                else if (this.field[rowIndex][colIndex] === 2) {
+                    const brick = new Brick(colIndex * 64, rowIndex * 64)
                     bricks[rowIndex].push(brick)
                 }
             })
         })
 
-        return bricks
+        return [walls, bricks]
     }
 }
 

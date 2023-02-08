@@ -31,7 +31,16 @@ class BombermanGame extends Game {
   }
 
   private createPlayingField() {
-    const bricks = this.gameFieldController.createPlayingField()
+    const [walls, bricks] = this.gameFieldController.createPlayingField()
+
+    // add walls
+    for (let i = 0; i < walls.length; i++) {
+      for (let j = 0; j < walls[i].length; j++) {
+        this.addWall(walls[i][j])
+      }
+    }
+
+    // add bricks
     for (let i = 0; i < bricks.length; i++) {
       for (let j = 0; j < bricks[i].length; j++) {
         this.addObject(bricks[i][j])

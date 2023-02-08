@@ -4,7 +4,7 @@ import Entity from "../../game-engine/engine/Entity";
 import SpriteSheet from "../../game-engine/engine/SpriteSheet";
 import { GameData } from "../../game-engine/engine/types"
 
-class TestBrick extends Entity implements Collidable {
+class Wall extends Entity implements Collidable {
 
   private sheet: SpriteSheet;
 
@@ -13,7 +13,7 @@ class TestBrick extends Entity implements Collidable {
     this.xPos = x
     this.yPos = y
   }
-  
+
   public setup() {
     super.setup()
     let image = new Image()
@@ -39,4 +39,4 @@ class TestBrick extends Entity implements Collidable {
 
 }
 
-export default TestBrick;
+export default Wall;

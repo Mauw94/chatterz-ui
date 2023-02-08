@@ -100,8 +100,8 @@ class Bomb extends Entity {
         const { context } = gameData
         context.fillStyle = "red"
         context.fillRect(
-            explosion.xPos,
-            explosion.yPos,
+            explosion.xPos + 6,
+            explosion.yPos + 6,
             explosion.width,
             explosion.height
         )

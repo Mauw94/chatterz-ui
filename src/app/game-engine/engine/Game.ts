@@ -68,6 +68,17 @@ abstract class Game {
    * Add entity to entitymanager
    * @param entity 
    */
+  public addWall(entity: Entity) {
+    this.gameData.entityManager.addWall(entity)
+    if (this.isCollidable(entity)) {
+      this.gameData.collisionHandler.addCollidable(entity)
+    }
+  }
+
+  /**
+   * Add entity to entitymanager
+   * @param entity 
+   */
   public addEnemy(entity: Entity) {
     this.gameData.entityManager.addEnemy(entity)
     if (this.isCollidable(entity)) {
