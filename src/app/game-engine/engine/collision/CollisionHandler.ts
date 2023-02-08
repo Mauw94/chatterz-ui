@@ -39,6 +39,17 @@ class CollisionHandler {
     return null
   }
 
+  public overlaps(object: CollisionBox, check: Entity) {
+    if (
+      object.xPos + object.width > check.xPos &&
+      object.xPos < check.xPos + check.width &&
+      object.yPos + object.height > check.yPos &&
+      object.yPos < check.yPos + check.height) {
+      return true
+    }
+    return false
+  }
+
   public checkCollisionsWith(box: CollisionBox, objects: Entity[]): Entity[] {
     let collisions: Entity[] = []
 

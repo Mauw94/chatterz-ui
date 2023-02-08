@@ -12,8 +12,11 @@ class Bomb extends Entity {
     private timerBeforeExplodeMS: number
     private explosionTimeMS: number // TODO: only show explosion 0.5s and then remove bomb entity
 
-    private explosionRectWidth: number = 48 * 3
-    private explosionRectHeight: number = 48
+    private readonly explosionRectWidth: number = 48
+    private readonly explosionRectHeight: number = 48
+
+    private horizontalExplosionBox: CollisionBox
+    private verticalExplosionBox: CollisionBox
 
     constructor(xPos: number, yPos: number) {
         super()
@@ -23,6 +26,20 @@ class Bomb extends Entity {
         this.height = 48
         this.timerBeforeExplodeMS = 3000
         this.explosionTimeMS = 500
+
+        this.horizontalExplosionBox = {
+            xPos: this.xPos - 48,
+            yPos: this.yPos,
+            width: this.explosionRectWidth * 3,
+            height: this.explosionRectHeight
+        }
+
+        this.verticalExplosionBox = {
+            xPos: this.xPos,
+            yPos: this.yPos - 48,
+            width: this.explosionRectWidth,
+            height: this.explosionRectHeight * 3
+        }
     }
 
     public setup() {
@@ -42,16 +59,18 @@ class Bomb extends Entity {
         if (this.exploded) {
             // TODO: maybe itll be better if we moved this to a seperate file
             // called bomb explosion or something
-            const collisionBox: CollisionBox = {
-                xPos: this.xPos - 48,
-                yPos: this.yPos,
-                width: this.explosionRectWidth,
-                height: this.explosionRectHeight
-            }
-            const collisions = gameData.collisionHandler
+            let collisions: Entity[] = []
+
+            const horizontalCollisions = gameData.collisionHandler
                 .checkCollisionsWith(
-                    collisionBox,
+                    this.horizontalExplosionBox,
                     gameData.entityManager.getObjects())
+            const verticalCollisions = gameData.collisionHandler
+                .checkCollisionsWith(
+                    this.verticalExplosionBox,
+                    gameData.entityManager.getObjects())
+
+            collisions = [...horizontalCollisions, ...verticalCollisions]
 
             collisions.forEach(collision => {
                 if (collision === this) return // do not remove self
@@ -70,16 +89,22 @@ class Bomb extends Entity {
 
     public render(gameData: GameData): void {
         if (this.exploded) {
-            this.renderRect(gameData)
+            this.renderExplosionPart(gameData, this.horizontalExplosionBox)
+            this.renderExplosionPart(gameData, this.verticalExplosionBox)
         } else {
             this.sprite.render(gameData, this.xPos, this.yPos, this.width, this.height, { opacity: this.calculateOpacity() })
         }
     }
 
-    private renderRect(gameData: GameData): void {
+    private renderExplosionPart(gameData: GameData, explosion: CollisionBox): void {
         const { context } = gameData
         context.fillStyle = "red"
-        context.fillRect(this.xPos - 48, this.yPos, this.explosionRectWidth, this.explosionRectHeight)
+        context.fillRect(
+            explosion.xPos,
+            explosion.yPos,
+            explosion.width,
+            explosion.height
+        )
     }
 }
 

@@ -1,0 +1,1 @@
+* make sure a game gets completely disposed of

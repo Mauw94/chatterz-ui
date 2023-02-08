@@ -1,7 +1,6 @@
 --- BOMBERMAN ---
-* create a world map and fill with bricks 
-    (like enemyMap for spaceinvaders)
-* target walls/bricks that would be remove after a bomb explodes
+* when droppping a bomb,place it in the middle of a tile
+     so it can not overlap tiles and collide with 2 at the same time
 
 * be able to push the bomb (direction which the player currently faces)
 * expand collidables with bombs as well

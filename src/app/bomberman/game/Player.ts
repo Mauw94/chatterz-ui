@@ -7,6 +7,7 @@ import Range from "../../game-engine/engine/Range"
 import Entity from "../../game-engine/engine/Entity"
 import CollisionBox from "../../game-engine/engine/collision/CollisionBox"
 import Bomb from "./Bomb"
+import TestBrick from "./TestBrick"
 
 class Player extends Entity {
 
@@ -106,10 +107,41 @@ class Player extends Entity {
 
     // keydown " " = SPACEBAR
     if (gameData.keyListener.isKeyDown(" ") && this.currBombCooldownMS <= 0) {
-      const bomb = new Bomb(this.xPos + (this.width / 2) - 24, this.yPos + this.height - 48)
-      gameData.entityManager.addObject(bomb)
-      this.currBombCooldownMS = this.bombCooldownMS
+      const x_y = this.calculateCleanXAndY(this.xPos + (this.width / 2), this.yPos + this.height)
+      const overlap = this.checkValidLocation(gameData, x_y)
+      if (!overlap) {
+        const bomb = new Bomb(x_y[0], x_y[1])
+        gameData.entityManager.addObject(bomb)
+        this.currBombCooldownMS = this.bombCooldownMS
+      }
     }
+  }
+
+  private calculateCleanXAndY(currX: number, currY: number): [number, number] {
+    const x = currX - (currX % 64)
+    const y = currY - (currY % 64)
+
+    return [x, y]
+  }
+
+  private checkValidLocation({ entityManager, collisionHandler }: GameData, x_y: [number, number]): boolean {
+    const objects = entityManager.getObjects()
+    const bombCollisionBox: CollisionBox = {
+      xPos: x_y[0],
+      yPos: x_y[1],
+      width: 48,
+      height: 48
+    }
+
+    for (let i = 0; i < objects.length; i++) {
+      if (objects[i] instanceof TestBrick) {
+        if (collisionHandler.overlaps(bombCollisionBox, objects[i])) {
+          return true
+        }
+      }
+    }
+
+    return false
   }
 }
 
