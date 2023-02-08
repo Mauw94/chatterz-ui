@@ -3,6 +3,7 @@ import Entity from "./Entity";
 class EntityManager {
 
     private entities: Entity[] = []
+    private backgrounds: Entity[] = []
     private enemies: Entity[] = []
     private players: Entity[] = []
     private objects: Entity[] = []
@@ -87,6 +88,14 @@ class EntityManager {
     public removePlayer(entity: Entity) {
         this.players = this.players.filter(p => p.id !== entity.id)
         this.removeEntity(entity)
+    }
+
+    public addBackground(entity: Entity) {
+        if (!entity.hasBeenSetup) {
+            entity.setup()
+        }
+        this.backgrounds.push(entity)
+        this.entities.push(entity)
     }
 
     public addObject(entity: Entity) {

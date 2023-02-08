@@ -17,7 +17,7 @@ class BombermanGame extends Game {
   }
 
   protected setup() {
-    this.addObject(new GameMap(this.gameData.screenWidth, this.gameData.screenHeight))
+    this.addBackground(new GameMap(this.gameData.screenWidth, this.gameData.screenHeight))
     this.createPlayingField()
     this.addPlayer(new Player())
   }

@@ -86,6 +86,14 @@ abstract class Game {
     }
   }
 
+  /**
+   * Add background
+   * @param entity 
+   */
+  public addBackground(entity: Entity) {
+    this.gameData.entityManager.addBackground(entity)
+  }
+
   protected abstract preload(): void
   protected abstract setup(): void
   protected abstract setupEntities(): void
