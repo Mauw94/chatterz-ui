@@ -72,6 +72,8 @@ class SpaceInvadersGame extends Game {
                 this.player.health--
             }
         })
+
+        // TODO: game over and we safe our score in the backend
     }
 
     protected update(delta: number): void {
