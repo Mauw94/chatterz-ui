@@ -1,2 +1,3 @@
 * make sure a game gets completely disposed of
 * add caching
+* add battleships
