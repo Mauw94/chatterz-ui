@@ -17,11 +17,7 @@ class BattleShipsGame extends Game {
     }
 
     protected preload(): void {
-        // TODO: add option in ship in which direction to draw it
-        // horizontal or vertical
-        // check if total length or width of ship is within canvas bounds
-        // cannot draw other ships on top of already drawn ships
-        this.shipController = new ShipController(this.gameData)
+        this.shipController = new ShipController(this.gameData, this.targetWidth, this.targetHeight)
     }
 
     protected setup(): void {
@@ -48,8 +44,15 @@ class BattleShipsGame extends Game {
 
     private targetArea(pos: [number, number]): void {
         const { context } = this.gameData
-        context.fillStyle = "red"
+
         pos = Utils.alignXAndY(pos, this.targetWidth, this.targetHeight)
+        const shipPositions = this.shipController.getShipPositions()
+
+        if (shipPositions.find(x => x[0] === pos[0] && x[1] === pos[1])) {
+            context.fillStyle = "red"
+        } else {
+            context.fillStyle = "yellow"
+        }
         context.fillRect(pos[0], pos[1], this.targetWidth, this.targetHeight)
     }
 }
