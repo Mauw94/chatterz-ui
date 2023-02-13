@@ -1,1 +1,1 @@
-* clicking on the canvas creates a red rectangle (40x40)
+* place random ships on the canvas

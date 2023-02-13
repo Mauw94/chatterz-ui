@@ -1,8 +1,13 @@
 import Game from "src/app/game-engine/engine/Game";
+import ShipController from "./ShipController";
+import { Utils } from "./Utils";
 
 class BattleShipsGame extends Game {
 
     public isPlayerTurn: boolean = false
+
+    private shipController: ShipController
+    private shipsSetup: boolean = false
 
     private targetWidth: number = 20
     private targetHeight: number = 20
@@ -12,7 +17,11 @@ class BattleShipsGame extends Game {
     }
 
     protected preload(): void {
-
+        // TODO: add option in ship in which direction to draw it
+        // horizontal or vertical
+        // check if total length or width of ship is within canvas bounds
+        // cannot draw other ships on top of already drawn ships
+        this.shipController = new ShipController(this.gameData)
     }
 
     protected setup(): void {
@@ -29,30 +38,20 @@ class BattleShipsGame extends Game {
         }
     }
 
+    protected render(): void {
+        super.render()
+        if (!this.shipsSetup) {
+            this.shipController.placeShips()
+            console.log(this.shipController.getShips())
+            this.shipsSetup = true
+        }
+    }
+
     private targetArea(pos: [number, number]): void {
         const { context } = this.gameData
         context.fillStyle = "red"
-        pos = this.alignXAndY(pos)
+        pos = Utils.alignXAndY(pos, this.targetWidth, this.targetHeight)
         context.fillRect(pos[0], pos[1], this.targetWidth, this.targetHeight)
-    }
-
-    private alignXAndY(pos: [number, number]): [number, number] {
-        let offsetX = pos[0] % this.targetWidth
-        let offsetY = pos[1] % this.targetHeight
-
-        if (offsetX >= 10) {
-            pos[0] = pos[0] + this.targetWidth - offsetX
-        } else {
-            pos[0] = pos[0] - offsetX
-        }
-
-        if (offsetY >= 10) {
-            pos[1] = pos[1] + this.targetHeight - offsetY
-        } else {
-            pos[1] = pos[1] - offsetY
-        }
-
-        return [pos[0], pos[1]]
     }
 }
 
