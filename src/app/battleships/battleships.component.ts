@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import BattleShipsGame from './game/BattleShipsGame';
 
 @Component({
   selector: 'app-battleships',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./battleships.component.css']
 })
 export class BattleshipsComponent implements OnInit {
+
+  private game: BattleShipsGame
 
   constructor() { }
 
@@ -22,8 +25,9 @@ export class BattleshipsComponent implements OnInit {
 
     canvasEl.focus()
 
-    // this.game = new SpaceInvadersGame(canvasEl)
-    // this.game.run()
+    this.game = new BattleShipsGame(canvasEl)
+    this.game.run()
+    this.game.isPlayerTurn = true
   }
 
 }
