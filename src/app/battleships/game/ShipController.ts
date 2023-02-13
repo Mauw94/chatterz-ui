@@ -9,8 +9,48 @@ class ShipController {
     private targetHeight: number
 
     private gameData: GameData
-    private shipNames: string[] = ['Cruiser', 'Destroyer', 'Aircraft carrier', 'Frigate', 'Ironclad']
-    private ships: Ship[] = []
+    private ships: Ship[] = [
+        {
+            name: "Cruiser",
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+            length: 4
+        },
+        {
+            name: "Destroyer",
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+            length: 5
+        },
+        {
+            name: "Aircraft Carrier",
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+            length: 7
+        },
+        {
+            name: "Frigate",
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+            length: 3
+        },
+        {
+            name: "Ironclad",
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+            length: 4
+        },
+    ]
     private takenPositions: [number, number][] = []
 
     constructor(gameData: GameData, targetWidth: number, targetHeight: number) {
@@ -52,23 +92,16 @@ class ShipController {
         const maxX = this.gameData.screenWidth - this.targetWidth
         const maxY = this.gameData.screenHeight - this.targetHeight
 
-        this.shipNames.forEach(name => {
-            const { x_y, width, height } = this.decidedXAndY(maxX, maxY)
-
-            const ship: Ship = {
-                name: name,
-                x: x_y[0],
-                y: x_y[1],
-                width: width,
-                height: height
-            }
-
-            this.ships.push(ship)
+        this.ships.forEach(s => {
+            const { x_y, width, height } = this.decidedXAndY(maxX, maxY, s.length)
+            s.x = x_y[0]
+            s.y = x_y[1]
+            s.width = width
+            s.height = height
         })
     }
 
-    private decidedXAndY(maxX: number, maxY: number) {
-        const length = this.random(3, 5)
+    private decidedXAndY(maxX: number, maxY: number, length: number) {
         const direction = this.random(0, 1) === 1 ? ShipDirection.horizontal : ShipDirection.vertical
 
         let width = 0
@@ -90,7 +123,7 @@ class ShipController {
         const x_y = Utils.alignXAndY([x, y], this.targetWidth, this.targetHeight)
 
         if (this.takenPositions.some(pos => pos[0] === x_y[0] || pos[1] === x_y[1])) {
-            return this.decidedXAndY(maxX, maxY)
+            return this.decidedXAndY(maxX, maxY, length)
         }
 
         for (let x = x_y[0]; x <= x_y[0] + width; x += this.targetWidth) {

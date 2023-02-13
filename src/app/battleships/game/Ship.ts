@@ -4,4 +4,5 @@ export interface Ship {
     y: number
     width: number
     height: number
+    length: number
 }

@@ -10,8 +10,8 @@ class BattleShipsGame extends Game {
     private shipController: ShipController
     private shipsSetup: boolean = false
 
-    private targetWidth: number = 20
-    private targetHeight: number = 20
+    private targetWidth: number = 25
+    private targetHeight: number = 25
 
     constructor(canvasEl: HTMLCanvasElement, isPlayerTurn: boolean, isPlayerBoard: boolean) {
         super(canvasEl)
