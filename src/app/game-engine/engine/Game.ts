@@ -107,11 +107,21 @@ abstract class Game {
 
   protected abstract preload(): void
   protected abstract setup(): void
-  protected abstract setupEntities(): void
-  protected abstract restart(): void
   protected checkRoundOver(gameData: GameData): void { }
   protected checkGameOver(gameData: GameData): void { }
   protected checkIfPlayerIsAlive(gameData: GameData): void { }
+
+  protected restart(): void {
+    this.isGameOver = false
+    this.gameData.entityManager.clear()
+    this.preload()
+    this.setup()
+    this.setupEntities()
+  }
+
+  protected setupEntities(): void {
+    this.gameData.entityManager.getEntities().map(e => e.setup())
+  }
 
   /**
    * Update game every x delta cycle

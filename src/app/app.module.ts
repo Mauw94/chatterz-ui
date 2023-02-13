@@ -20,6 +20,7 @@ import { ContextMenuComponentComponent } from './context-menu-component/context-
 import { GameChatComponent } from './game-chat/game-chat.component';
 import { BombermanComponent } from './bomberman/bomberman.component';
 import { SpaceInvadersComponent } from './space-invaders/space-invaders.component';
+import { BattleshipsComponent } from './battleships/battleships.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SpaceInvadersComponent } from './space-invaders/space-invaders.componen
     ContextMenuComponentComponent,
     GameChatComponent,
     BombermanComponent,
-    SpaceInvadersComponent
+    SpaceInvadersComponent,
+    BattleshipsComponent
   ],
   imports: [
     BrowserModule,

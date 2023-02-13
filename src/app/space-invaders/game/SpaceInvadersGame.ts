@@ -31,18 +31,6 @@ class SpaceInvadersGame extends Game {
         enemies.forEach(e => this.gameData.entityManager.addEnemy(e))
     }
 
-    protected restart(): void {
-        this.isGameOver = false
-        this.gameData.entityManager.clear()
-        this.preload()
-        this.setup()
-        this.setupEntities()
-    }
-
-    protected setupEntities() {
-        this.gameData.entityManager.getEntities().map(e => e.setup())
-    }
-
     protected checkRoundOver(gameData: GameData): void {
         const { entityManager } = gameData
         if (entityManager.getEnemies().length === 0) {
