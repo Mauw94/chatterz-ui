@@ -19,6 +19,7 @@
                 <button (click)="login()" class="btn btn-black">Login</button>
                 <button class="btn btn-secondary">Register</button>
 
+                <p *ngIf="loggingIn">Logging in..</p>
                 <p *ngIf="loginFailed">Username or password is not correct, please try again.</p>
             </div>
         </div>

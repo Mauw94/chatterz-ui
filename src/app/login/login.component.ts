@@ -12,6 +12,7 @@ export class LoginComponent {
   public loginFailed: boolean = false
   public username: string = ""
   public password: string = ""
+  public loggingIn: boolean = false
 
   constructor(
     private loginService: LoginService) {
@@ -20,6 +21,7 @@ export class LoginComponent {
 
   login(): void {
     if (this.username && this.password) {
+      this.loggingIn = true
       this.loginService.login(this.username, this.password).subscribe({
         next: (res) => {
           this.loginService.user = this.newUserLoginInfo(res.id, res.userName, res.password, res.chatroomId)
@@ -29,6 +31,7 @@ export class LoginComponent {
           this.loginFailed = false
         },
         error: (err) => { 
+          this.loggingIn = false
           this.loginFailed = true
           console.error(err) 
         }
