@@ -73,8 +73,11 @@ class ShipController {
             return this.decidedXAndY(maxX, maxY)
         }
 
-        // TODO whole range from x till width/height of ship
-        this.takenPositions.push(x_y)
+        for (let x = x_y[0]; x <= x_y[0] + width; x++) {
+            for (let y = x_y[1]; y <= x_y[1] + height; y++) {
+                this.takenPositions.push([x, y])
+            }
+        }
 
         return { x_y, width, height }
     }

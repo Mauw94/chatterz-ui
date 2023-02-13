@@ -42,7 +42,6 @@ class BattleShipsGame extends Game {
         super.render()
         if (!this.shipsSetup) {
             this.shipController.placeShips()
-            console.log(this.shipController.getShips())
             this.shipsSetup = true
         }
     }
