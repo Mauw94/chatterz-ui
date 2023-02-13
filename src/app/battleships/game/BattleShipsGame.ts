@@ -5,6 +5,7 @@ import { Utils } from "./Utils";
 class BattleShipsGame extends Game {
 
     public isPlayerTurn: boolean = false
+    public isPlayerBoard: boolean = false
 
     private shipController: ShipController
     private shipsSetup: boolean = false
@@ -12,8 +13,10 @@ class BattleShipsGame extends Game {
     private targetWidth: number = 20
     private targetHeight: number = 20
 
-    constructor(canvasEl: HTMLCanvasElement) {
+    constructor(canvasEl: HTMLCanvasElement, isPlayerTurn: boolean, isPlayerBoard: boolean) {
         super(canvasEl)
+        this.isPlayerTurn = isPlayerTurn
+        this.isPlayerBoard = isPlayerBoard
     }
 
     protected preload(): void {
@@ -29,7 +32,7 @@ class BattleShipsGame extends Game {
     protected update(delta: number): void {
         super.update(delta)
         const { keyListener } = this.gameData
-        if (keyListener.isMouseDown() && this.isPlayerTurn) {
+        if (keyListener.isMouseDown() && this.isPlayerTurn && !this.isPlayerBoard) {
             this.targetArea(keyListener.getMousePos())
         }
     }
@@ -37,7 +40,7 @@ class BattleShipsGame extends Game {
     protected render(): void {
         super.render()
         if (!this.shipsSetup) {
-            this.shipController.placeShips()
+            this.shipController.placeShips(this.isPlayerBoard)
             this.shipsSetup = true
         }
     }

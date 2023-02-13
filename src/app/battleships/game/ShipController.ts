@@ -25,12 +25,14 @@ class ShipController {
         return this.ships
     }
 
-    public placeShips() {
+    public placeShips(isPlayerBoard: boolean) {
         if (this.ships.length === 0) return
         const { context } = this.gameData
         this.ships.forEach(s => {
-            context.fillStyle = "orange"
-            context.fillRect(s.x, s.y, s.width, s.height)
+            if (isPlayerBoard) {
+                context.fillStyle = "orange"
+                context.fillRect(s.x, s.y, s.width, s.height)
+            }
         })
     }
 

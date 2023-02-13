@@ -9,6 +9,7 @@ import BattleShipsGame from './game/BattleShipsGame';
 export class BattleshipsComponent implements OnInit {
 
   private game: BattleShipsGame
+  private game2: BattleShipsGame
 
   constructor() { }
 
@@ -23,11 +24,19 @@ export class BattleshipsComponent implements OnInit {
       return
     }
 
+    const canvasEl2 = document.getElementById("game-canvas2") as HTMLCanvasElement | undefined
+    if (canvasEl2 == null) {
+      console.log("couldn't find the canvas")
+      return
+    }
+
     canvasEl.focus()
 
-    this.game = new BattleShipsGame(canvasEl)
+    this.game = new BattleShipsGame(canvasEl, true, true)
     this.game.run()
-    this.game.isPlayerTurn = true
+
+    this.game2 = new BattleShipsGame(canvasEl2, true, false)
+    this.game2.run()
   }
 
 }
