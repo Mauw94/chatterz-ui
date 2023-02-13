@@ -9,9 +9,11 @@ class BattleShipsGame extends Game {
     protected preload(): void {
         
     }
-    
+
     protected setup(): void {
-        throw new Error("Method not implemented.");
+        const { context } = this.gameData
+        context.fillStyle = "blue"
+        context.fillRect(0, 0, this.gameData.screenWidth, this.gameData.screenHeight)
     }
 }
 

@@ -7,6 +7,7 @@ import { MainComponent } from './main/main.component';
 import { WordGuesserComponent } from './word-guesser/word-guesser.component';
 import { BombermanComponent } from './bomberman/bomberman.component';
 import { SpaceInvadersComponent } from './space-invaders/space-invaders.component';
+import { BattleshipsComponent } from './battleships/battleships.component';
 
 
 const routes: Routes = [
@@ -17,7 +18,8 @@ const routes: Routes = [
   { path: 'wordguesser', component: WordGuesserComponent, canActivate: [AuthGuard] },
   { path: 'wordguesser/:id', component: WordGuesserComponent, canActivate: [AuthGuard] },
   { path: 'bomberman', component: BombermanComponent, canActivate: [AuthGuard] },
-  { path: 'spaceinvaders', component: SpaceInvadersComponent, canActivate: [AuthGuard] }
+  { path: 'spaceinvaders', component: SpaceInvadersComponent, canActivate: [AuthGuard] },
+  { path: 'battleships', component: BattleshipsComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

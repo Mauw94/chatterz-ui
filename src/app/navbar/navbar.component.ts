@@ -81,4 +81,8 @@ export class NavbarComponent implements OnInit {
   launchSpaceinvaders(): void {
     this.router.navigate(['spaceinvaders'])
   }
+
+  launchBattleships(): void {
+    this.router.navigate(['battleships'])
+  }
 }
