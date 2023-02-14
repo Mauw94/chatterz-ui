@@ -102,7 +102,7 @@ class ShipController {
     }
 
     private decidedXAndY(maxX: number, maxY: number, length: number) {
-        const direction = this.random(0, 1) === 1 ? ShipDirection.horizontal : ShipDirection.vertical
+        const direction = Utils.random(0, 1) === 1 ? ShipDirection.horizontal : ShipDirection.vertical
 
         let width = 0
         let height = 0
@@ -118,8 +118,8 @@ class ShipController {
             height = length * this.targetHeight
         }
 
-        const x = this.random(0, maxX)
-        const y = this.random(0, maxY)
+        const x = Utils.random(0, maxX)
+        const y = Utils.random(0, maxY)
         const x_y = Utils.alignXAndY([x, y], this.targetWidth, this.targetHeight)
 
         if (this.takenPositions.some(pos => pos[0] === x_y[0] || pos[1] === x_y[1])) {
@@ -133,10 +133,6 @@ class ShipController {
         }
 
         return { x_y, width, height }
-    }
-
-    private random(min: number, max: number) {
-        return (Math.floor(Math.random() * (max - min + 1) + min))
     }
 
 }

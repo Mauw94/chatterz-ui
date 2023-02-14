@@ -13,6 +13,8 @@ class BattleShipsGame extends Game {
     private targetWidth: number = 25
     private targetHeight: number = 25
 
+    private targettedAreas: [number, number][] = []
+
     constructor(canvasEl: HTMLCanvasElement, isPlayerTurn: boolean, isPlayerBoard: boolean) {
         super(canvasEl)
         this.isPlayerTurn = isPlayerTurn
@@ -33,7 +35,8 @@ class BattleShipsGame extends Game {
         super.update(delta)
         const { keyListener } = this.gameData
         if (keyListener.isMouseDown() && this.isPlayerTurn && !this.isPlayerBoard) {
-            this.targetArea(keyListener.getMousePos())
+            const pos = Utils.alignXAndY(keyListener.getMousePos(), this.targetWidth, this.targetHeight)
+            this.targetArea(pos)
         }
     }
 
@@ -47,8 +50,6 @@ class BattleShipsGame extends Game {
 
     private targetArea(pos: [number, number]): void {
         const { context } = this.gameData
-
-        pos = Utils.alignXAndY(pos, this.targetWidth, this.targetHeight)
         const shipPositions = this.shipController.getShipPositions()
 
         if (shipPositions.find(x => x[0] === pos[0] && x[1] === pos[1])) {
@@ -57,6 +58,20 @@ class BattleShipsGame extends Game {
             context.fillStyle = "yellow"
         }
         context.fillRect(pos[0], pos[1], this.targetWidth, this.targetHeight)
+    }
+
+    private targetRandomXAndY() {
+        const x = Utils.random(0, this.gameData.screenWidth)
+        const y = Utils.random(0, this.gameData.screenHeight)
+        const pos = Utils.alignXAndY([x, y], this.targetWidth, this.targetHeight)
+
+        if (this.targettedAreas.find(t => t[0] === pos[0] && t[1] === pos[1])) {
+            return this.targetRandomXAndY()
+        }
+
+        this.targettedAreas.push(pos)
+
+        return pos
     }
 }
 

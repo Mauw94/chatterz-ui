@@ -31,4 +31,15 @@ export class Utils {
 
         return [pos[0], pos[1]]
     }
+
+    /**
+     * Get random number between min and max including.
+     * @param min 
+     * @param max 
+     * @returns 
+     */
+    public static random(min: number, max: number) {
+        return (Math.floor(Math.random() * (max - min + 1) + min))
+    }
+
 }
