@@ -88,6 +88,10 @@ class ShipController {
         return positions
     }
 
+    /**
+     * Place ships on a random position on the canvas. 
+     * Ships cannot overlap.
+     */
     private setRandomShipPositions() {
         const maxX = this.gameData.screenWidth - this.targetWidth
         const maxY = this.gameData.screenHeight - this.targetHeight
@@ -101,6 +105,14 @@ class ShipController {
         })
     }
 
+    /**
+     * Find X and Y coordinate for a ship. 
+     * Cannot overlap on another ship position.
+     * @param maxX 
+     * @param maxY 
+     * @param length 
+     * @returns 
+     */
     private decidedXAndY(maxX: number, maxY: number, length: number) {
         const direction = Utils.random(0, 1) === 1 ? ShipDirection.horizontal : ShipDirection.vertical
 
