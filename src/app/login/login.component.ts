@@ -30,10 +30,10 @@ export class LoginComponent {
           this.loginService.setCookie()
           this.loginFailed = false
         },
-        error: (err) => { 
+        error: (err) => {
           this.loggingIn = false
           this.loginFailed = true
-          console.error(err) 
+          console.error(err)
         }
       })
     }

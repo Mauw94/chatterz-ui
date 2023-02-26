@@ -21,6 +21,7 @@ import { GameChatComponent } from './game-chat/game-chat.component';
 import { BombermanComponent } from './bomberman/bomberman.component';
 import { SpaceInvadersComponent } from './space-invaders/space-invaders.component';
 import { BattleshipsComponent } from './battleships/battleships.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { BattleshipsComponent } from './battleships/battleships.component';
     GameChatComponent,
     BombermanComponent,
     SpaceInvadersComponent,
-    BattleshipsComponent
+    BattleshipsComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

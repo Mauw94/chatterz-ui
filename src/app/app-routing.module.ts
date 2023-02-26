@@ -8,11 +8,13 @@ import { WordGuesserComponent } from './word-guesser/word-guesser.component';
 import { BombermanComponent } from './bomberman/bomberman.component';
 import { SpaceInvadersComponent } from './space-invaders/space-invaders.component';
 import { BattleshipsComponent } from './battleships/battleships.component';
+import { RegisterComponent } from './register/register.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'chat', component: ChatComponent, canActivate: [AuthGuard] },
   { path: 'main', component: MainComponent, canActivate: [AuthGuard] },
   { path: 'wordguesser', component: WordGuesserComponent, canActivate: [AuthGuard] },
