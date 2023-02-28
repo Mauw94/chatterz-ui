@@ -23,6 +23,7 @@
     "@microsoft/signalr-protocol-msgpack": "^7.0.2",
     "@ng-bootstrap/ng-bootstrap": "^12.1.2",
     "@popperjs/core": "^2.10.2",
+    "angular-device-information": "^1.0.8",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.3",
     "ngx-cookie-service": "^14.0.1",

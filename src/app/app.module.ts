@@ -23,6 +23,7 @@ import { SpaceInvadersComponent } from './space-invaders/space-invaders.componen
 import { BattleshipsComponent } from './battleships/battleships.component';
 import { RegisterComponent } from './register/register.component';
 import { AlienizationComponent } from './alienization/alienization.component';
+import { AngularDeviceInformationService } from 'angular-device-information';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,7 @@ import { AlienizationComponent } from './alienization/alienization.component';
     NgbModule,
     ReactiveFormsModule,
   ],
-  providers: [AuthGuard, CookieService, DatePipe],
+  providers: [AuthGuard, CookieService, DatePipe, AngularDeviceInformationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

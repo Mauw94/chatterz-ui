@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import BattleShipsGame from './game/BattleShipsGame';
+import { AngularDeviceInformationService } from 'angular-device-information';
 
 @Component({
   selector: 'app-battleships',
@@ -13,7 +14,7 @@ export class BattleshipsComponent implements OnInit {
   private playerCanvas: HTMLCanvasElement
   private opponentCanvas: HTMLCanvasElement
 
-  constructor() { }
+  constructor(private deviceInformationService: AngularDeviceInformationService) { }
 
   ngOnInit(): void {
     this.playerCanvas = document.getElementById("game-canvas") as HTMLCanvasElement | undefined
@@ -38,16 +39,18 @@ export class BattleshipsComponent implements OnInit {
   }
 
   private start(): void {
-    this.opponentCanvas.focus()
+    let greaterOffset = false
+    if (this.deviceInformationService.getDeviceInfo().os.includes("Mac OS")) {
+      greaterOffset = true
+    }
 
+    this.opponentCanvas.focus()
     this.opponentCanvas.addEventListener("mousedown", e => {
-      // e.preventDefault()
       if (this.playerTurn) {
-        this.game.targetArea(this.opponentCanvas, [e.offsetX - 10, e.offsetY - 10])
+        const mousePos = greaterOffset ? [e.offsetX - 15, e.offsetY - 15] : [e.offsetX - 10, e.offsetY - 10]
+        this.game.targetArea(this.opponentCanvas, [mousePos[0], mousePos[1]])
         this.playerTurn = !this.playerTurn
-        console.log("computer's turn")
         setTimeout(() => {
-          console.log("computer plays")
           const pos = this.game.targetRandomXAndY(this.playerCanvas)
           this.game.targetArea(this.playerCanvas, pos)
           this.playerTurn = !this.playerTurn
