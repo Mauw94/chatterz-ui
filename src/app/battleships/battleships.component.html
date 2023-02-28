@@ -1,4 +1,6 @@
 <div class="row">
+    <h3 *ngIf="playerTurn">Your turn</h3>
+    <h3 *ngIf="!playerTurn">Opponent's turn</h3>
     <div class="col-md-6">
         <h4>Player</h4>
         <hr>
