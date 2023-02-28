@@ -1,4 +1,3 @@
-import { GameData } from "src/app/game-engine/engine/types";
 import { Ship } from "./Ship";
 import { ShipDirection } from "./ShipDirectionEnum";
 import { Utils } from "./Utils";
@@ -8,7 +7,6 @@ class ShipController {
     private targetWidth: number
     private targetHeight: number
 
-    private gameData: GameData
     private ships: Ship[] = [
         {
             name: "Cruiser",
@@ -53,26 +51,23 @@ class ShipController {
     ]
     private takenPositions: [number, number][] = []
 
-    constructor(gameData: GameData, targetWidth: number, targetHeight: number) {
-        this.gameData = gameData
+    constructor(canvasWidth: number, canvasHeight: number, targetWidth: number, targetHeight: number) {
         this.targetWidth = targetWidth
         this.targetHeight = targetHeight
 
-        this.setRandomShipPositions()
+        this.setRandomShipPositions(canvasWidth, canvasHeight)
     }
 
     public getShips() {
         return this.ships
     }
 
-    public placeShips(isPlayerBoard: boolean) {
+    public placeShips(canvasEl: HTMLCanvasElement) {
         if (this.ships.length === 0) return
-        const { context } = this.gameData
         this.ships.forEach(s => {
-            if (isPlayerBoard) {
-                context.fillStyle = "orange"
-                context.fillRect(s.x, s.y, s.width, s.height)
-            }
+            const context = canvasEl.getContext("2d")
+            context.fillStyle = "orange"
+            context.fillRect(s.x, s.y, s.width, s.height)
         })
     }
 
@@ -92,12 +87,12 @@ class ShipController {
      * Place ships on a random position on the canvas. 
      * Ships cannot overlap.
      */
-    private setRandomShipPositions() {
-        const maxX = this.gameData.screenWidth - this.targetWidth
-        const maxY = this.gameData.screenHeight - this.targetHeight
+    private setRandomShipPositions(canvasWidth: number, canvasHeight: number) {
+        const maxX = canvasWidth - this.targetWidth
+        const maxY = canvasHeight - this.targetHeight
 
         this.ships.forEach(s => {
-            const { x_y, width, height } = this.decidedXAndY(maxX, maxY, s.length)
+            const { x_y, width, height } = this.decidedXAndY(canvasWidth, canvasHeight, maxX, maxY, s.length)
             s.x = x_y[0]
             s.y = x_y[1]
             s.width = width
@@ -113,19 +108,19 @@ class ShipController {
      * @param length 
      * @returns 
      */
-    private decidedXAndY(maxX: number, maxY: number, length: number) {
+    private decidedXAndY(canvasWidth: number, canvasHeight: number, maxX: number, maxY: number, length: number) {
         const direction = Utils.random(0, 1) === 1 ? ShipDirection.horizontal : ShipDirection.vertical
 
         let width = 0
         let height = 0
 
         if (direction === ShipDirection.horizontal) {
-            maxX = this.gameData.screenWidth - (length * this.targetWidth)
+            maxX = canvasWidth - (length * this.targetWidth)
             width = length * this.targetWidth
             height = this.targetHeight
         }
         else {
-            maxY = this.gameData.screenWidth - (length * this.targetHeight)
+            maxY = canvasHeight - (length * this.targetHeight)
             width = this.targetWidth
             height = length * this.targetHeight
         }
@@ -135,7 +130,7 @@ class ShipController {
         const x_y = Utils.alignXAndY([x, y], this.targetWidth, this.targetHeight)
 
         if (this.takenPositions.some(pos => pos[0] === x_y[0] || pos[1] === x_y[1])) {
-            return this.decidedXAndY(maxX, maxY, length)
+            return this.decidedXAndY(canvasWidth, canvasHeight, maxX, maxY, length)
         }
 
         for (let x = x_y[0]; x <= x_y[0] + width; x += this.targetWidth) {
