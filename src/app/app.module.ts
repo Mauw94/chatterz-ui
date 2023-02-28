@@ -22,6 +22,7 @@ import { BombermanComponent } from './bomberman/bomberman.component';
 import { SpaceInvadersComponent } from './space-invaders/space-invaders.component';
 import { BattleshipsComponent } from './battleships/battleships.component';
 import { RegisterComponent } from './register/register.component';
+import { AlienizationComponent } from './alienization/alienization.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { RegisterComponent } from './register/register.component';
     BombermanComponent,
     SpaceInvadersComponent,
     BattleshipsComponent,
-    RegisterComponent
+    RegisterComponent,
+    AlienizationComponent
   ],
   imports: [
     BrowserModule,
