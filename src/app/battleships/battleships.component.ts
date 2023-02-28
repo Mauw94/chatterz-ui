@@ -33,10 +33,6 @@ export class BattleshipsComponent implements OnInit {
     canvasEl.focus()
 
     this.game = new BattleShipsGame(canvasEl, true, true)
-    this.game.run()
-
-    this.game2 = new BattleShipsGame(canvasEl2, true, false)
-    this.game2.run()
   }
 
 }
