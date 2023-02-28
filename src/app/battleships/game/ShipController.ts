@@ -62,7 +62,7 @@ class ShipController {
         return this.ships
     }
 
-    public showwShipsOnBoard(canvasEl: HTMLCanvasElement) {
+    public showShipsOnBoard(canvasEl: HTMLCanvasElement) {
         if (this.ships.length === 0) return
         this.ships.forEach(s => {
             const context = canvasEl.getContext("2d")

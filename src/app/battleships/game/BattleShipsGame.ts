@@ -19,7 +19,7 @@ class BattleShipsGame {
         const context = canvas.getContext("2d")
         context.fillStyle = "lightblue"
         context.fillRect(0, 0, canvas.width, canvas.height)
-        this.shipControllerPlayer.showwShipsOnBoard(canvas)
+        this.shipControllerPlayer.showShipsOnBoard(canvas)
     }
 
     public setupOpponentBoard(canvas: HTMLCanvasElement): void {
