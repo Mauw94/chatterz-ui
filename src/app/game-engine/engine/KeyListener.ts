@@ -15,7 +15,6 @@ class KeyListener {
       this.keyStates[e.key] = false
     })
     canvasEl.addEventListener("mousedown", e => {
-      console.log("click")
       e.preventDefault()
       this.mousePos = [e.offsetX - 10, e.offsetY - 10]
       this.mouseDown = true

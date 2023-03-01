@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import SpaceInvadersGame from './game/SpaceInvadersGame';
+import { SpaceInvadersService } from 'src/services/spaceinvaders.service';
+import { LoginService } from 'src/services/login.service';
 
 @Component({
   selector: 'app-space-invaders',
@@ -9,12 +11,18 @@ import SpaceInvadersGame from './game/SpaceInvadersGame';
 export class SpaceInvadersComponent implements OnInit, OnDestroy {
 
   private game: SpaceInvadersGame
+  private gameId: number
 
-  constructor() { }
+  constructor(private spaceinvadersService: SpaceInvadersService, private loginService: LoginService) { }
 
   ngOnInit(): void {
-    this.start()
-    // TODO: do we want a chatroom here?
+    this.spaceinvadersService.startGame(this.loginService.user.Id).subscribe({
+      next: (res) => {
+        this.gameId = res
+        this.start()
+      },
+      error: (err) => console.error(err)
+    })
   }
 
   ngOnDestroy(): void {
@@ -33,7 +41,7 @@ export class SpaceInvadersComponent implements OnInit, OnDestroy {
 
     canvasEl.focus()
 
-    this.game = new SpaceInvadersGame(canvasEl)
+    this.game = new SpaceInvadersGame(canvasEl, this.spaceinvadersService, this.gameId)
     this.game.run()
   }
 }

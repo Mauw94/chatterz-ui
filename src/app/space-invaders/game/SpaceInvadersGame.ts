@@ -3,6 +3,7 @@ import { GameData } from "src/app/game-engine/engine/types";
 import GameMap from "./GameMap";
 import Player from "./Player";
 import EnemyController from "./EnemyController";
+import { SpaceInvadersService } from "src/services/spaceinvaders.service";
 
 
 class SpaceInvadersGame extends Game {
@@ -11,14 +12,25 @@ class SpaceInvadersGame extends Game {
     private playerStartingPositions = [260, 550]
     private player: Player
     private enemyController: EnemyController
+    private highscore: number
+    private spaceinvadersService: SpaceInvadersService
+    private gameId: number
+    private canSaveScore: boolean
 
-    constructor(canvasEl: HTMLCanvasElement) {
+    constructor(canvasEl: HTMLCanvasElement, spaceinvadersService: SpaceInvadersService, gameId: number) {
         super(canvasEl);
+        this.spaceinvadersService = spaceinvadersService
+        this.gameId = gameId
     }
 
     protected preload(): void {
+        this.spaceinvadersService.highScore().subscribe((highscore) => {
+            this.highscore = highscore
+            console.log(highscore) // TODO: create a scoreboard to display this
+        })
         this.enemyController = new EnemyController(this.gameData)
         this.enemyController.spawnEnemies(this.level)
+        this.canSaveScore = true
     }
 
     protected setup(): void {
@@ -51,6 +63,7 @@ class SpaceInvadersGame extends Game {
             const collision = collisionHandler.checkCollisionWith(p, enemies)
             if (collision != null) {
                 this.isGameOver = true
+                this.saveScore()
             }
         })
 
@@ -60,8 +73,6 @@ class SpaceInvadersGame extends Game {
                 this.player.health--
             }
         })
-
-        // TODO: game over and we safe our score in the backend
     }
 
     protected update(delta: number): void {
@@ -75,6 +86,7 @@ class SpaceInvadersGame extends Game {
 
         if (this.player.health <= 0) {
             this.isGameOver = true
+            this.saveScore()
         }
     }
 
@@ -114,6 +126,17 @@ class SpaceInvadersGame extends Game {
         this.enemyController.spawnEnemies(this.level)
         const enemies = this.enemyController.enemies()
         enemies.forEach(e => this.gameData.entityManager.addEnemy(e))
+    }
+
+    private saveScore() {
+        if (this.canSaveScore) {
+            this.spaceinvadersService.saveScore(this.gameId, 5).subscribe({
+                next: () => {
+                    this.canSaveScore = false
+                },
+                error: (err) => console.error(err)
+            })
+        }
     }
 }
 

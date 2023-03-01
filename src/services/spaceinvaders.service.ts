@@ -10,6 +10,14 @@ export class SpaceInvadersService {
 
     constructor(private http: HttpClient) { }
 
+    public startGame(userId: number): Observable<any> {
+        return this.http.get(this.apiUrl + "start?userId=" + userId)
+    }
+
+    public saveScore(gameId: number, score: number): Observable<any> {
+        return this.http.post(this.apiUrl + "savescore?gameId=" + gameId + "&score=" + score, {})
+    }
+
     public highScore(): Observable<any> {
         return this.http.get(this.apiUrl + "highscore")
     }
