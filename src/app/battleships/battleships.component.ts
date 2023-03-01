@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import BattleShipsGame from './game/BattleShipsGame';
 import { AngularDeviceInformationService } from 'angular-device-information';
 
@@ -7,7 +7,7 @@ import { AngularDeviceInformationService } from 'angular-device-information';
   templateUrl: './battleships.component.html',
   styleUrls: ['./battleships.component.css']
 })
-export class BattleshipsComponent implements OnInit {
+export class BattleshipsComponent implements OnInit, OnDestroy {
 
   public playerTurn: boolean = true
 
@@ -18,14 +18,20 @@ export class BattleshipsComponent implements OnInit {
   constructor(private deviceInformationService: AngularDeviceInformationService) { }
 
   ngOnInit(): void {
-    this.playerCanvas = document.getElementById("game-canvas") as HTMLCanvasElement 
-    this.opponentCanvas = document.getElementById("game-canvas2") as HTMLCanvasElement 
- 
+    this.playerCanvas = document.getElementById("game-canvas") as HTMLCanvasElement
+    this.opponentCanvas = document.getElementById("game-canvas2") as HTMLCanvasElement
+
     this.game = new BattleShipsGame()
     this.game.setupPlayerBoard(this.playerCanvas)
     this.game.setupOpponentBoard(this.opponentCanvas)
 
     this.start()
+  }
+
+  ngOnDestroy(): void {
+    this.playerCanvas = undefined
+    this.opponentCanvas = undefined
+    this.game = undefined
   }
 
   private start(): void {
