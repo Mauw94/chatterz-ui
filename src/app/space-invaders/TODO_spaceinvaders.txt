@@ -1,4 +1,3 @@
 --- SPACEINVADERS ---
-
+* create a scoreboard with usernames and score; also display highscore
 * change some lets into consts
-* save high scores for players

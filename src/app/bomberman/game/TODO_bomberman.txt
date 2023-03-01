@@ -1,5 +1,4 @@
 --- BOMBERMAN ---
-
 * explosions can get bigger by picking up some item that can drop from walls that can be destroyed
 * be able to push the bomb (direction which the player currently faces)
 * play sound when bomb explodes

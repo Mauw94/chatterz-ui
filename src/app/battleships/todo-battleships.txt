@@ -1,4 +1,1 @@
-* other board will be controller by the computer
-* switch turns from computer to Player
-* computer takes 2 seconds to play or something -> add delay
 * show how many ships u have destroyed out of 5
