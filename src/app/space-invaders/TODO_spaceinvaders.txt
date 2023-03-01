@@ -1,3 +1,4 @@
 --- SPACEINVADERS ---
+* create menu (start, scoreboard, quit?)
 * create a scoreboard with usernames and score; also display highscore
 * change some lets into consts
