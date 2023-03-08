@@ -2,7 +2,7 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { UserLoginInfo } from '../models/userLoginInfo';
 import { LoginService } from 'src/services/login.service';
-import { ChatSignalRService } from 'src/services/chat-signalr.service';
+import { ChatSignalRService } from 'src/services/signalR-services/chat-signalr.service';
 import { GameType } from '../models/gameTypeEnum';
 
 @Component({

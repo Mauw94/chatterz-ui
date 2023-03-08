@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChatSignalRService } from 'src/services/chat-signalr.service';
+import { ChatSignalRService } from 'src/services/signalR-services/chat-signalr.service';
 import { ChatterzService } from 'src/services/chatterz.service';
 import { LoginService } from 'src/services/login.service';
-import { WordGuesserService } from 'src/services/word-guesser.service';
+import { WordGuesserService } from 'src/services/signalR-services/word-guesser.service';
 
 @Component({
   selector: 'app-navbar',

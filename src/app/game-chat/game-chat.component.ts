@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ScrollToBottomDirective } from '../directives/scroll-to-bottom.directive';
-import { WordGuesserService } from 'src/services/word-guesser.service';
+import { WordGuesserService } from 'src/services/signalR-services/word-guesser.service';
 import { Subscription } from 'rxjs';
 import { ChatMessage } from '../models/chatMessage';
 import { DatePipe } from '@angular/common';

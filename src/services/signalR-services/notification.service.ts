@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import * as signalR from "@microsoft/signalr";
 import { Const } from "src/utils/const";
+import { SignalRService } from "./signalr-interface";
 
 @Injectable({ providedIn: 'root' })
-export class NotificationService {
+export class NotificationService implements SignalRService {
 
     private hubConnection: signalR.HubConnection
     private connectionUrl = Const.getBaseUrl() + "signalr_notification"
@@ -11,6 +12,14 @@ export class NotificationService {
     public async connect() {
         await this.startConnection()
         await this.addListeners()
+    }
+
+    public async disconnect() {
+        await this.hubConnection.stop()
+            .then(() => {
+                console.log("notification hub connection stopped")
+            })
+            .catch((err) => console.error(err))
     }
 
     private async startConnection(): Promise<void> {

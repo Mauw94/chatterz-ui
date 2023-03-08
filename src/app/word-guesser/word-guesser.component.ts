@@ -2,7 +2,7 @@ import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from 'src/services/login.service';
-import { WordGuesserService } from 'src/services/word-guesser.service';
+import { WordGuesserService } from 'src/services/signalR-services/word-guesser.service';
 import { WordGuesserDto } from '../models/wordGuesserDto';
 import { DtoBuilder } from 'src/utils/dto-builder';
 import { ScrollToBottomDirective } from '../directives/scroll-to-bottom.directive';
@@ -80,7 +80,7 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
     this.connectionEstablishedSubcription = this.gameService.retrieveConnectionEstablished().subscribe((connectionEstablished: boolean) => {
       if (connectionEstablished) {
         console.log("connection established")
-        this.gameService.connect(
+        this.gameService.connectApi(
           this.gameId,
           this.loginService.user,
           this.gameService.connectionId).subscribe({
@@ -137,7 +137,7 @@ export class WordGuesserComponent implements OnInit, OnDestroy {
       this.router.navigate(['main'])
     })
 
-    await this.gameService.connectSignalR()
+    await this.gameService.connect()
   }
 
   async ngOnDestroy(): Promise<void> {

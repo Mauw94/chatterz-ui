@@ -6,12 +6,13 @@ import { Const } from "src/utils/const";
 import * as signalR from "@microsoft/signalr"
 import { GameConnectDto } from "src/app/models/gameConnectDto";
 import { DtoBuilder } from "src/utils/dto-builder";
-import { LoginService } from "./login.service";
+import { LoginService } from "../login.service";
 import { WordGuesserDto } from "src/app/models/wordGuesserDto";
 import { ChatMessage } from "src/app/models/chatMessage";
+import { SignalRService } from "./signalr-interface";
 
 @Injectable({ providedIn: 'root' })
-export class WordGuesserService {
+export class WordGuesserService implements SignalRService {
 
     public gameId: number
     public connectionId: string = ""
@@ -31,7 +32,7 @@ export class WordGuesserService {
         private http: HttpClient,
         private loginService: LoginService) { }
 
-    public async connectSignalR() {
+    public async connect() {
         await this.startConnection()
         await this.addListeners()
     }
@@ -70,7 +71,7 @@ export class WordGuesserService {
         return this.http.get(this.apiUrl + "create");
     }
 
-    public connect(gameId: number, player: UserLoginInfo, connectionId: string): Observable<any> {
+    public connectApi(gameId: number, player: UserLoginInfo, connectionId: string): Observable<any> {
         return this.http.post(this.apiUrl + "connect", this.buildGameConnectDto(gameId, player, connectionId));
     }
 

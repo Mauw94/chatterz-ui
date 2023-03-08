@@ -6,16 +6,17 @@ import { Observable, Subject } from "rxjs";
 import { tap } from "rxjs/operators";
 import { ChatMessage } from "src/app/models/chatMessage";
 import { Const } from "src/utils/const";
-import { LoginService } from "./login.service";
-import { ChatterzService } from "./chatterz.service";
+import { LoginService } from "../login.service";
+import { ChatterzService } from "../chatterz.service";
 import { ChatroomDto } from "src/app/models/chatroomDto";
 import { DtoBuilder } from "src/utils/dto-builder";
 import { changeUsernameDto } from "src/app/models/changeUsernameDto";
 import { GameInviteDto } from "src/app/models/gameInviteDto";
 import { UserLoginInfo } from "src/app/models/userLoginInfo";
+import { SignalRService } from "./signalr-interface";
 
 @Injectable({ providedIn: 'root' })
-export class ChatSignalRService {
+export class ChatSignalRService implements SignalRService {
 
     public connectionId: string = ""
     public connectionEstablished: Subject<boolean> = new Subject<boolean>()
