@@ -107,7 +107,7 @@ export class ChatSignalRService {
     public retrieveGameDecline(): Observable<string> {
         return this.gameDeclineSubject.asObservable()
     }
-    
+
     public reconnectToChatrooms(currentChatroomId: number, userId: number, connectionId: string): Observable<any> {
         return this.http.post(this.apiSignalRUrl + "connect",
             DtoBuilder.buildChatroomJoinDto(currentChatroomId, userId, connectionId))
