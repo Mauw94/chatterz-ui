@@ -53,7 +53,7 @@ export class ChatSignalRService implements SignalRService {
                 this.disconnectSignalRApi()
                 // this.loginService.logout(this.chatterzService.chatroomId, this.connectionId)
                 this.connectionEstablished.next(false)
-                console.log("connection stopped")
+                console.log("chat hub connection stopped")
             })
             .catch((err) => console.error(err))
     }
@@ -133,7 +133,7 @@ export class ChatSignalRService implements SignalRService {
 
         await this.hubConnection.start()
             .then(() => {
-                console.log("connection started")
+                console.log("chat hub connection started")
                 this.connectionId = this.hubConnection.connectionId
                 this.updateConnectionId(this.loginService.user.Id, this.connectionId).subscribe(() => {
                     this.connectionEstablished.next(true)

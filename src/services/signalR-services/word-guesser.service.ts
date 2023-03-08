@@ -43,7 +43,7 @@ export class WordGuesserService implements SignalRService {
                 this.disconnectApi(this.gameId, this.connectionId, this.loginService.user.Id).subscribe(() => {
                     this.gameId = undefined
                     this.connectionEstablishedSubject.next(false)
-                    console.log("game signalr connection stoppped")
+                    console.log("game hub connection stoppped")
                 })
             })
             .catch((err) => console.error(err))
@@ -136,7 +136,7 @@ export class WordGuesserService implements SignalRService {
 
         await this.hubConnection.start()
             .then(() => {
-                console.log("game signalr connection started")
+                console.log("game hub connection started")
                 this.connectionId = this.hubConnection.connectionId
                 this.connectionEstablishedSubject.next(true)
             })
