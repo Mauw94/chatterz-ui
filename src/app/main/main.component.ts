@@ -7,7 +7,6 @@ import { ChatroomDto } from '../models/chatroomDto';
 import { Router } from '@angular/router';
 import { WordGuesserService } from 'src/services/signalR-services/word-guesser.service';
 import { Subscription } from 'rxjs';
-import { NotificationService } from 'src/services/signalR-services/notification.service';
 
 @Component({
   selector: 'app-main',
@@ -28,7 +27,6 @@ export class MainComponent implements OnInit, OnDestroy {
     private chatterzService: ChatterzService,
     private chatSignalRService: ChatSignalRService,
     private wordGuesserService: WordGuesserService,
-    private notificationService: NotificationService,
     private router: Router) { }
 
   async ngOnInit(): Promise<void> {
@@ -37,7 +35,6 @@ export class MainComponent implements OnInit, OnDestroy {
     })
 
     await this.chatSignalRService.connect()
-    await this.notificationService.connect()
 
     this.retrieveGameInvite()
     this.retrieveGameInviteAccept()
@@ -46,8 +43,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   async ngOnDestroy(): Promise<void> {
     await this.chatSignalRService.disconnect()
-    await this.notificationService.disconnect()
-    
+
     this.gameInviteSubscription.unsubscribe()
     this.gameInviteAcceptSubscription.unsubscribe()
     this.gameInviteDeclineSubscription.unsubscribe()

@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import * as signalR from "@microsoft/signalr";
 import { Const } from "src/utils/const";
 import { SignalRService } from "./signalr-interface";
+import { Observable, Subject } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService implements SignalRService {
@@ -9,6 +10,8 @@ export class NotificationService implements SignalRService {
     private hubConnection: signalR.HubConnection
     private connectionUrl = Const.getBaseUrl() + "signalr_notification"
 
+    private notificationSubject: Subject<string> = new Subject<string>()
+    
     public async connect() {
         await this.startConnection()
         await this.addListeners()
@@ -20,6 +23,10 @@ export class NotificationService implements SignalRService {
                 console.log("notification hub connection stopped")
             })
             .catch((err) => console.error(err))
+    }
+
+    public retrieveNotification(): Observable<string> {
+        return this.notificationSubject.asObservable()
     }
 
     private async startConnection(): Promise<void> {
@@ -41,7 +48,7 @@ export class NotificationService implements SignalRService {
 
     private async addListeners(): Promise<void> {
         this.hubConnection.on("notification", (message: string) => {
-            console.log(message)
+            this.notificationSubject.next(message)
         })
     }
 }
