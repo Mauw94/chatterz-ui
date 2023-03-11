@@ -16,6 +16,7 @@ class KeyListener {
     })
     canvasEl.addEventListener("mousedown", e => {
       e.preventDefault()
+      canvasEl.focus()
       this.mousePos = [e.offsetX - 10, e.offsetY - 10]
       this.mouseDown = true
     })
