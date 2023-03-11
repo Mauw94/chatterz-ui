@@ -1,4 +1,9 @@
 <div *ngIf="loginService.isLoggedIn">
     <app-navbar></app-navbar>
 </div>
+
+<div *ngIf="showNotification" class="alert alert-success alert-dismissible">
+    {{message}}
+</div>
+
 <router-outlet></router-outlet>

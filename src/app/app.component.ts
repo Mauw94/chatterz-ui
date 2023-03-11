@@ -10,11 +10,15 @@ import { NotificationService } from 'src/services/signalR-services/notification.
 })
 export class AppComponent implements OnInit {
 
+  public showNotification: boolean = false
+  public message: string = ""
+
+  private notificationSubscription = new Subscription()
+
   constructor(
     public loginService: LoginService,
     private notificationService: NotificationService) { }
 
-  private notificationSubscription = new Subscription()
 
   async ngOnInit() {
     await this.notificationService.connect()
@@ -30,8 +34,12 @@ export class AppComponent implements OnInit {
 
   private retrieveNotification() {
     this.notificationSubscription = this.notificationService.retrieveNotification().subscribe((message: string) => {
-      console.log("display this: ")
-      console.log(message)
+      this.message = message
+      this.showNotification = true
+
+      setTimeout(() => {
+        this.showNotification = false
+      }, 10000)
     })
   }
 }
